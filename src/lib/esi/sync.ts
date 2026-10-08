@@ -7,7 +7,7 @@ import {records,storeRaw,storeRecord,type ProjectRecord} from '../source-records
 import {ESI_SCOPES} from './config';
 import {EsiClient,type EsiResponse} from './client';
 import {accessToken} from './sso';
-import {Planet,miningRecords,colonyRecords,journalRecords,transactionRecords,jobRecords,orderRecords} from './normalizers';
+import {Planet,Asset,miningRecords,colonyRecords,journalRecords,transactionRecords,jobRecords,orderRecords} from './normalizers';
 import {classifyJournal} from './classification';
 export type Character={character_id:string;name:string;scopes:string;connection_status:string;generation:string;last_sync:string|null;last_error:string|null};
 export function listCharacters(){const db=getDatabase();try{return db.prepare('SELECT character_id,name,scopes,connection_status,generation,last_sync,last_error FROM characters ORDER BY name').all() as Character[];}finally{db.close();}}
@@ -81,16 +81,20 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
  });
  await area('industry',async()=>{const path=base+'/industry/jobs',response=await client.get(path,'char-industry',{include_completed:'true'});return [{path,response,rows:jobRecords(characterId,response)}];});
  await area('market',async()=>{const path=base+'/orders',response=await client.get(path,'char-market');return [{path,response,rows:orderRecords(characterId,response)}];},['market_order']);
+ await area('assets',async()=>{const path=base+'/assets';return(await client.pages(path,'char-asset')).map(response=>({path,response,rows:z.array(Asset).parse(response.data).map(data=>({kind:'asset_snapshot',source:'esi',sourceClass:'automatic' as const,sourceCharacterId:characterId,sourceEntityId:data.item_id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured' as const,status:'actual' as const,deduplicationKey:'esi:'+characterId+':asset:'+data.item_id,data}))}));},['asset_snapshot']);
  await area('skills',async()=>{const path=base+'/skills',response=await client.get(path,'char-detail'),attrs=await client.get(base+'/attributes','char-detail');return [{path,response,rows:skillRecords(characterId,response,'skill_snapshot')},{path:base+'/attributes',response:attrs,rows:skillRecords(characterId,attrs,'character_attributes')}];});
  await area('skillqueue',async()=>{const path=base+'/skillqueue',response=await client.get(path,'char-detail');return [{path,response,rows:skillRecords(characterId,response,'skill_queue')}];});
  await area('implants',async()=>{const path=base+'/implants',response=await client.get(path,'char-detail');return [{path,response,rows:skillRecords(characterId,response,'character_implants')}];});
  // Metadata is bounded and cached. Failure does not discard a valid skill snapshot.
- if(scopes.has(ESI_SCOPES.skills)||scopes.has(ESI_SCOPES.skillqueue)){
-  try{const read=getDatabase();let rows:ProjectRecord[];try{rows=records(read).filter(r=>r.sourceCharacterId===characterId);}finally{read.close();}
+ if(['skills','skillqueue','pi','mining','industry','assets'].some(key=>scopes.has(ESI_SCOPES[key as keyof typeof ESI_SCOPES]))){
+  try{const read=getDatabase();let rows:ProjectRecord[];let knownTypes:Set<string>;try{knownTypes=new Set(records(read,'type_metadata').map(r=>r.sourceEntityId!));rows=records(read).filter(r=>r.sourceCharacterId===characterId);}finally{read.close();}
    const snapshot=rows.find(r=>r.kind==='skill_snapshot'),queue=rows.find(r=>r.kind==='skill_queue');
-   const ids=[...new Set([...(queue?Queue.parse(queue.data.queue).map(q=>q.skill_id):[]),...economicSkills.map(s=>s.id),...(snapshot?SkillSnapshot.parse(snapshot.data).skills.map(s=>s.skill_id):[])])].slice(0,80);
+   const operationalIds=rows.flatMap(r=>r.kind==='mining_entry'?[String(r.data.typeId)]:r.kind==='pi_pin'?[String(r.data.type_id),...(Array.isArray(r.data.contents)?r.data.contents.map(c=>String((c as {type_id:string}).type_id)):[]),...(r.data.extractor_details&&typeof r.data.extractor_details==='object'&&'product_type_id' in r.data.extractor_details?[String(r.data.extractor_details.product_type_id)]:[])]:r.kind==='asset_snapshot'?[String(r.data.type_id)]:r.kind==='industry_job'?[String(r.data.blueprint_type_id),...(r.data.product_type_id?[String(r.data.product_type_id)]:[])]:[]).filter(id=>/^\d+$/.test(id));
+   const ids=[...new Set([...operationalIds,...(queue?Queue.parse(queue.data.queue).map(q=>q.skill_id):[]),...economicSkills.map(s=>s.id),...(snapshot?SkillSnapshot.parse(snapshot.data).skills.map(s=>s.skill_id):[])])].filter(id=>!knownTypes.has(id)).slice(0,80);
    for(const id of ids){const path='/universe/types/'+id,response=await client.get(path,'universe'),data=z.object({name:z.string(),type_id:z.number().int().safe(),description:z.string().optional()}).passthrough().parse(response.data),write=getDatabase();try{const rawId=storeRaw(write,{source:'esi',endpoint:path,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp,payloadText:response.rawText});storeRecord(write,{kind:'type_metadata',source:'esi',sourceClass:'automatic',sourceEntityId:id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured',status:'actual',deduplicationKey:'esi:type:'+id,data,rawId});}finally{write.close();}}
-   results.type_names={status:'success',records:ids.length};
+   const schematics=[...new Set(rows.filter(r=>r.kind==='pi_pin').flatMap(r=>{const d=r.data;const f=d.factory_details as {schematic_id?:string}|undefined;return f?.schematic_id?[f.schematic_id]:typeof d.schematic_id==='string'?[d.schematic_id]:[];}))].slice(0,40);
+   for(const id of schematics){const path='/universe/schematics/'+id,response=await client.get(path,'universe'),data=z.object({schematic_name:z.string(),cycle_time:z.number().positive()}).parse(response.data),write=getDatabase();try{const rawId=storeRaw(write,{source:'esi',endpoint:path,fetchedAt:response.fetchedAt,payloadText:response.rawText});storeRecord(write,{kind:'schematic_metadata',source:'esi',sourceClass:'automatic',sourceEntityId:id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured',status:'actual',deduplicationKey:'esi:schematic:'+id,data,rawId});}finally{write.close();}}
+   results.type_names={status:'success',records:ids.length+schematics.length};
   }catch(e){results.type_names={status:'error',error:safeError(e)};}
  }
  const errors=Object.values(results).filter(r=>r.status==='error');

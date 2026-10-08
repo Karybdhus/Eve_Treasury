@@ -25,14 +25,13 @@ export const MIGRATION_V3=[
 'CREATE TABLE IF NOT EXISTS reported_profit_decimal(report_id TEXT PRIMARY KEY REFERENCES reports(report_id),value_decimal TEXT,quality TEXT NOT NULL)',
 "INSERT OR IGNORE INTO reported_profit_decimal SELECT report_id,CASE WHEN value IS NULL THEN NULL ELSE printf('%.2f',value) END,quality FROM reported_profit",
 ];
+export const MIGRATION_V4=[
+'CREATE TABLE IF NOT EXISTS fleet_sessions(session_id TEXT PRIMARY KEY,started_at TEXT NOT NULL,ended_at TEXT,body TEXT NOT NULL)',
+'CREATE TABLE IF NOT EXISTS fleet_buyback_links(booking_id TEXT PRIMARY KEY REFERENCES buyback_bookings(booking_id),session_id TEXT NOT NULL REFERENCES fleet_sessions(session_id),linked_at TEXT NOT NULL)',
+];
 export function migrate(db:DatabaseSync) {
-  const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
-  if(version>3)throw new Error('Database version is newer than this application');
-  if(version<2){
-    db.exec('BEGIN IMMEDIATE');
-    try{for(const sql of MIGRATION_V2)db.exec(sql);db.exec('PRAGMA user_version=2; COMMIT');}
-    catch(e){db.exec('ROLLBACK');throw e;}
-  }
-
- if(version<3){db.exec('BEGIN IMMEDIATE');try{for(const sql of MIGRATION_V3)db.exec(sql);db.exec('PRAGMA user_version=3; COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}
+ const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
+ if(version>4)throw new Error('Database version is newer than this application');
+ const steps:[number,string[]][]=[[2,MIGRATION_V2],[3,MIGRATION_V3],[4,MIGRATION_V4]];
+ for(const [target,statements] of steps){if(version>=target)continue;db.exec('BEGIN IMMEDIATE');try{for(const sql of statements)db.exec(sql);db.exec('PRAGMA user_version='+target+'; COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}
 }

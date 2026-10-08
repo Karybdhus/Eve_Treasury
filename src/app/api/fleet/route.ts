@@ -1,0 +1,5 @@
+import {assertLocalRequest} from '@/lib/esi/config';
+import {getDatabase} from '@/lib/db';
+import {startFleet,endFleet,linkFleetBuyback} from '@/lib/fleet-sessions';
+export const runtime='nodejs';
+export async function POST(request:Request){try{assertLocalRequest(request,true);}catch{return Response.json({error:'Local origin required'},{status:403});}const db=getDatabase();try{const text=await request.text();if(text.length>20000)throw new Error('Input too large');const input=JSON.parse(text);if(input.action==='start')return Response.json(startFleet(db,input.session));if(input.action==='end')return Response.json(endFleet(db,input.sessionId,input.endedAt));if(input.action==='link'){linkFleetBuyback(db,input.sessionId,input.bookingId,input.confirmExclusive);return Response.json({ok:true});}if(input.action==='unlink'){db.prepare('DELETE FROM fleet_buyback_links WHERE booking_id=? AND session_id=?').run(input.bookingId,input.sessionId);return Response.json({ok:true});}throw new Error('Unknown action');}catch(e){return Response.json({error:e instanceof Error?e.message:'Fleet failed'},{status:400});}finally{db.close();}}

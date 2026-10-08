@@ -1,0 +1,7 @@
+import {assertLocalRequest} from '@/lib/esi/config';
+import {getDatabase} from '@/lib/db';
+import {PiScenario} from '@/lib/pi-analysis';
+import {storeRaw,storeRecord} from '@/lib/source-records';
+import {randomUUID} from 'node:crypto';
+export const runtime='nodejs';
+export async function POST(request:Request){try{assertLocalRequest(request,true);}catch{return Response.json({error:'Local origin required'},{status:403});}const db=getDatabase();try{const text=await request.text();if(text.length>20000)throw new Error('Scenario too large');const input=JSON.parse(text);if(input.action==='archive'){if(typeof input.id!=='string')throw new Error('Invalid scenario ID');db.prepare("UPDATE project_records SET is_current=0 WHERE deduplication_key=? AND kind='pi_scenario' AND source='manual'").run(input.id);return Response.json({ok:true});}const value=PiScenario.parse(input),id=randomUUID(),now=new Date().toISOString();db.exec('BEGIN IMMEDIATE');try{const rawId=storeRaw(db,{source:'manual',endpoint:'pi-scenario',entityId:id,fetchedAt:now,payloadText:JSON.stringify(input)});storeRecord(db,{kind:'pi_scenario',source:'manual',sourceClass:'manual',sourceEntityId:id,fetchedAt:now,dataQuality:'partial',status:'plan',deduplicationKey:'pi-scenario:'+id,data:value,rawId});db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}return Response.json({id});}catch(e){return Response.json({error:e instanceof Error?e.message:'Invalid scenario'},{status:400});}finally{db.close();}}

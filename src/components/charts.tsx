@@ -7,3 +7,7 @@ export function WeeklyChart({rows}:{rows:Row[]}){
 export function OutputChart({rows}:{rows:{item:string;quantity:number}[]}){
  return <div className="chart" role="img" aria-label="Mining-Output nach Item"><ResponsiveContainer width="100%" height="100%"><BarChart data={rows} layout="vertical" margin={{left:25,right:20}}><CartesianGrid stroke="#243342" horizontal={false}/><XAxis type="number" stroke="#94a6b6"/><YAxis type="category" dataKey="item" stroke="#94a6b6" width={100}/><Tooltip contentStyle={{background:'#121e29',border:'1px solid #314453'}}/><Bar dataKey="quantity" fill="#4dd4c6" name="Bloecke" radius={[0,4,4,0]}/></BarChart></ResponsiveContainer></div>;
 }
+
+export function BuybackChart({rows}:{rows:{period:string;revenue:number|null;partial:number|null}[]}){
+ return <div className="chart" role="img" aria-label="Buyback-Einnahmen je Zeitraum. Unvollstaendige Teilbetraege sind gelb."><ResponsiveContainer width="100%" height="100%"><BarChart data={rows}><CartesianGrid stroke="#243342" vertical={false}/><XAxis dataKey="period" stroke="#94a6b6"/><YAxis stroke="#94a6b6" tickFormatter={v=>v+' Mio'}/><Tooltip contentStyle={{background:'#121e29',border:'1px solid #314453'}}/><Legend/><Bar dataKey="revenue" name="Gemeldete vollstaendige Einnahmen / Mio ISK" fill="#4dd4c6"/><Bar dataKey="partial" name="Bekannte Teilbetraege / Mio ISK" fill="#e9b76d"/></BarChart></ResponsiveContainer></div>;
+}

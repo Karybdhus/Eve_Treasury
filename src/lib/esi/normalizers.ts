@@ -3,6 +3,7 @@ import type {ProjectRecord} from '../source-records';
 import type {EsiResponse} from './client';
 const id=z.union([z.number().int().nonnegative().safe(),z.string().regex(/^\d+$/)]).transform(String);
 const number=z.number().finite(),quantity=number.nonnegative().safe(),timestamp=z.iso.datetime({offset:true});
+export const Asset=z.object({item_id:id,type_id:id,location_id:id,location_type:z.enum(['station','solar_system','item','other']),location_flag:z.string(),quantity:z.number().int().safe(),is_singleton:z.boolean(),is_blueprint_copy:z.boolean().optional()}).passthrough();
 export const MiningEntry=z.object({date:z.iso.date(),type_id:id,solar_system_id:id,quantity});
 export const Planet=z.object({planet_id:id,solar_system_id:id,owner_id:id,planet_type:z.string(),upgrade_level:z.number().int(),num_pins:z.number().int(),last_update:timestamp});
 export const Pin=z.object({pin_id:id,type_id:id,latitude:number,longitude:number,contents:z.array(z.object({type_id:id,amount:quantity})).optional(),expiry_time:timestamp.optional(),install_time:timestamp.optional(),last_cycle_start:timestamp.optional(),schematic_id:id.optional(),extractor_details:z.object({cycle_time:quantity.optional(),product_type_id:id.optional(),qty_per_cycle:quantity.optional(),heads:z.array(z.unknown())}).passthrough().optional(),factory_details:z.object({schematic_id:id}).optional()}).passthrough();
@@ -33,8 +34,8 @@ export function transactionRecords(characterId:string,response:EsiResponse){
  return z.array(Transaction).parse(response.data).map(d=>record('wallet_transaction',characterId,d.transaction_id,response,d,d.date));
 }
 export function jobRecords(characterId:string,response:EsiResponse){
- return z.array(IndustryJob).parse(response.data).map(d=>record('industry_job',characterId,d.job_id,response,d,d.start_date));
+ return z.array(IndustryJob).parse(response.data).map(d=>record('industry_job',characterId,d.job_id,response,d,response.sourceTimestamp??response.fetchedAt));
 }
 export function orderRecords(characterId:string,response:EsiResponse){
- return z.array(Order).parse(response.data).map(d=>record('market_order',characterId,d.order_id,response,d,d.issued));
+ return z.array(Order).parse(response.data).map(d=>record('market_order',characterId,d.order_id,response,d,response.sourceTimestamp??response.fetchedAt));
 }

@@ -1,7 +1,7 @@
 export const ESI_SCOPES={
   mining:'esi-industry.read_character_mining.v1',pi:'esi-planets.manage_planets.v1',
   wallet:'esi-wallet.read_character_wallet.v1',industry:'esi-industry.read_character_jobs.v1',
-  market:'esi-markets.read_character_orders.v1',skills:'esi-skills.read_skills.v1',skillqueue:'esi-skills.read_skillqueue.v1',implants:'esi-clones.read_implants.v1'
+  market:'esi-markets.read_character_orders.v1',skills:'esi-skills.read_skills.v1',skillqueue:'esi-skills.read_skillqueue.v1',implants:'esi-clones.read_implants.v1',assets:'esi-assets.read_assets.v1'
 } as const;
 export function configuredScopes(){
  const scopes=(process.env.EVE_SSO_SCOPES??Object.values(ESI_SCOPES).join(' ')).split(/\s+/).filter(Boolean);

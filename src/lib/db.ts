@@ -16,6 +16,7 @@ export function openDatabase(filename=process.env.DASHBOARD_DB??path.join(proces
  const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
  if(filename!==':memory:'&&version===1&&!existsSync(filename+'.pre-v2.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v2.sqlite');
  if(filename!==':memory:'&&version===2&&!existsSync(filename+'.pre-v3.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v3.sqlite');
+ if(filename!==':memory:'&&version===3&&!existsSync(filename+'.pre-v4.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v4.sqlite');
  migrate(db);return db;
 }
 function scope(r:Report){
@@ -44,7 +45,7 @@ export function importReports(db:DatabaseSync,input:unknown,filename:string){
    const fetchedAt=new Date().toISOString();
    db.prepare('INSERT INTO reports VALUES (?,?,?,?,?)').run(r.reportId,scope(r),body,fetchedAt,path.basename(filename));
    db.prepare('INSERT INTO imported_source_reports VALUES (?,?,?)').run(r.reportId,rawBody,contract);
-   if(reportedProfit!==undefined)db.prepare('INSERT INTO reported_profit_decimal VALUES (?,?,?)').run(r.reportId,typeof reportedProfit==='number'?reportedProfit.toFixed(2):null,typeof reportedProfit==='number'?'measured':reportedProfit);
+   if(reportedProfit!==undefined)db.prepare('INSERT INTO reported_profit_decimal VALUES (?,?,?)').run(r.reportId,typeof reportedProfit==='number'?reportedProfit.toFixed(2):null,typeof reportedProfit==='number'?(typeof profit(r)==='number'?'measured':'reported_unverified'):reportedProfit);
    const rawId=storeRaw(db,{source:r.source,endpoint:'json-import',entityId:r.reportId,fetchedAt,sourceTimestamp:r.period.to,payloadText:rawBody});
    storeRecord(db,{kind:'report',source:r.source,sourceClass:sourceClass(r.source),sourceEntityId:r.reportId,fetchedAt,sourceTimestamp:r.period.to,dataQuality:r.provenance==='historical_seed'?'historical_seed':'partial',status:r.status,deduplicationKey:'report:'+r.reportId,data:r,rawId});
    imported++;
@@ -56,7 +57,7 @@ export function seedDatabase(db:DatabaseSync){
  const n=db.prepare('SELECT COUNT(*) AS n FROM reports').get() as {n:number};
  if(!n.n){const dir=path.join(process.cwd(),'seed');for(const name of readdirSync(dir).filter(n=>n.endsWith('.json')).sort())importReports(db,JSON.parse(readFileSync(path.join(dir,name),'utf8')),name);}
 }
-export function getDatabase(){const db=openDatabase();seedDatabase(db);return db;}
+export function getDatabase(){const db=openDatabase();if(process.env.DASHBOARD_DEMO_SEED!=='0')seedDatabase(db);return db;}
 export function readReports(db:DatabaseSync):StoredReport[]{
  return (db.prepare('SELECT body,imported_at,filename FROM reports ORDER BY imported_at DESC,report_id').all() as {body:string;imported_at:string;filename:string}[]).map(r=>({report:validateReport(JSON.parse(r.body)),importedAt:r.imported_at,filename:r.filename}));
 }

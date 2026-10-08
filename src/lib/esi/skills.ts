@@ -39,8 +39,8 @@ export function SkillImpactAnalysis(snapshot:Skills|undefined,queue:SkillQueue|u
   if(q.finish_date&&queueFetchedAt&&Date.parse(q.finish_date)<=Math.min(now.getTime(),Date.parse(queueFetchedAt)))trained.set(q.skill_id,Math.max(trained.get(q.skill_id)??0,q.finished_level));
   future.set(q.skill_id,Math.max(future.get(q.skill_id)??0,q.finished_level));
  }
- const rows=economicSkills.map(s=>({...s,activeLevel:active.get(s.id)??0,trainedLevel:trained.get(s.id)??0,queueLevel:future.get(s.id)??0,quality:'actual snapshot / queue forecast',iskImpact:'unknown'}));
+ const rows=economicSkills.map(s=>({...s,activeLevel:active.get(s.id)??0,trainedLevel:trained.get(s.id)??0,queueLevel:queue===undefined?null:future.get(s.id)??0,quality:'actual snapshot / queue forecast',iskImpact:'unknown'}));
  const calculate=(levels:Map<string,number>)=>{const l=(id:string)=>levels.get(id)??0;return {maxPlanets:1+l('2495'),commandCenterLevel:l('2505'),orderSlots:5+4*l('3443')+8*l('3444')+16*l('16596')+32*l('18580'),salesTaxPercent:7.5*(1-.11*l('16622')),npcBrokerBeforeStandingsPercent:3-.3*l('3446'),relistDiscountPercent:50+6*l('16597'),manufacturingJobSlots:1+l('3387')+l('24625'),reactionJobSlots:1+l('45748')+l('45749'),manufacturingTimeMultiplier:1-.04*l('3380'),reactionTimeMultiplier:1-.04*l('45746')};};
  const currentTraining=(queue??[]).find(q=>q.start_date&&q.finish_date&&Date.parse(q.start_date)<=now.getTime()&&Date.parse(q.finish_date)>now.getTime());
- return {rows,capacities:calculate(active),forecast:calculate(future),currentTraining};
+ return {rows,capacities:calculate(active),forecast:queue===undefined?null:calculate(future),currentTraining};
 }
