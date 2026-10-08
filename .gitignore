@@ -5,3 +5,6 @@ data/imports/
 *.tsbuildinfo
 .env*
 !.env.example
+
+# SQLite snapshots/WAL must never be committed, regardless of location
+*.sqlite*

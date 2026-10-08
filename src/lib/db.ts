@@ -1,3 +1,4 @@
+import {accessMode} from './application-access';
 import {moneyFact} from './exact-money';
 import {parseFinancialJson} from './financial-json';
 import {writeMoneyFacts} from './financial-facts';
@@ -62,7 +63,7 @@ export function seedDatabase(db:DatabaseSync){
  const n=db.prepare('SELECT COUNT(*) AS n FROM reports').get() as {n:number};
  if(!n.n){const dir=path.join(process.cwd(),'seed');for(const name of readdirSync(dir).filter(n=>n.endsWith('.json')).sort())importReports(db,JSON.parse(readFileSync(path.join(dir,name),'utf8')),name);}
 }
-export function getDatabase(){const db=openDatabase();if(process.env.DASHBOARD_DEMO_SEED!=='0')seedDatabase(db);return db;}
+export function getDatabase(){if(accessMode()==='private'&&(process.env.DASHBOARD_DATABASE_ROLE!=='primary'||process.env.DASHBOARD_DEMO_SEED!=='0'||!process.env.DASHBOARD_DB||!path.isAbsolute(process.env.DASHBOARD_DB)||process.env.DASHBOARD_DB.startsWith('\\\\')))throw new Error('Private mode requires an explicit primary local database');const db=openDatabase();if(process.env.DASHBOARD_DEMO_SEED!=='0')seedDatabase(db);return db;}
 export function readReports(db:DatabaseSync):StoredReport[]{
  return (db.prepare('SELECT body,imported_at,filename FROM reports ORDER BY imported_at DESC,report_id').all() as {body:string;imported_at:string;filename:string}[]).map(r=>({report:validateReport(JSON.parse(r.body)),importedAt:r.imported_at,filename:r.filename}));
 }

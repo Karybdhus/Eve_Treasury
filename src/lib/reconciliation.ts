@@ -1,3 +1,4 @@
+import {reconciliationCandidates} from './reconciliation-candidates';
 import type {DatabaseSync} from 'node:sqlite';
 import {detachFinancialSource} from './reconciliation-links';
 import {randomUUID} from 'node:crypto';
@@ -90,17 +91,20 @@ export function reconciliation(db:DatabaseSync){
   const sources=collectFinancialSources(db);db.prepare('UPDATE financial_sources SET is_current=0').run();
   for(const s of sources){db.prepare('INSERT INTO financial_sources VALUES (?,?,1) ON CONFLICT(source_key) DO UPDATE SET body=excluded.body,is_current=1').run(s.key,JSON.stringify(s));eventFor(db,s);}
   const decisions=new Map((db.prepare('SELECT pair_key,status FROM reconciliation_decisions').all() as {pair_key:string;status:string}[]).map(x=>[x.pair_key,x.status])),proposals:Match[]=[];
-  for(let i=0;i<sources.length;i++)for(let j=i+1;j<sources.length;j++){
+  const walletRows=db.prepare('SELECT journal_key,booking_id FROM buyback_wallet_links').all() as {journal_key:string;booking_id:string}[];
+  const walletByJournal=new Map(walletRows.map(row=>[row.journal_key,row]));
+  const identityCounts=new Map<string,number>();for(const source of sources)if(source.eligible&&source.identity!==null)identityCounts.set(source.identity,(identityCounts.get(source.identity)??0)+1);
+  for(const [i,j] of reconciliationCandidates(sources,walletRows)){
    const a=sources[i],b=sources[j];if(!a.eligible||!b.eligible||eventFor(db,a)===eventFor(db,b))continue;
-   const pairKey=pair(a.key,b.key),rejected=decisions.get(pairKey)==='rejected',wallet=db.prepare('SELECT booking_id FROM buyback_wallet_links WHERE journal_key=?').get(a.source==='esi'?a.key:b.key) as {booking_id:string}|undefined;
+   const pairKey=pair(a.key,b.key),rejected=decisions.get(pairKey)==='rejected',wallet=walletByJournal.get(a.source==='esi'?a.key:b.key);
    const explicit=wallet&&'buyback:'+wallet.booking_id===(a.source==='buyback'?a.key:b.key),strong=(a.identity!==null&&a.identity===b.identity||a.role!=='report'&&b.role!=='report'&&(a.references.includes(b.identity??'')||b.references.includes(a.identity??'')))&&a.role!=='report'&&b.role!=='report';
-   const ambiguous=strong&&a.identity?.startsWith('contract:')&&sources.filter(s=>s.eligible&&s.identity===a.identity).length>2;
+   const ambiguous=strong&&a.identity?.startsWith('contract:')&&(identityCounts.get(a.identity)??0)>2;
    if(ambiguous&&!rejected){proposals.push({pairKey,left:a.key,right:b.key,reason:'Contract identity has multiple payments; explicit allocation required',status:'conflict'});continue;}
    if((strong||explicit)&&!rejected){if(compatible(a,b)){merge(db,a,b,explicit?'existing_manual_wallet_link':'strong_source_identifier',explicit?'Existing confirmed wallet link':a.identity!,!!explicit);continue;}proposals.push({pairKey,left:a.key,right:b.key,reason:'Strong identifier conflicts with financial facts',status:'conflict'});continue;}
    const refs=a.references.some(r=>[b.key,b.sourceId,b.identity].includes(r))||b.references.some(r=>[a.key,a.sourceId,a.identity].includes(r)),amountDate=a.amountISK!==null&&signedCents(a.amountISK)>0n&&a.amountISK===b.amountISK&&a.date!==null&&a.date===b.date;
    if(refs||amountDate)proposals.push({pairKey,left:a.key,right:b.key,reason:refs?'Report reference needs whole-event confirmation':'Amount/date alone is insufficient',status:rejected?'rejected':compatible(a,b)?'proposal':'conflict'});
   }
-  const links=db.prepare('SELECT * FROM event_sources').all() as Link[],events=db.prepare('SELECT * FROM economic_events').all() as {event_id:string;category:FinancialCategory;revision:number;created_at:string}[];db.exec('COMMIT');return {sources,links,events,proposals};
+  const links=db.prepare('SELECT * FROM event_sources').all().map(row=>({...row})) as Link[],events=db.prepare('SELECT * FROM economic_events').all().map(row=>({...row})) as {event_id:string;category:FinancialCategory;revision:number;created_at:string}[];db.exec('COMMIT');return {sources,links,events,proposals};
  }catch(e){db.exec('ROLLBACK');throw e;}
 }
 export function decideReconciliation(db:DatabaseSync,input:{action:'link'|'reject'|'unlink'|'classify';left:string;right?:string;category?:FinancialCategory;reason:string;expectedRevision?:number}){
