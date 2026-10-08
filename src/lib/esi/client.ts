@@ -72,7 +72,10 @@ export class EsiClient{
    if(response.data.length===0)return responses;
    const ids=response.data.map(r=>String((r as {transaction_id?:string|number}).transaction_id));
    if(ids.some(id=>!/^\d+$/.test(id)))throw new Error('Invalid transaction ID');
-   const next=ids.reduce((a,b)=>BigInt(a)<BigInt(b)?a:b);if(!/^\d+$/.test(next)||next===cursor)throw new Error('ESI transaction pagination did not advance');cursor=next;
+   // CCP includes the from_id record, including on the terminal page.
+   if(cursor&&ids.length===1&&ids[0]===cursor)return responses;
+   const next=ids.reduce((a,b)=>BigInt(a)<BigInt(b)?a:b);
+   if(cursor&&BigInt(next)>=BigInt(cursor))throw new Error('ESI transaction pagination did not advance');cursor=next;
   }
   throw new Error('ESI transaction pagination exceeds supported limit');
  }
