@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "dataQuality": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {}
+    },
+    "plexContribution": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "grossBuys": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "grossSales": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "salesTax": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "brokerFees": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "relistFees": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "realizedTradingProfit": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "oldInventoryLiquidationNet": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "internalTransfers": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "capitalBound": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "freeLiquidity": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "sourceTransactionIds": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": {}
+}

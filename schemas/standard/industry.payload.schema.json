@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "dataQuality": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {}
+    },
+    "plexContribution": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "realizedRevenue": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "netProfit": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "operationalStatus": {
+      "type": "string",
+      "enum": [
+        "active",
+        "parked",
+        "planning"
+      ]
+    },
+    "jobs": {
+      "type": "array",
+      "items": {}
+    },
+    "reactions": {
+      "type": "array",
+      "items": {}
+    },
+    "materialCosts": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "jobFees": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "structureFees": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "logisticsCosts": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "operationalStatus"
+  ],
+  "additionalProperties": {}
+}

@@ -43,7 +43,8 @@
         "manual",
         "motor_market",
         "esi",
-        "buyback"
+        "buyback",
+        "dashboard"
       ]
     },
     "status": {
@@ -57,6 +58,42 @@
     "currency": {
       "type": "string",
       "const": "ISK"
+    },
+    "reportingTimezone": {
+      "type": "string",
+      "enum": [
+        "UTC",
+        "Europe/Berlin"
+      ]
+    },
+    "derivedNetProfit": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": -90000000000000,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "evidenceReferences": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sourceTransactionIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "provenance": {
       "type": "string",
@@ -75,7 +112,10 @@
     },
     "reportType": {
       "type": "string",
-      "const": "snapshot"
+      "enum": [
+        "snapshot",
+        "plan"
+      ]
     },
     "data": {
       "type": "object",

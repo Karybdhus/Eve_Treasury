@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "dataQuality": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {}
+    },
+    "plexContribution": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "realizedRevenue": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "netProfit": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "characters": {
+      "type": "array",
+      "items": {}
+    },
+    "colonies": {
+      "type": "array",
+      "items": {}
+    },
+    "extractionCycles": {
+      "type": "array",
+      "items": {}
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "typeId": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "ice",
+              "ore",
+              "gas"
+            ]
+          },
+          "quantity": {
+            "type": "number",
+            "minimum": 0
+          },
+          "unit": {
+            "type": "string"
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "P0",
+              "P1",
+              "P2",
+              "P3",
+              "P4"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "quantity"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "pocoTaxes": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "importExportCosts": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "inventorySnapshot": {
+      "type": "array",
+      "items": {}
+    }
+  },
+  "additionalProperties": {}
+}

@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "dataQuality": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {}
+    },
+    "plexContribution": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "wallet": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "escrow": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "openBuyOrders": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "openSellOrders": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "sellOrdersGross": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "inventoryValue": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "freeOrderSlots": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "capitalBound": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "freeLiquidity": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    }
+  },
+  "additionalProperties": {}
+}

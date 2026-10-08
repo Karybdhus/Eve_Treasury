@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "dataQuality": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {}
+    },
+    "plexContribution": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "activities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "ratting",
+              "hacking",
+              "salvage",
+              "other"
+            ]
+          },
+          "grossRevenue": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "unknown",
+                  "not_reported"
+                ]
+              }
+            ]
+          },
+          "directCosts": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "unknown",
+                  "not_reported"
+                ]
+              }
+            ]
+          },
+          "netProfit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "unknown",
+                  "not_reported"
+                ]
+              }
+            ]
+          },
+          "sourceTransactionIds": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "category"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": {}
+}
