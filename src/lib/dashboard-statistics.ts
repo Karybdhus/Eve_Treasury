@@ -25,4 +25,3 @@ export function buybackPeriods(summary:Summary,grain:'week'|'month'|'year'){
  for(const row of rows){if(!row.date)continue;const d=new Date(row.date+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));const period=grain==='week'?d.toISOString().slice(0,10):row.date.slice(0,grain==='month'?7:4),key=period+'|'+row.category;groups.set(key,[...(groups.get(key)??[]),row]);}
  return [...groups.entries()].map(([key,events])=>({period:key.split('|')[0],category:goodsLabels[events[0].category]??'MIXED / nicht aufgeteilt',amountISK:summary.unresolved?null:exactSum(events.map(e=>e.amountISK)),costsISK:exactSum(events.map(e=>e.costsISK)),netISK:exactSum(events.map(e=>e.netISK)),events})).sort((a,b)=>b.period.localeCompare(a.period));
 }
-

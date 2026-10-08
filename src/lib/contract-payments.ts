@@ -21,4 +21,3 @@ export function confirmFullContractPayment(db:DatabaseSync,input:{contractId:str
  const revision=(key:string)=>state.events.find(e=>e.event_id===state.links.find(l=>l.source_key===key)?.event_id)!.revision;
  allocateEvidence(db,{payment:p.key,target:c.key,amountISK:p.amountISK,kind:'payout',reason:input.reason,paymentRevision:revision(p.key),targetRevision:revision(c.key),expectedContractRevision:input.expectedRevision});
 }
-
