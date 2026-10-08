@@ -2,16 +2,17 @@ import {z} from 'zod';
 import type {ProjectRecord} from '../source-records';
 import type {EsiResponse} from './client';
 const id=z.union([z.number().int().nonnegative().safe(),z.string().regex(/^\d+$/)]).transform(String);
+const money=z.union([z.number().finite(),z.string().regex(/^-?\d+(\.\d{1,2})?$/)]);
 const number=z.number().finite(),quantity=number.nonnegative().safe(),timestamp=z.iso.datetime({offset:true});
 export const Asset=z.object({item_id:id,type_id:id,location_id:id,location_type:z.enum(['station','solar_system','item','other']),location_flag:z.string(),quantity:z.number().int().safe(),is_singleton:z.boolean(),is_blueprint_copy:z.boolean().optional()}).passthrough();
 export const MiningEntry=z.object({date:z.iso.date(),type_id:id,solar_system_id:id,quantity});
 export const Planet=z.object({planet_id:id,solar_system_id:id,owner_id:id,planet_type:z.string(),upgrade_level:z.number().int(),num_pins:z.number().int(),last_update:timestamp});
 export const Pin=z.object({pin_id:id,type_id:id,latitude:number,longitude:number,contents:z.array(z.object({type_id:id,amount:quantity})).optional(),expiry_time:timestamp.optional(),install_time:timestamp.optional(),last_cycle_start:timestamp.optional(),schematic_id:id.optional(),extractor_details:z.object({cycle_time:quantity.optional(),product_type_id:id.optional(),qty_per_cycle:quantity.optional(),heads:z.array(z.unknown())}).passthrough().optional(),factory_details:z.object({schematic_id:id}).optional()}).passthrough();
 export const Layout=z.object({pins:z.array(Pin),links:z.array(z.unknown()),routes:z.array(z.unknown())});
-export const JournalEntry=z.object({id,ref_type:z.string(),date:timestamp,description:z.string(),amount:number.optional(),first_party_id:id.optional(),second_party_id:id.optional(),tax:number.optional(),tax_receiver_id:id.optional(),context_id:id.optional(),context_id_type:z.string().optional()}).passthrough();
-export const Transaction=z.object({transaction_id:id,journal_ref_id:id,type_id:id,date:timestamp,unit_price:number.nonnegative(),quantity,is_buy:z.boolean(),is_personal:z.boolean(),client_id:id,location_id:id}).passthrough();
-export const IndustryJob=z.object({job_id:id,activity_id:id,blueprint_type_id:id,product_type_id:id.optional(),runs:quantity,cost:number.nonnegative().optional(),start_date:timestamp,end_date:timestamp,facility_id:id,status:z.string()}).passthrough();
-export const Order=z.object({order_id:id,type_id:id,issued:timestamp,price:number.nonnegative(),volume_remain:quantity,is_buy_order:z.boolean().optional(),is_corporation:z.boolean(),escrow:number.nonnegative().optional()}).passthrough();
+export const JournalEntry=z.object({id,ref_type:z.string(),date:timestamp,description:z.string(),amount:money.optional(),first_party_id:id.optional(),second_party_id:id.optional(),tax:money.optional(),tax_receiver_id:id.optional(),context_id:id.optional(),context_id_type:z.string().optional()}).passthrough();
+export const Transaction=z.object({transaction_id:id,journal_ref_id:id,type_id:id,date:timestamp,unit_price:money,quantity,is_buy:z.boolean(),is_personal:z.boolean(),client_id:id,location_id:id}).passthrough();
+export const IndustryJob=z.object({job_id:id,activity_id:id,blueprint_type_id:id,product_type_id:id.optional(),runs:quantity,cost:money.optional(),start_date:timestamp,end_date:timestamp,facility_id:id,status:z.string()}).passthrough();
+export const Order=z.object({order_id:id,type_id:id,issued:timestamp,price:money,volume_remain:quantity,is_buy_order:z.boolean().optional(),is_corporation:z.boolean(),escrow:money.optional()}).passthrough();
 function record(kind:string,characterId:string,entityId:string,response:EsiResponse,data:Record<string,unknown>,sourceTimestamp?:string):ProjectRecord{
  return {kind,source:'esi',sourceClass:'automatic',sourceCharacterId:characterId,sourceEntityId:entityId,fetchedAt:response.fetchedAt,sourceTimestamp:sourceTimestamp??response.sourceTimestamp,dataQuality:'measured',status:'actual',deduplicationKey:'esi:'+characterId+':'+kind+':'+entityId,data};
 }

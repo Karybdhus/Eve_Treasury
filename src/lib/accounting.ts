@@ -1,3 +1,5 @@
+import {moneyFact,exactSum,exactDifference,compatibilityNumber,signedCents,roundedRatio} from './exact-money';
+import {decimal} from './money';
 import type { Measure, Report } from './contracts';
 import {dateKey,freshness} from './time';
 export const project = { start: '2026-10-04', end: '2026-12-31', accounts: 5, monthlyPlex: 500, targets: {6:7875,12:13500} };
@@ -7,11 +9,11 @@ export function known(v: Measure | undefined): v is number { return typeof v ===
 export function sum(values: Measure[]): Measure {
   if (values.length === 0 || values.includes('not_reported')) return 'not_reported';
   if (values.includes('unknown')) return 'unknown';
-  return Number(values.reduce<bigint>((a,v) => a + BigInt(Math.round((v as number)*100)),0n))/100;
+  return compatibilityNumber(exactSum(values.map(v=>moneyFact(v).value)));
 }
 export function difference(revenue: Measure, costs: Measure[]): Measure {
   const total = sum(costs);
-  return known(revenue) && known(total) ? Number(BigInt(Math.round(revenue*100))-BigInt(Math.round(total*100)))/100 : revenue === 'unknown' || total === 'unknown' ? 'unknown' : 'not_reported';
+  return known(revenue) && known(total) ? compatibilityNumber(exactDifference(moneyFact(revenue).value,[moneyFact(total).value])) : revenue === 'unknown' || total === 'unknown' ? 'unknown' : 'not_reported';
 }
 export function profit(r: Report): Measure {
   if (r.provenance==='historical_seed' || r.status !== 'actual' || r.reportType !== 'daily') return 'not_reported';
@@ -33,16 +35,17 @@ export function funding(reports: Report[], now = new Date(),targetsConfig:{sixMo
   const snapshot=goal&&(!coordinator||Date.parse(goal.period.to)>Date.parse(coordinator.period.to))?goal:coordinator;
   const d = snapshot?.data;
   const physical = d?.physicalPlex ?? 'not_reported';
-  const released = d?.kind==='PlexGoalSnapshot'?d.iskAllocatedForPlex:d?.releasedPlexContribution ?? 'not_reported';
+  const releasedValue = d?.kind==='PlexGoalSnapshot'?d.iskAllocatedForPlex:d?.releasedPlexContribution ?? 'not_reported';
+  const released:Measure=known(releasedValue)&&moneyFact(releasedValue).value===null?'unknown':releasedValue;
   const evidence=d?.priceEvidence;
   const priceStatus=evidence?freshness(evidence.fetchedAt,evidence.fetchedAt,now.getTime()):'unknown';
-  const price:Measure = evidence?.quality==='actual'&&priceStatus==='recent_snapshot'?(d?.plexUnitPrice??'not_reported'):'not_reported';
+  const price:Measure = evidence?.quality==='actual'&&priceStatus==='recent_snapshot'&&moneyFact(d?.plexUnitPrice).value!==null?(d?.plexUnitPrice??'not_reported'):'not_reported';
   const equivalent: Measure = known(physical) && known(released) && known(price) ? physical + released/price : 'not_reported';
   const days = daysRemaining(now);
   const targets = [6,12].map(months=>{
     const plex = months===6?targetsConfig.sixMonthPlex:targetsConfig.twelveMonthPlex;
-    const gap: Measure = known(physical) && known(released) && known(price) ? Math.max(0, (plex-physical)*price-released) : 'not_reported';
-    return { months, plex, gap, weekly: known(gap) && days>0 ? gap/days*7 : 'not_reported' as Measure, progress: known(equivalent) ? Math.min(100,equivalent/plex*100) : 'not_reported' as Measure };
+    const gap: Measure = known(physical) && known(released) && known(price) ? compatibilityNumber(decimal((BigInt(plex)-BigInt(physical))*signedCents(moneyFact(price).value!)-signedCents(moneyFact(released).value!)>0n?(BigInt(plex)-BigInt(physical))*signedCents(moneyFact(price).value!)-signedCents(moneyFact(released).value!):0n)) : 'not_reported';
+    return { months, plex, gap, weekly: known(gap) && days>0 ? compatibilityNumber(decimal(roundedRatio(signedCents(moneyFact(gap).value!)*7n,BigInt(days)))) : 'not_reported' as Measure, progress: known(equivalent) ? Math.min(100,equivalent/plex*100) : 'not_reported' as Measure };
   });
   return { snapshot, physical, released, price, priceStatus, equivalent, freeLiquidity:coordinator?.data.freeLiquidity ?? 'not_reported', days, targets };
 }

@@ -4,12 +4,12 @@ import {records,storeRaw,storeRecord} from './source-records';
 import {cents,decimal} from './money';
 export function linkSessionIncome(db:DatabaseSync,sessionId:string,bookingId:string,confirmExclusive:boolean){
  if(confirmExclusive!==true)throw new Error('Confirm exclusive goods attribution to this session');
- const s=db.prepare('SELECT type,ended_at FROM manual_sessions WHERE session_id=?').get(sessionId) as {type:string;ended_at:string|null}|undefined;
+ db.exec('BEGIN IMMEDIATE');try{const s=db.prepare('SELECT type,ended_at FROM manual_sessions WHERE session_id=?').get(sessionId) as {type:string;ended_at:string|null}|undefined;
  if(!s?.ended_at)throw new Error('End the session before linking');
  const category=({hacking:'hacking',salvage:'salvage',ratting:'ratloot'} as Record<string,string>)[s.type];if(!category)throw new Error('Use the fleet view for mining income');
  const b=listBuybacks(db).find(b=>b.bookingId===bookingId);if(!b||b.historicalAggregate||b.reportingStatus!=='confirmed_payout'||!b.lines.some(l=>l.category===category&&l.actualPayoutISK!==null))throw new Error('Select a matching confirmed individual payout');
- const key='session-buyback:'+bookingId+':'+category,now=new Date().toISOString();db.exec('BEGIN IMMEDIATE');
- try{if(db.prepare('SELECT deduplication_key FROM project_records WHERE deduplication_key=? AND is_current=1').get(key))throw new Error('Payout category already attributed to a session');const data={sessionId,bookingId,category,exclusive:true};const rawId=storeRaw(db,{source:'manual',endpoint:'session-income-link',entityId:key,fetchedAt:now,payloadText:JSON.stringify({...data,linkedAt:now})});storeRecord(db,{kind:'session_buyback_link',source:'manual',sourceClass:'manual',sourceEntityId:bookingId,fetchedAt:now,dataQuality:'measured',status:'actual',deduplicationKey:key,data,rawId});db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}
+ const key='session-buyback:'+bookingId+':'+category,now=new Date().toISOString();
+ if(db.prepare('SELECT deduplication_key FROM project_records WHERE deduplication_key=? AND is_current=1').get(key))throw new Error('Payout category already attributed to a session');const data={sessionId,bookingId,category,exclusive:true};const rawId=storeRaw(db,{source:'manual',endpoint:'session-income-link',entityId:key,fetchedAt:now,payloadText:JSON.stringify({...data,linkedAt:now})});storeRecord(db,{kind:'session_buyback_link',source:'manual',sourceClass:'manual',sourceEntityId:bookingId,fetchedAt:now,dataQuality:'measured',status:'actual',deduplicationKey:key,data,rawId});db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}
 }
 export function sessionIncomeAnalytics(db:DatabaseSync){
  const sessions=records(db,'manual_session'),links=records(db,'session_buyback_link'),bookings=listBuybacks(db);

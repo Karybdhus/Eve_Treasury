@@ -73,7 +73,7 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
  },['pi_colony','pi_pin']);
  await area('wallet',async()=>{
   const path=base+'/wallet',balance=await client.get(path,'char-wallet');
-  if(typeof balance.data!=='number')throw new Error('Unexpected wallet balance');
+  if(typeof balance.data!=='number'&&typeof balance.data!=='string')throw new Error('Unexpected wallet balance');
   const balanceRecord:ProjectRecord={kind:'wallet_balance',source:'esi',sourceClass:'automatic',sourceCharacterId:characterId,sourceEntityId:characterId,fetchedAt:balance.fetchedAt,sourceTimestamp:balance.sourceTimestamp,dataQuality:'measured',status:'actual',deduplicationKey:'esi:'+characterId+':wallet_balance',data:{wallet:balance.data}};
   const journal=await client.pages(path+'/journal','char-wallet');
   const transactions=await client.transactions(path+'/transactions');

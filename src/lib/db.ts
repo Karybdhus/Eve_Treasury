@@ -1,3 +1,6 @@
+import {moneyFact} from './exact-money';
+import {parseFinancialJson} from './financial-json';
+import {writeMoneyFacts} from './financial-facts';
 import {DatabaseSync} from 'node:sqlite';
 import {mkdirSync,readFileSync,readdirSync,existsSync} from 'node:fs';
 import path from 'node:path';
@@ -17,6 +20,7 @@ export function openDatabase(filename=process.env.DASHBOARD_DB??path.join(proces
  if(filename!==':memory:'&&version===1&&!existsSync(filename+'.pre-v2.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v2.sqlite');
  if(filename!==':memory:'&&version===2&&!existsSync(filename+'.pre-v3.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v3.sqlite');
  if(filename!==':memory:'&&version===3&&!existsSync(filename+'.pre-v4.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v4.sqlite');
+ if(filename!==':memory:'&&version<5){const backup=filename+'.pre-v5-'+Date.now()+'.sqlite';db.prepare('VACUUM INTO ?').run(backup);}
  migrate(db);return db;
 }
 function scope(r:Report){
@@ -24,16 +28,17 @@ function scope(r:Report){
  if(r.data.kind==='MiningSessionReport')return 'mining:session:'+r.status+':'+r.data.sessionId;
  return r.data.kind+':'+r.reportType+':'+r.status+':'+new Date(r.period.to).toISOString();
 }
-export function importReports(db:DatabaseSync,input:unknown,filename:string){
+export function importReports(db:DatabaseSync,input:unknown,filename:string,originalText?:string){
  const list=Array.isArray(input)?input:[input];
  if(!list.length||list.length>500)throw new Error('Import requires 1 to 500 reports');
  const normalized=list.map((r,i)=>{try{return normalizeImport(r);}catch(e){throw new Error('Report '+(i+1)+': '+(e as Error).message);}});
  let imported=0,skipped=0;db.exec('BEGIN IMMEDIATE');
  try{
+  if(originalText)storeRaw(db,{source:normalized[0].report.source,endpoint:'original-json-file',entityId:filename,fetchedAt:new Date().toISOString(),payloadText:originalText});
   for(let i=0;i<normalized.length;i++){
    const {report:r,contract,reportedProfit}=normalized[i],body=JSON.stringify(r),rawBody=JSON.stringify(list[i]);
    const old=db.prepare('SELECT body FROM reports WHERE report_id=?').get(r.reportId) as {body:string}|undefined;
-   if(old){const original=db.prepare('SELECT raw_body FROM imported_source_reports WHERE report_id=?').get(r.reportId) as {raw_body:string}|undefined;if(original&&!isDeepStrictEqual(JSON.parse(original.raw_body),list[i]))throw new Error('reportId '+r.reportId+' original content changed. Reports are immutable.');if(old.body!==body)throw new Error('reportId '+r.reportId+' already exists with different content. Reports are immutable.');skipped++;continue;}
+   if(old){const original=db.prepare('SELECT raw_body FROM imported_source_reports WHERE report_id=?').get(r.reportId) as {raw_body:string}|undefined;if(original&&!isDeepStrictEqual(parseFinancialJson(original.raw_body),parseFinancialJson(JSON.stringify(list[i]))))throw new Error('reportId '+r.reportId+' original content changed. Reports are immutable.');if(old.body!==body)throw new Error('reportId '+r.reportId+' already exists with different content. Reports are immutable.');skipped++;continue;}
    // Existing V1 snapshot scope keys are preserved. Semantic comparison bridges the migration.
    const conflict=db.prepare('SELECT body FROM reports WHERE scope_key=?').get(scope(r));
    const semantic=db.prepare('SELECT body FROM reports').all() as {body:string}[];
@@ -45,10 +50,10 @@ export function importReports(db:DatabaseSync,input:unknown,filename:string){
    const fetchedAt=new Date().toISOString();
    db.prepare('INSERT INTO reports VALUES (?,?,?,?,?)').run(r.reportId,scope(r),body,fetchedAt,path.basename(filename));
    db.prepare('INSERT INTO imported_source_reports VALUES (?,?,?)').run(r.reportId,rawBody,contract);
-   if(reportedProfit!==undefined)db.prepare('INSERT INTO reported_profit_decimal VALUES (?,?,?)').run(r.reportId,typeof reportedProfit==='number'?reportedProfit.toFixed(2):null,typeof reportedProfit==='number'?(typeof profit(r)==='number'?'measured':'reported_unverified'):reportedProfit);
+   if(reportedProfit!==undefined)db.prepare('INSERT INTO reported_profit_decimal VALUES (?,?,?)').run(r.reportId,moneyFact(reportedProfit).value,typeof reportedProfit==='number'?(typeof profit(r)==='number'?'measured':'reported_unverified'):reportedProfit);
    const rawId=storeRaw(db,{source:r.source,endpoint:'json-import',entityId:r.reportId,fetchedAt,sourceTimestamp:r.period.to,payloadText:rawBody});
    storeRecord(db,{kind:'report',source:r.source,sourceClass:sourceClass(r.source),sourceEntityId:r.reportId,fetchedAt,sourceTimestamp:r.period.to,dataQuality:r.provenance==='historical_seed'?'historical_seed':'partial',status:r.status,deduplicationKey:'report:'+r.reportId,data:r,rawId});
-   imported++;
+   writeMoneyFacts(db,'report:'+r.reportId,r,rawBody);imported++;
   }
   db.exec('COMMIT');return {imported,skipped};
  }catch(e){db.exec('ROLLBACK');throw e;}

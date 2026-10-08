@@ -9,20 +9,20 @@ export function fleetSessions(db:DatabaseSync):FleetSession[]{return (db.prepare
 export function startFleet(db:DatabaseSync,input:unknown,now=new Date()):FleetSession{
  const parsed=FleetInput.parse(input),start=parsed.startedAt??now.toISOString();if(Date.parse(start)>now.getTime())throw new Error('Start must not be in the future');
  const keys=parsed.characters.map(c=>c.characterId??c.name.trim().toLowerCase());if(new Set(keys).size!==keys.length)throw new Error('Duplicate fleet participant');
- const active=fleetSessions(db).filter(s=>!s.endedAt);if(active.some(s=>s.characters.some(c=>keys.includes(c.characterId??c.name.trim().toLowerCase()))))throw new Error('Character already in an open fleet session');
- const s:FleetSession={sessionId:randomUUID(),startedAt:start,endedAt:null,characters:parsed.characters,notes:parsed.notes,fleetHours:null,characterHours:null};db.prepare('INSERT INTO fleet_sessions VALUES (?,?,NULL,?)').run(s.sessionId,start,JSON.stringify(s));return s;
+ db.exec('BEGIN IMMEDIATE');try{const active=fleetSessions(db).filter(s=>!s.endedAt);if(active.some(s=>s.characters.some(c=>keys.includes(c.characterId??c.name.trim().toLowerCase()))))throw new Error('Character already in an open fleet session');
+ const s:FleetSession={sessionId:randomUUID(),startedAt:start,endedAt:null,characters:parsed.characters,notes:parsed.notes,fleetHours:null,characterHours:null};db.prepare('INSERT INTO fleet_sessions VALUES (?,?,NULL,?)').run(s.sessionId,start,JSON.stringify(s));db.exec('COMMIT');return s;}catch(e){db.exec('ROLLBACK');throw e;}
 }
 export function endFleet(db:DatabaseSync,id:string,endedAt=new Date().toISOString(),now=new Date()):FleetSession{
- z.uuid().parse(id);z.iso.datetime({offset:true}).parse(endedAt);const s=fleetSessions(db).find(s=>s.sessionId===id);if(!s)throw new Error('Fleet session not found');if(s.endedAt)return s;if(Date.parse(endedAt)<Date.parse(s.startedAt)||Date.parse(endedAt)>now.getTime())throw new Error('Invalid end time');
- const hours=(Date.parse(endedAt)-Date.parse(s.startedAt))/3600000;const result={...s,endedAt,fleetHours:hours,characterHours:hours*s.characters.length};db.prepare('UPDATE fleet_sessions SET ended_at=?,body=? WHERE session_id=? AND ended_at IS NULL').run(endedAt,JSON.stringify(result),id);return result;
+ z.uuid().parse(id);z.iso.datetime({offset:true}).parse(endedAt);db.exec('BEGIN IMMEDIATE');try{const s=fleetSessions(db).find(s=>s.sessionId===id);if(!s)throw new Error('Fleet session not found');if(s.endedAt){db.exec('COMMIT');return s;}if(Date.parse(endedAt)<Date.parse(s.startedAt)||Date.parse(endedAt)>now.getTime())throw new Error('Invalid end time');
+ const hours=(Date.parse(endedAt)-Date.parse(s.startedAt))/3600000;const result={...s,endedAt,fleetHours:hours,characterHours:hours*s.characters.length};db.prepare('UPDATE fleet_sessions SET ended_at=?,body=? WHERE session_id=? AND ended_at IS NULL').run(endedAt,JSON.stringify(result),id);db.exec('COMMIT');return result;}catch(e){db.exec('ROLLBACK');throw e;}
 }
 export function linkFleetBuyback(db:DatabaseSync,sessionId:string,bookingId:string,confirmExclusive:boolean){
  if(confirmExclusive!==true)throw new Error('Confirm that all ORE/ICE in this payout belongs to this fleet session');
- const s=fleetSessions(db).find(s=>s.sessionId===sessionId),b=listBuybacks(db).find(b=>b.bookingId===bookingId);
+ db.exec('BEGIN IMMEDIATE');try{const s=fleetSessions(db).find(s=>s.sessionId===sessionId),b=listBuybacks(db).find(b=>b.bookingId===bookingId);
  if(!s?.endedAt||!s.fleetHours)throw new Error('End the fleet session before linking');
  if(!b||b.historicalAggregate||b.reportingStatus!=='confirmed_payout')throw new Error('Select an individual confirmed payout');
  if(!b.lines.some(l=>l.category==='ore_ice'&&l.actualPayoutISK!==null))throw new Error('Payout has no ORE/ICE category');
- db.prepare('INSERT INTO fleet_buyback_links VALUES (?,?,?)').run(bookingId,sessionId,new Date().toISOString());
+ db.prepare('INSERT INTO fleet_buyback_links VALUES (?,?,?)').run(bookingId,sessionId,new Date().toISOString());db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}
 }
 export function fleetAnalytics(db:DatabaseSync){
  const links=db.prepare('SELECT booking_id,session_id FROM fleet_buyback_links').all() as {booking_id:string;session_id:string}[],bookings=listBuybacks(db);

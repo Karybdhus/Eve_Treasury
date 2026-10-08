@@ -1,3 +1,4 @@
+import {compatibilityNumber,moneyFact} from '../exact-money';
 import type {ProjectRecord} from '../source-records';
 import type {Measure} from '../contracts';
 import {sum} from '../accounting';
@@ -25,6 +26,6 @@ export function rattingEvidence(records:ProjectRecord[],projectCharacterIds:Set<
  const classified=selected.map(r=>({record:r,...classifyJournal(r.data,projectCharacterIds)}));
  const bounty=classified.filter(r=>r.category==='ratting_bounty'),tax=classified.filter(r=>r.category==='ratting_tax');
  // Journal amounts are already wallet deltas. The informational tax field is never subtracted twice.
- const amount=(r:typeof classified[number]):Measure=>typeof r.record.data.amount==='number'?Math.round(r.record.data.amount*100)/100:'unknown';
+ const amount=(r:typeof classified[number]):Measure=>compatibilityNumber(moneyFact(r.record.data.amount).value);
  return {measuredNet:sum([...bounty,...tax].map(amount)),bountyEntries:bounty.length,taxEntries:tax.length,essEntries:classified.filter(r=>r.category==='ess_unvalidated').length,completeness:'partial' as const,classes:classified};
 }

@@ -1,3 +1,4 @@
+import {writeMoneyFacts} from './financial-facts';
 import {createHash,randomUUID} from 'node:crypto';
 import type {DatabaseSync} from 'node:sqlite';
 export type SourceClass='automatic'|'agent'|'manual';
@@ -15,6 +16,8 @@ export function storeRaw(db:DatabaseSync,r:{source:string;characterId?:string;en
   return id;
 }
 export function storeRecord(db:DatabaseSync,r:ProjectRecord){
+  const original=r.rawId?db.prepare('SELECT payload_text FROM raw_source_records WHERE raw_id=?').get(r.rawId) as {payload_text:string}|undefined:undefined;
+  writeMoneyFacts(db,r.deduplicationKey,r.data,original?.payload_text);
   db.prepare('INSERT INTO project_records VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(deduplication_key) DO UPDATE SET fetched_at=excluded.fetched_at,source_timestamp=excluded.source_timestamp,data_quality=excluded.data_quality,status=excluded.status,body=excluded.body,raw_id=excluded.raw_id,is_current=excluded.is_current')
     .run(r.deduplicationKey,r.kind,r.source,r.sourceClass,r.sourceCharacterId??null,r.sourceEntityId??null,r.fetchedAt,r.sourceTimestamp??null,r.dataQuality,r.status,JSON.stringify(r.data),r.rawId??null,r.isCurrent===false?0:1);
 }

@@ -1,10 +1,13 @@
+import {compatibilityNumber,moneyFact} from './exact-money';
+import {sum} from './accounting';
 import {z} from 'zod';
 import {validateReport,type Report,type Measure} from './contracts';
 const unknown='not_reported' as const;
-const measure=z.union([z.number().finite(),z.enum(['unknown','not_reported'])]);
+const decimalInput=z.string().regex(/^-?(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/).transform(v=>compatibilityNumber(moneyFact(v).value));
+const measure=z.union([decimalInput,z.number().finite(),z.enum(['unknown','not_reported'])]);
 const money=measure.refine(v=>typeof v!=='number'||(Math.abs(v)<=90_000_000_000_000&&Math.abs(v*100-Math.round(v*100))<0.01),'Money must have at most two decimal places');
 const quantity=measure.refine(v=>typeof v!=='number'||v>=0);
-const positive=money.refine(v=>typeof v!=='number'||v>=0);
+const positive=z.union([z.number().finite().min(0).max(90_000_000_000_000).multipleOf(0.01),z.enum(['unknown','not_reported']),z.string().regex(/^(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/).transform(v=>compatibilityNumber(moneyFact(v).value))]);
 const output=z.object({typeId:z.number().int().nonnegative().safe().optional(),name:z.string().min(1),category:z.enum(['ice','ore','gas']).optional(),quantity:z.number().finite().nonnegative(),unit:z.string().optional(),tier:z.enum(['P0','P1','P2','P3','P4']).optional()}).passthrough();
 const quality=z.record(z.string(),z.unknown()).optional();
 const common={dataQuality:quality,plexContribution:positive.optional(),notes:z.string().optional()};
@@ -71,7 +74,7 @@ export function normalizeImport(input:unknown):{report:Report;contract:string;re
    const activities=(d.activities??[]) as {category:string;grossRevenue?:Measure;directCosts?:Measure;netProfit?:Measure;sourceTransactionIds?:string[]}[];
    data={kind:'SupplementaryIncomeReport',activities:[...new Set(activities.map(a=>a.category==='ratting'?'ratloot':a.category))],...finance};
    const values=activities.map(a=>traced({...a},'netProfit'));
-   reportedProfit=values.length&&values.every(v=>typeof v==='number')?values.reduce<number>((n,v)=>n+(v as number),0):unknown;break;
+   reportedProfit=values.length&&values.every(v=>typeof v==='number')?sum(values as Measure[]):unknown;break;
   }
   case 'coordinator':case 'plexGoal':{
    const price=(d.plexPrice??{}) as {iskPerPlex?:Measure;timestamp?:string;source?:string};

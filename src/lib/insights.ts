@@ -1,14 +1,15 @@
+import {signedCents,moneyFact} from './exact-money';
 import type {Report} from './contracts';
 import type {ProjectRecord} from './source-records';
 import type {Booking} from './buyback';
-import {funding,weekly,weekStart,known,pillars,profit} from './accounting';
+import {funding,weekly,weekStart,known,pillars,profit,project,difference} from './accounting';
 import {freshness,dateKey} from './time';
 import {Queue,economicSkills,SkillSnapshot} from './esi/skills';
 import {cents,decimal} from './money';
 export type Insight={id:string;title:string;metric:string;source:string;reason:string;quality:string;impactISK:string|null;evidence:string[]};
-export function buildInsights(reports:Report[],rows:ProjectRecord[],buybacks:Booking[],now=new Date()):Insight[]{
+export function buildInsights(reports:Report[],rows:ProjectRecord[],buybacks:Booking[],now=new Date(),targetsConfig?:Parameters<typeof funding>[2]):Insight[]{
  const out:Insight[]=[];const add=(v:Insight)=>out.push(v);
- const f=funding(reports,now);if(!known(f.price))add({id:'plex-price',title:'PLEX-Preis nicht aktuell belegbar',metric:'Finanzierungsbedarf ISK / Woche',source:'coordinator / plex_goal',reason:'Preisquelle, Zeitpunkt und actual-Qualitaet benoetigt. Preisstatus: '+f.priceStatus+'.',quality:f.priceStatus.toUpperCase(),impactISK:null,evidence:f.snapshot?[f.snapshot.reportId]:[]});
+ const f=funding(reports,now,targetsConfig);if(!known(f.price))add({id:'plex-price',title:'PLEX-Preis nicht aktuell belegbar',metric:'Finanzierungsbedarf ISK / Woche',source:'coordinator / plex_goal',reason:'Preisquelle, Zeitpunkt und actual-Qualitaet benoetigt. Preisstatus: '+f.priceStatus+'.',quality:f.priceStatus.toUpperCase(),impactISK:null,evidence:f.snapshot?[f.snapshot.reportId]:[]});
  for(const r of rows){
   const fresh=freshness(r.fetchedAt,r.sourceTimestamp,now.getTime());
   if(r.kind==='pi_colony'&&fresh!=='recent_snapshot')add({id:'pi-stale:'+r.deduplicationKey,title:'PI-Kolonie veraltet oder unbestimmt',metric:'Colony State / Produktion',source:'ESI',reason:'Quelldatum '+(r.sourceTimestamp??'nicht gemeldet')+'; Abruf ersetzt kein last_update. Daten erneut pruefen.',quality:fresh.toUpperCase(),impactISK:null,evidence:[r.deduplicationKey]});
@@ -22,7 +23,7 @@ export function buildInsights(reports:Report[],rows:ProjectRecord[],buybacks:Boo
   if(b.reportingStatus==='confirmed_payout'&&!b.historicalAggregate&&b.reconciliationStatus==='unmatched'&&b.actualPayoutISK!==null){const candidates=rows.filter(r=>r.kind==='wallet_journal'&&['contract_price','player_donation'].includes(String(r.data.ref_type))&&typeof r.data.amount==='number'&&r.data.amount>0&&cents(r.data.amount.toFixed(2))===cents(b.actualPayoutISK!)&&(!b.characterId||b.characterId===r.sourceCharacterId)&&(!b.payoutDate||typeof r.data.date==='string'&&dateKey(r.data.date)===b.payoutDate));if(candidates.length)add({id:'buyback-match:'+b.bookingId,title:'Moeglicher Wallet-Beleg fuer Buyback',metric:'Doppelzaehlungspruefung',source:'BUYBACK / ESI',reason:'Betrag und gemeldete Zeit-/Charaktermerkmale stimmen mit '+candidates.length+' Beleg(en) ueberein. Nur manueller Abgleich kann die Identitaet bestaetigen.',quality:'POSSIBLE_MATCH',impactISK:null,evidence:[b.bookingId,...candidates.map(r=>r.deduplicationKey)]});}
  }
  const yesterday=dateKey(new Date(now.getTime()-86400000));
- for(const p of pillars)if(!reports.some(r=>r.pillar===p&&r.status==='actual'&&r.reportType==='daily'&&r.provenance!=='historical_seed'&&dateKey(r.period.from,r.reportingTimezone??'UTC')===yesterday))add({id:'missing:'+p+':'+yesterday,title:'Tagesbericht fehlt: '+p,metric:'Vollstaendige Wochenbilanz',source:'AGENT / JSON',reason:'Kein Ist-Tagesbericht fuer '+yesterday+'. Fehlend ist kein Nullgewinn.',quality:'NOT_REPORTED',impactISK:null,evidence:[]});
- const current=weekly(reports,now).find(w=>w.week===weekStart(now.toISOString()));if(known(current?.total)&&known(f.targets[0].weekly)&&current.total<f.targets[0].weekly)add({id:'pace',title:'Gemeldeter Wochengewinn unter Zieltempo',metric:'Hauptsaeulen-Netto vs Finanzierungsszenario',source:'JSON actual / PLEX scenario',reason:'Vergleich verwendet vollstaendigen gemeldeten Nettogewinn, keine automatische Freigabe fuer PLEX. Restwoche und Budgetzuweisung separat beurteilen.',quality:'ACTUAL / PLAN comparison',impactISK:decimal(BigInt(Math.round((f.targets[0].weekly-current.total)*100))),evidence:reports.filter(r=>known(profit(r))).map(r=>r.reportId)});
+ for(const p of pillars)if(yesterday>=project.start&&yesterday<=project.end&&!reports.some(r=>r.pillar===p&&r.status==='actual'&&r.reportType==='daily'&&r.provenance!=='historical_seed'&&dateKey(r.period.from,r.reportingTimezone??'UTC')===yesterday))add({id:'missing:'+p+':'+yesterday,title:'Tagesbericht fehlt: '+p,metric:'Vollstaendige Wochenbilanz',source:'AGENT / JSON',reason:'Kein Ist-Tagesbericht fuer '+yesterday+'. Fehlend ist kein Nullgewinn.',quality:'NOT_REPORTED',impactISK:null,evidence:[]});
+ const current=weekly(reports,now).find(w=>w.week===weekStart(now.toISOString()));if(known(current?.total)&&known(f.targets[0].weekly)&&current.total<f.targets[0].weekly)add({id:'pace',title:'Gemeldeter Wochengewinn unter Zieltempo',metric:'Hauptsaeulen-Netto vs Finanzierungsszenario',source:'JSON actual / PLEX scenario',reason:'Vergleich verwendet vollstaendigen gemeldeten Nettogewinn, keine automatische Freigabe fuer PLEX. Restwoche und Budgetzuweisung separat beurteilen.',quality:'ACTUAL / PLAN comparison',impactISK:decimal(signedCents(moneyFact(difference(f.targets[0].weekly,[current.total])).value!)),evidence:reports.filter(r=>known(profit(r))).map(r=>r.reportId)});
  return out;
 }

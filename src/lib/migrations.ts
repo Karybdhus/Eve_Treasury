@@ -1,3 +1,4 @@
+import {backfillMoneyFacts} from './financial-facts';
 import type {DatabaseSync} from 'node:sqlite';
 export const MIGRATION_V2 = [
 'CREATE TABLE IF NOT EXISTS characters (character_id TEXT PRIMARY KEY, name TEXT NOT NULL, scopes TEXT NOT NULL, owner_hash TEXT NOT NULL, connection_status TEXT NOT NULL, generation TEXT NOT NULL, connected_at TEXT NOT NULL, last_sync TEXT, last_error TEXT)',
@@ -29,9 +30,18 @@ export const MIGRATION_V4=[
 'CREATE TABLE IF NOT EXISTS fleet_sessions(session_id TEXT PRIMARY KEY,started_at TEXT NOT NULL,ended_at TEXT,body TEXT NOT NULL)',
 'CREATE TABLE IF NOT EXISTS fleet_buyback_links(booking_id TEXT PRIMARY KEY REFERENCES buyback_bookings(booking_id),session_id TEXT NOT NULL REFERENCES fleet_sessions(session_id),linked_at TEXT NOT NULL)',
 ];
+export const MIGRATION_V5=[
+'CREATE TABLE financial_money(source_key TEXT NOT NULL,field TEXT NOT NULL,value_decimal TEXT,quality TEXT NOT NULL,PRIMARY KEY(source_key,field))',
+'CREATE TABLE financial_sources(source_key TEXT PRIMARY KEY,body TEXT NOT NULL,is_current INTEGER NOT NULL DEFAULT 1)',
+'CREATE TABLE economic_events(event_id TEXT PRIMARY KEY,category TEXT NOT NULL,revision INTEGER NOT NULL DEFAULT 1,created_at TEXT NOT NULL)',
+'CREATE TABLE event_sources(source_key TEXT PRIMARY KEY REFERENCES financial_sources(source_key),event_id TEXT NOT NULL REFERENCES economic_events(event_id),method TEXT NOT NULL,evidence TEXT NOT NULL,confirmed_at TEXT NOT NULL,manual INTEGER NOT NULL DEFAULT 0)',
+'CREATE TABLE reconciliation_decisions(pair_key TEXT PRIMARY KEY,status TEXT NOT NULL,reason TEXT NOT NULL,changed_at TEXT NOT NULL)',
+'CREATE TABLE reconciliation_audit(audit_id TEXT PRIMARY KEY,action TEXT NOT NULL,changed_at TEXT NOT NULL,body TEXT NOT NULL)',
+'CREATE UNIQUE INDEX manual_session_active ON manual_sessions(character_id) WHERE ended_at IS NULL',
+];
 export function migrate(db:DatabaseSync) {
  const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
- if(version>4)throw new Error('Database version is newer than this application');
- const steps:[number,string[]][]=[[2,MIGRATION_V2],[3,MIGRATION_V3],[4,MIGRATION_V4]];
- for(const [target,statements] of steps){if(version>=target)continue;db.exec('BEGIN IMMEDIATE');try{for(const sql of statements)db.exec(sql);db.exec('PRAGMA user_version='+target+'; COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}
+ if(version>5)throw new Error('Database version is newer than this application');
+ const steps:[number,string[]][]=[[2,MIGRATION_V2],[3,MIGRATION_V3],[4,MIGRATION_V4],[5,MIGRATION_V5]];
+ for(const [target,statements] of steps){if(version>=target)continue;db.exec('BEGIN IMMEDIATE');try{for(const sql of statements)db.exec(sql);if(target===5)backfillMoneyFacts(db);db.exec('PRAGMA user_version='+target+'; COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}
 }

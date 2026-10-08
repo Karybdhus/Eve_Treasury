@@ -1,9 +1,12 @@
+import {compatibilityNumber,moneyFact} from './exact-money';
 import { z } from 'zod';
 import {dateKey,localClock} from './time';
 
 // Numbers are measured facts; explicit strings preserve missing-data semantics.
-const amount = z.union([z.number().finite().min(0).max(90_000_000_000_000).multipleOf(0.01), z.enum(['unknown', 'not_reported'])]);
-const signed = z.union([z.number().finite().min(-90_000_000_000_000).max(90_000_000_000_000).multipleOf(0.01), z.enum(['unknown', 'not_reported'])]);
+const decimalInput=z.string().regex(/^(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/).transform(v=>compatibilityNumber(moneyFact(v).value));
+const signedInput=z.string().regex(/^-?(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/).transform(v=>compatibilityNumber(moneyFact(v).value));
+const amount = z.union([decimalInput,z.number().finite().min(0).max(90_000_000_000_000).multipleOf(0.01), z.enum(['unknown', 'not_reported'])]);
+const signed = z.union([signedInput,z.number().finite().min(-90_000_000_000_000).max(90_000_000_000_000).multipleOf(0.01), z.enum(['unknown', 'not_reported'])]);
 const quantity = z.union([z.number().finite().nonnegative(), z.enum(['unknown', 'not_reported'])]);
 const count = z.union([z.number().int().nonnegative(), z.enum(['unknown', 'not_reported'])]);
 const output = z.strictObject({ item: z.string().min(1).max(100), category: z.enum(['ice', 'ore', 'gas', 'pi', 'other']), quantity: z.number().finite().nonnegative(), unit: z.string().min(1).max(40) });
