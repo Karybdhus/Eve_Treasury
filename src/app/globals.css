@@ -14,3 +14,4 @@ nav a[aria-current="page"]{background:#17302f;color:var(--accent);border-left:2p
 @media(max-width:400px){.metrics{grid-template-columns:minmax(0,1fr)}.pillar-grid{grid-template-columns:minmax(0,1fr)}.hero{gap:16px;align-items:flex-start;flex-wrap:wrap}}
 .evidence-list{max-height:32rem;overflow:auto;overscroll-behavior:contain;padding-right:8px}.evidence-list:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .reconciliation-panel>label{display:flex;flex-direction:column;gap:6px;margin:12px 0}.reconciliation-panel>label>input,.reconciliation-panel>label>select{width:100%;max-width:640px}
+.form-grid>label{min-width:0;display:flex;flex-direction:column;gap:6px}.panel pre{max-width:100%;overflow:auto}.panel>p{overflow-wrap:anywhere}

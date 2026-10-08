@@ -1,5 +1,6 @@
 import {applicationOrigin,assertApplicationRequest} from '../application-access';
 export const ESI_SCOPES={
+  contracts:'esi-contracts.read_character_contracts.v1',
   mining:'esi-industry.read_character_mining.v1',pi:'esi-planets.manage_planets.v1',
   wallet:'esi-wallet.read_character_wallet.v1',industry:'esi-industry.read_character_jobs.v1',
   market:'esi-markets.read_character_orders.v1',skills:'esi-skills.read_skills.v1',skillqueue:'esi-skills.read_skillqueue.v1',implants:'esi-clones.read_implants.v1',assets:'esi-assets.read_assets.v1'

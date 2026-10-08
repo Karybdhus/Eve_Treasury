@@ -22,6 +22,7 @@ export function openDatabase(filename=process.env.DASHBOARD_DB??path.join(proces
  if(filename!==':memory:'&&version===2&&!existsSync(filename+'.pre-v3.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v3.sqlite');
  if(filename!==':memory:'&&version===3&&!existsSync(filename+'.pre-v4.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v4.sqlite');
  if(filename!==':memory:'&&version<5){const backup=filename+'.pre-v5-'+Date.now()+'.sqlite';db.prepare('VACUUM INTO ?').run(backup);}
+ if(filename!==':memory:'&&version<6){db.prepare('VACUUM INTO ?').run(filename+'.pre-v6-'+Date.now()+'.sqlite');}
  migrate(db);return db;
 }
 function scope(r:Report){

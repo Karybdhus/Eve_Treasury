@@ -1,15 +1,17 @@
-import {compatibilityNumber,moneyFact} from '../exact-money';
+import {exactSum,signedCents,compatibilityNumber,moneyFact} from '../exact-money';
 import type {ProjectRecord} from '../source-records';
 import type {Measure} from '../contracts';
 import {sum} from '../accounting';
-const bounties=new Set(['bounty','bounty_prize','bounty_prizes']);
+const bounties=new Set(['bounty_prizes']);
 const bountyTaxes=new Set(['bounty_prize_corporation_tax','npc_bounty_security_tax']);
-export function classifyJournal(row:Record<string,unknown>,projectCharacterIds:Set<string>){
+export function classifyJournal(row:Record<string,unknown>,projectCharacterIds:Set<string>,walletOwner?:string){
  const type=String(row.ref_type);
- if(type==='ess_escrow_transfer')return {category:'ess_unvalidated',quality:'partial'};
- if(bounties.has(type))return {category:'ratting_bounty',quality:'measured'};
- if(bountyTaxes.has(type))return {category:'ratting_tax',quality:'measured'};
- if(type==='player_donation'||type==='corporation_account_withdrawal'||type==='corporation_payment'){
+ const delta=moneyFact(row.amount).value,positive=delta!==null&&signedCents(delta)>0n;
+ const owned=walletOwner!==undefined&&projectCharacterIds.has(walletOwner);
+ if(type==='ess_escrow_transfer')return {category:positive&&owned&&row.context_id_type==='system_id'&&/^\d+$/.test(String(row.context_id??''))?'ess_realized':'ess_unvalidated',quality:positive&&owned&&row.context_id_type==='system_id'?'measured':'partial'};
+ if(bounties.has(type))return {category:positive?'ratting_bounty':'bounty_unvalidated',quality:positive?'measured':'unknown'};
+ if(bountyTaxes.has(type))return {category:delta!==null&&signedCents(delta)<0n?'ratting_tax':'bounty_tax_unvalidated',quality:delta!==null&&signedCents(delta)<0n?'measured':'unknown'};
+ if(type==='player_donation'||type==='corporation_account_withdrawal'||type==='corporation_payment'||type==='contract_price'||type==='contract_price_payment_corp'){
   const both=projectCharacterIds.has(String(row.first_party_id))&&projectCharacterIds.has(String(row.second_party_id));
   return {category:both?'internal_transfer':'transfer_unresolved',quality:both?'measured':'unknown'};
  }
@@ -23,9 +25,10 @@ export function classifyJournal(row:Record<string,unknown>,projectCharacterIds:S
 }
 export function rattingEvidence(records:ProjectRecord[],projectCharacterIds:Set<string>){
  const selected=records.filter(r=>r.kind==='wallet_journal'&&r.status==='actual');
- const classified=selected.map(r=>({record:r,...classifyJournal(r.data,projectCharacterIds)}));
+ const classified=selected.map(r=>({record:r,...classifyJournal(r.data,projectCharacterIds,r.sourceCharacterId)}));
  const bounty=classified.filter(r=>r.category==='ratting_bounty'),tax=classified.filter(r=>r.category==='ratting_tax');
  // Journal amounts are already wallet deltas. The informational tax field is never subtracted twice.
  const amount=(r:typeof classified[number]):Measure=>compatibilityNumber(moneyFact(r.record.data.amount).value);
- return {measuredNet:sum([...bounty,...tax].map(amount)),bountyEntries:bounty.length,taxEntries:tax.length,essEntries:classified.filter(r=>r.category==='ess_unvalidated').length,completeness:'partial' as const,classes:classified};
+ const realizedEss=classified.filter(r=>r.category==='ess_realized'),bountyISK=exactSum(bounty.map(r=>moneyFact(r.record.data.amount).value)),essISK=exactSum(realizedEss.map(r=>moneyFact(r.record.data.amount).value));
+ return {realizedBountyISK:bountyISK,realizedEssISK:essISK,realizedTotalISK:exactSum([...(bountyISK!==null?[bountyISK]:[]),...(essISK!==null?[essISK]:[])]),pendingEssISK:null,stolenEssISK:null,reservePersonalIncomeISK:null,bankObservationQuality:'UNKNOWN',measuredNet:sum([...bounty,...tax].map(amount)),bountyEntries:bounty.length,taxEntries:tax.length,essEntries:classified.filter(r=>r.category==='ess_unvalidated').length,completeness:'partial' as const,classes:classified};
 }

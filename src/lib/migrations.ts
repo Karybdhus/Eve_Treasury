@@ -39,9 +39,18 @@ export const MIGRATION_V5=[
 'CREATE TABLE reconciliation_audit(audit_id TEXT PRIMARY KEY,action TEXT NOT NULL,changed_at TEXT NOT NULL,body TEXT NOT NULL)',
 'CREATE UNIQUE INDEX manual_session_active ON manual_sessions(character_id) WHERE ended_at IS NULL',
 ];
+export const MIGRATION_V6=[
+ 'CREATE TABLE contract_observations(contract_id TEXT NOT NULL,character_id TEXT NOT NULL,raw_id TEXT REFERENCES raw_source_records(raw_id),fetched_at TEXT NOT NULL,body TEXT NOT NULL,PRIMARY KEY(contract_id,character_id,fetched_at))',
+ 'CREATE TABLE contract_decisions(contract_id TEXT PRIMARY KEY,category TEXT,reason TEXT NOT NULL,expected_payout TEXT,revision INTEGER NOT NULL DEFAULT 1,updated_at TEXT NOT NULL)',
+ "CREATE TABLE evidence_allocations(allocation_id TEXT PRIMARY KEY,payment_key TEXT NOT NULL REFERENCES financial_sources(source_key),target_key TEXT NOT NULL REFERENCES financial_sources(source_key),amount_decimal TEXT NOT NULL,kind TEXT NOT NULL CHECK(kind IN ('payout','aggregate','included_cost')),status TEXT NOT NULL CHECK(status IN ('active','revoked')),reason TEXT NOT NULL,created_at TEXT NOT NULL,revoked_at TEXT)",
+ 'CREATE INDEX evidence_allocations_payment ON evidence_allocations(payment_key,status)',
+ 'CREATE INDEX evidence_allocations_target ON evidence_allocations(target_key,status)',
+ 'CREATE TABLE event_cost_components(component_id TEXT PRIMARY KEY,event_id TEXT NOT NULL REFERENCES economic_events(event_id),kind TEXT NOT NULL,treatment TEXT NOT NULL,amount_decimal TEXT,gross_decimal TEXT,net_decimal TEXT,reason TEXT NOT NULL,created_at TEXT NOT NULL)',
+ 'CREATE TABLE sde_imports(build TEXT PRIMARY KEY,source_url TEXT NOT NULL,sha256 TEXT NOT NULL,imported_at TEXT NOT NULL,body TEXT NOT NULL)',
+];
 export function migrate(db:DatabaseSync) {
  const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
- if(version>5)throw new Error('Database version is newer than this application');
- const steps:[number,string[]][]=[[2,MIGRATION_V2],[3,MIGRATION_V3],[4,MIGRATION_V4],[5,MIGRATION_V5]];
+ if(version>6)throw new Error('Database version is newer than this application');
+ const steps:[number,string[]][]=[[2,MIGRATION_V2],[3,MIGRATION_V3],[4,MIGRATION_V4],[5,MIGRATION_V5],[6,MIGRATION_V6]];
  for(const [target,statements] of steps){if(version>=target)continue;db.exec('BEGIN IMMEDIATE');try{for(const sql of statements)db.exec(sql);if(target===5)backfillMoneyFacts(db);db.exec('PRAGMA user_version='+target+'; COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}
 }

@@ -1,0 +1,6 @@
+import {getDatabase} from '@/lib/db';
+import {assertLocalRequest} from '@/lib/esi/config';
+import {contractArchive,confirmContract,readBuybackPolicy,saveBuybackPolicy} from '@/lib/esi-contracts';
+export const runtime='nodejs';export const dynamic='force-dynamic';
+export async function GET(request:Request){try{assertLocalRequest(request);const db=getDatabase();try{return Response.json({contracts:contractArchive(db),policy:readBuybackPolicy(db)},{headers:{'Cache-Control':'no-store'}});}finally{db.close();}}catch{return Response.json({error:'Access denied'},{status:403});}}
+export async function POST(request:Request){try{assertLocalRequest(request,true);}catch{return Response.json({error:'Access denied'},{status:403});}try{const text=await request.text();if(Buffer.byteLength(text)>100000)return Response.json({error:'Maximum 100 KB'},{status:413});const raw=JSON.parse(text),db=getDatabase();try{if(raw.action==='policy')saveBuybackPolicy(db,raw.policy);else{const {action,...input}=raw;void action;confirmContract(db,input);}return Response.json({contracts:contractArchive(db),policy:readBuybackPolicy(db)});}finally{db.close();}}catch(e){return Response.json({error:(e as Error).message},{status:400});}}

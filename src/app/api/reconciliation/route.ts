@@ -1,3 +1,5 @@
+import {recordCostComponent} from '@/lib/reconciliation-costs';
+import {allocateEvidence,revokeAllocation} from '@/lib/reconciliation-allocations';
 import {financialFilter} from '@/lib/financial-filter';
 import {z} from 'zod';
 import {getDatabase} from '@/lib/db';
@@ -12,5 +14,5 @@ export async function GET(request:Request){
 }
 export async function POST(request:Request){
  try{assertLocalRequest(request,true);}catch{return Response.json({error:'Same-origin local mutation required'},{status:403});}
- try{const text=await request.text();if(Buffer.byteLength(text)>10000)return Response.json({error:'Maximum 10 KB'},{status:413});const input=Input.parse(JSON.parse(text)),db=getDatabase();try{return Response.json(decideReconciliation(db,input));}finally{db.close();}}catch(e){return Response.json({error:(e as Error).message},{status:400});}
+ try{const text=await request.text();if(Buffer.byteLength(text)>10000)return Response.json({error:'Maximum 10 KB'},{status:413});const raw=JSON.parse(text),db=getDatabase();try{if(raw.action==='cost_component'){const {action,...input}=raw;void action;reconciliation(db);recordCostComponent(db,input);return Response.json(reconciliation(db));}if(raw.action==='allocate'){const {action,...input}=raw;void action;reconciliation(db);allocateEvidence(db,input);return Response.json(reconciliation(db));}if(raw.action==='revoke_allocation'){const {action,...input}=raw;void action;reconciliation(db);revokeAllocation(db,input);return Response.json(reconciliation(db));}const input=Input.parse(raw);return Response.json(decideReconciliation(db,input));}finally{db.close();}}catch(e){return Response.json({error:(e as Error).message},{status:400});}
 }

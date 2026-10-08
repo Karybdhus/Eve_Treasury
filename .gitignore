@@ -8,3 +8,4 @@ data/imports/
 
 # SQLite snapshots/WAL must never be committed, regardless of location
 *.sqlite*
+data/sde/

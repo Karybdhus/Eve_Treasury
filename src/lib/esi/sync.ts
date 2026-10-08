@@ -1,3 +1,4 @@
+import {Contract,contractRecords,archiveContract} from '../esi-contracts';
 import {skillRecords,SkillSnapshot,Queue,economicSkills} from './skills';
 import {z} from 'zod';
 import {readSettings} from '../settings';
@@ -10,7 +11,7 @@ import {accessToken} from './sso';
 import {Planet,Asset,miningRecords,colonyRecords,journalRecords,transactionRecords,jobRecords,orderRecords} from './normalizers';
 import {classifyJournal} from './classification';
 export type Character={character_id:string;name:string;scopes:string;connection_status:string;generation:string;last_sync:string|null;last_error:string|null};
-export function listCharacters(){const db=getDatabase();try{return db.prepare('SELECT character_id,name,scopes,connection_status,generation,last_sync,last_error FROM characters ORDER BY name').all() as Character[];}finally{db.close();}}
+export function listCharacters(){const db=getDatabase();try{return db.prepare('SELECT character_id,name,scopes,connection_status,generation,last_sync,last_error FROM characters ORDER BY name').all().map(row=>({...row})) as Character[];}finally{db.close();}}
 export function safeError(error:unknown){return error instanceof Error&&/^(ESI |SSO |Character |Authorization |Reauthorize |Sync )/.test(error.message)?error.message:'Sync failed; source data could not be safely read or normalized';}
 export async function syncCharacter(characterId:string,options:{client?:EsiClient}={}){
  const character=listCharacters().find(c=>c.character_id===characterId);
@@ -46,12 +47,12 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
     if(replaceKinds.length)for(const kind of replaceKinds)if(kind==='mining_entry'){const cutoff=new Date(Date.now()-30*86400000).toISOString().slice(0,10);write.prepare("UPDATE project_records SET is_current=0 WHERE source='esi' AND source_character_id=? AND kind=? AND json_extract(body,'$.sourceDate')>=?").run(characterId,kind,cutoff);}else write.prepare("UPDATE project_records SET is_current=0 WHERE source='esi' AND source_character_id=? AND kind=?").run(characterId,kind);
     for(const b of batches){
      const rawId=storeRaw(write,{source:'esi',characterId,endpoint:b.path,fetchedAt:b.response.fetchedAt,sourceTimestamp:b.response.sourceTimestamp,payloadText:b.response.rawText});
-     for(const row of b.rows)storeRecord(write,{...row,rawId});
+     for(const row of b.rows){const source={...row,rawId};if(row.kind==='contract_archive')archiveContract(write,source);else storeRecord(write,source);}
     }
     if(name==='wallet'){
      const ids=new Set(listCharacters().map(c=>c.character_id));
      for(const row of records(write,'wallet_journal')){
-      const c=classifyJournal(row.data,ids);
+      const c=classifyJournal(row.data,ids,row.sourceCharacterId);
       write.prepare('INSERT INTO wallet_classifications VALUES (?,?,?,?) ON CONFLICT(deduplication_key) DO UPDATE SET category=excluded.category,quality=excluded.quality,rule_version=excluded.rule_version').run(row.deduplicationKey,c.category,c.quality,'1.0');
      }
     }
@@ -79,6 +80,13 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
   const transactions=await client.transactions(path+'/transactions');
   return [{path,response:balance,rows:[balanceRecord]},...journal.map(response=>({path:path+'/journal',response,rows:journalRecords(characterId,response)})),...transactions.map(response=>({path:path+'/transactions',response,rows:transactionRecords(characterId,response)}))];
  });
+ await area('contracts',async()=>{
+  const path=base+'/contracts',pages=await client.pages(path,'char-contract'),batches:{path:string;response:EsiResponse;rows:ProjectRecord[]}[]=[];
+  for(const response of pages){const contracts=z.array(Contract).parse(response.data),items=new Map<string,unknown[]>();
+   for(const c of contracts){const itemPath=path+'/'+c.contract_id+'/items',itemPages=await client.pages(itemPath,'char-contract');for(const itemResponse of itemPages){if(!Array.isArray(itemResponse.data))throw new Error('ESI contract items invalid');items.set(c.contract_id,[...(items.get(c.contract_id)??[]),...itemResponse.data]);batches.push({path:itemPath,response:itemResponse,rows:[]});}}
+   batches.push({path,response,rows:contractRecords(characterId,response,items)});
+  }return batches;
+ });
  await area('industry',async()=>{const path=base+'/industry/jobs',response=await client.get(path,'char-industry',{include_completed:'true'});return [{path,response,rows:jobRecords(characterId,response)}];});
  await area('market',async()=>{const path=base+'/orders',response=await client.get(path,'char-market');return [{path,response,rows:orderRecords(characterId,response)}];},['market_order']);
  await area('assets',async()=>{const path=base+'/assets';return(await client.pages(path,'char-asset')).map(response=>({path,response,rows:z.array(Asset).parse(response.data).map(data=>({kind:'asset_snapshot',source:'esi',sourceClass:'automatic' as const,sourceCharacterId:characterId,sourceEntityId:data.item_id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured' as const,status:'actual' as const,deduplicationKey:'esi:'+characterId+':asset:'+data.item_id,data}))}));},['asset_snapshot']);
@@ -86,12 +94,12 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
  await area('skillqueue',async()=>{const path=base+'/skillqueue',response=await client.get(path,'char-detail');return [{path,response,rows:skillRecords(characterId,response,'skill_queue')}];});
  await area('implants',async()=>{const path=base+'/implants',response=await client.get(path,'char-detail');return [{path,response,rows:skillRecords(characterId,response,'character_implants')}];});
  // Metadata is bounded and cached. Failure does not discard a valid skill snapshot.
- if(['skills','skillqueue','pi','mining','industry','assets'].some(key=>scopes.has(ESI_SCOPES[key as keyof typeof ESI_SCOPES]))){
+ if(['contracts','skills','skillqueue','pi','mining','industry','assets'].some(key=>scopes.has(ESI_SCOPES[key as keyof typeof ESI_SCOPES]))){
   try{const read=getDatabase();let rows:ProjectRecord[];let knownTypes:Set<string>;try{knownTypes=new Set(records(read,'type_metadata').map(r=>r.sourceEntityId!));rows=records(read).filter(r=>r.sourceCharacterId===characterId);}finally{read.close();}
    const snapshot=rows.find(r=>r.kind==='skill_snapshot'),queue=rows.find(r=>r.kind==='skill_queue');
-   const operationalIds=rows.flatMap(r=>r.kind==='mining_entry'?[String(r.data.typeId)]:r.kind==='pi_pin'?[String(r.data.type_id),...(Array.isArray(r.data.contents)?r.data.contents.map(c=>String((c as {type_id:string}).type_id)):[]),...(r.data.extractor_details&&typeof r.data.extractor_details==='object'&&'product_type_id' in r.data.extractor_details?[String(r.data.extractor_details.product_type_id)]:[])]:r.kind==='asset_snapshot'?[String(r.data.type_id)]:r.kind==='industry_job'?[String(r.data.blueprint_type_id),...(r.data.product_type_id?[String(r.data.product_type_id)]:[])]:[]).filter(id=>/^\d+$/.test(id));
+   const operationalIds=rows.flatMap(r=>r.kind==='contract_archive'&&Array.isArray(r.data.items)?r.data.items.map(i=>String((i as {type_id:string}).type_id)):r.kind==='mining_entry'?[String(r.data.typeId)]:r.kind==='pi_pin'?[String(r.data.type_id),...(Array.isArray(r.data.contents)?r.data.contents.map(c=>String((c as {type_id:string}).type_id)):[]),...(r.data.extractor_details&&typeof r.data.extractor_details==='object'&&'product_type_id' in r.data.extractor_details?[String(r.data.extractor_details.product_type_id)]:[])]:r.kind==='asset_snapshot'?[String(r.data.type_id)]:r.kind==='industry_job'?[String(r.data.blueprint_type_id),...(r.data.product_type_id?[String(r.data.product_type_id)]:[])]:[]).filter(id=>/^\d+$/.test(id));
    const ids=[...new Set([...operationalIds,...(queue?Queue.parse(queue.data.queue).map(q=>q.skill_id):[]),...economicSkills.map(s=>s.id),...(snapshot?SkillSnapshot.parse(snapshot.data).skills.map(s=>s.skill_id):[])])].filter(id=>!knownTypes.has(id)).slice(0,80);
-   for(const id of ids){const path='/universe/types/'+id,response=await client.get(path,'universe'),data=z.object({name:z.string(),type_id:z.number().int().safe(),description:z.string().optional()}).passthrough().parse(response.data),write=getDatabase();try{const rawId=storeRaw(write,{source:'esi',endpoint:path,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp,payloadText:response.rawText});storeRecord(write,{kind:'type_metadata',source:'esi',sourceClass:'automatic',sourceEntityId:id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured',status:'actual',deduplicationKey:'esi:type:'+id,data,rawId});}finally{write.close();}}
+   for(const id of ids){const path='/universe/types/'+id,response=await client.get(path,'universe'),data=z.object({name:z.string(),type_id:z.number().int().safe(),description:z.string().optional()}).passthrough().parse(response.data),write=getDatabase();try{if(typeof data.group_id==='number'||typeof data.group_id==='string'){const groupPath='/universe/groups/'+data.group_id,group=await client.get(groupPath,'universe'),g=z.object({category_id:z.number().int().safe(),name:z.string()}).passthrough().parse(group.data);data.category_id=g.category_id;data.group_name=g.name;storeRaw(write,{source:'esi',endpoint:groupPath,fetchedAt:group.fetchedAt,payloadText:group.rawText});}const rawId=storeRaw(write,{source:'esi',endpoint:path,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp,payloadText:response.rawText});storeRecord(write,{kind:'type_metadata',source:'esi',sourceClass:'automatic',sourceEntityId:id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured',status:'actual',deduplicationKey:'esi:type:'+id,data,rawId});}finally{write.close();}}
    const schematics=[...new Set(rows.filter(r=>r.kind==='pi_pin').flatMap(r=>{const d=r.data;const f=d.factory_details as {schematic_id?:string}|undefined;return f?.schematic_id?[f.schematic_id]:typeof d.schematic_id==='string'?[d.schematic_id]:[];}))].slice(0,40);
    for(const id of schematics){const path='/universe/schematics/'+id,response=await client.get(path,'universe'),data=z.object({schematic_name:z.string(),cycle_time:z.number().positive()}).parse(response.data),write=getDatabase();try{const rawId=storeRaw(write,{source:'esi',endpoint:path,fetchedAt:response.fetchedAt,payloadText:response.rawText});storeRecord(write,{kind:'schematic_metadata',source:'esi',sourceClass:'automatic',sourceEntityId:id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured',status:'actual',deduplicationKey:'esi:schematic:'+id,data,rawId});}finally{write.close();}}
    results.type_names={status:'success',records:ids.length+schematics.length};

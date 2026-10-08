@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import type {reconciliation,FinancialCategory} from '@/lib/reconciliation';
 import {displayMoney} from '@/lib/money';
-const categories=['BUYBACK_MINING','BUYBACK_PI','BUYBACK_RATLOOT','BUYBACK_HACKING','BUYBACK_SALVAGE','TRADING_SALE','TRADING_PURCHASE','TRADING_FEE','RATTING_BOUNTY','INDUSTRY_COST','OTHER_INCOME','OPERATING_COST','INTERNAL_TRANSFER','PLEX_PURCHASE','UNKNOWN'];
+const categories=['BUYBACK_MINING','BUYBACK_PI','BUYBACK_RATLOOT','BUYBACK_HACKING','BUYBACK_SALVAGE','BUYBACK_MIXED','TRADING_SALE','TRADING_PURCHASE','TRADING_FEE','RATTING_BOUNTY','ESS_INCOME','INDUSTRY_COST','OTHER_INCOME','OPERATING_COST','INTERNAL_TRANSFER','PLEX_PURCHASE','UNKNOWN'];
 export function ReconciliationPanel({state}:{state:ReturnType<typeof reconciliation>}){
  const router=useRouter(),[error,setError]=useState(''),[busy,setBusy]=useState(false),[left,setLeft]=useState(''),[right,setRight]=useState(''),[reason,setReason]=useState(''),[category,setCategory]=useState('UNKNOWN'),[filter,setFilter]=useState('all');
  async function act(action:string,l=left,r=right,revision?:number){

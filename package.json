@@ -12,7 +12,8 @@
     "seed": "tsx scripts/seed.ts",
     "schemas": "tsx scripts/schemas.ts && tsx scripts/standard-schemas.ts",
     "secrets": "tsx scripts/secrets.ts",
-    "backup": "tsx scripts/backup.ts"
+    "backup": "tsx scripts/backup.ts",
+    "sde:import": "tsx scripts/import-sde.ts"
   },
   "dependencies": {
     "exceljs": "^4.4.0",
