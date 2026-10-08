@@ -1,3 +1,4 @@
+import {contractArchive} from './esi-contracts';
 import type {DatabaseSync} from 'node:sqlite';
 import {randomUUID} from 'node:crypto';
 import {z} from 'zod';
@@ -10,7 +11,7 @@ export function allocationCapacity(source:FinancialSource){return source.amountI
 export function allocationState(db:DatabaseSync,sources:FinancialSource[]){
  const rows=allocations(db),active=rows.filter(a=>a.status==='active'),byKey=new Map(sources.map(s=>[s.key,s]));
  const targets=sources.filter(s=>active.some(a=>a.target_key===s.key)||s.role==='snapshot'&&s.identity?.startsWith('contract:')).map(s=>{
-  const linked=active.filter(a=>a.target_key===s.key),sum=linked.reduce((n,a)=>n+signedCents(a.amount_decimal),0n),capacity=linked.length>0&&linked.every(a=>a.kind==='included_cost')?s.costsISK===null?null:signedCents(s.costsISK):allocationCapacity(s),invalid=!s.eligible||linked.some(a=>!byKey.has(a.payment_key));
+  const linked=active.filter(a=>a.target_key===s.key),sum=linked.reduce((n,a)=>n+signedCents(a.amount_decimal),0n),capacity=linked.length>0&&linked.every(a=>a.kind==='included_cost')?s.costsISK===null?null:signedCents(s.costsISK):allocationCapacity(s),invalid=linked.length>0&&(!s.eligible||linked.some(a=>!byKey.has(a.payment_key)));
   return {key:s.key,expectedISK:capacity===null?null:decimal(capacity),allocatedISK:decimal(sum),remainingISK:capacity===null?null:decimal(capacity-sum),status:invalid?'conflict':capacity===null?'unknown':sum>capacity?'overpayment':sum===0n?'open':sum===capacity?'complete':'partial'};
  });
  const payments=sources.filter(s=>active.some(a=>a.payment_key===s.key)).map(s=>{const sums=['payout','aggregate','included_cost'].map(kind=>active.filter(a=>a.payment_key===s.key&&a.kind===kind).reduce((n,a)=>n+signedCents(a.amount_decimal),0n)),used=sums.reduce((n,value)=>value>n?value:n,0n),capacity=allocationCapacity(s);return {key:s.key,allocatedISK:decimal(used),remainingISK:capacity===null?null:decimal(capacity-used),conflict:capacity===null||used>capacity||!creditEligible(s)};});
@@ -18,7 +19,7 @@ export function allocationState(db:DatabaseSync,sources:FinancialSource[]){
  return {rows,targets,payments,conflicts:targets.filter(t=>['overpayment','conflict'].includes(t.status)).length+payments.filter(p=>p.conflict).length+missing.length};
 }
 function creditEligible(s:FinancialSource){return s.eligible&&['actual','confirmed_payout'].includes(s.status)&&['cash','cost'].includes(s.role)&&!['INTERNAL_TRANSFER','PLEX_PURCHASE','TRADING_PURCHASE'].includes(s.category)&&(s.role==='cost'||!(s.raw&&typeof s.raw==='object'&&'amount' in s.raw)||signedCents(String((s.raw as {amount:unknown}).amount))>0n);}
-const Input=z.object({payment:z.string().min(1).max(300),target:z.string().min(1).max(300),amountISK:z.string().regex(/^(0|[1-9]\d*)(\.\d{1,2})?$/),kind:z.enum(['payout','aggregate','included_cost']),reason:z.string().trim().min(1).max(2000),paymentRevision:z.number().int().positive(),targetRevision:z.number().int().positive()}).strict();
+const Input=z.object({payment:z.string().min(1).max(300),target:z.string().min(1).max(300),amountISK:z.string().regex(/^(0|[1-9]\d*)(\.\d{1,2})?$/),kind:z.enum(['payout','aggregate','included_cost']),reason:z.string().trim().min(1).max(2000),paymentRevision:z.number().int().positive(),targetRevision:z.number().int().positive(),expectedContractRevision:z.number().int().nonnegative().optional()}).strict();
 function source(db:DatabaseSync,key:string){const row=db.prepare('SELECT body FROM financial_sources WHERE source_key=? AND is_current=1').get(key) as {body:string}|undefined;if(!row)throw new Error('Current source missing');return JSON.parse(row.body) as FinancialSource;}
 function bump(db:DatabaseSync,key:string,expected:number){const link=db.prepare('SELECT event_id FROM event_sources WHERE source_key=?').get(key) as {event_id:string}|undefined;if(!link||db.prepare('UPDATE economic_events SET revision=revision+1 WHERE event_id=? AND revision=?').run(link.event_id,expected).changes!==1)throw new Error('Evidence changed; reload before allocating');}
 function audit(db:DatabaseSync,action:string,body:unknown){db.prepare('INSERT INTO reconciliation_audit VALUES (?,?,?,?)').run(randomUUID(),action,new Date().toISOString(),JSON.stringify(body));}
@@ -30,6 +31,7 @@ export function allocateEvidence(db:DatabaseSync,raw:unknown){
   if(!creditEligible(p)||!t.eligible)throw new Error('Source is not eligible cash evidence');
   if(input.kind==='payout'&&(!(t.role==='snapshot'&&t.identity?.startsWith('contract:')||t.source==='buyback')||p.role!=='cash'))throw new Error('Payout target must be a contract or buyback');
   if(input.kind==='payout'){
+   if(input.expectedContractRevision!==undefined){const c=contractArchive(db).find(c=>c.key===t.key);if(!c?.completed||!c.candidate||c.revision!==input.expectedContractRevision)throw new Error('Contract changed; reload before confirming payment');}
    if(p.source==='esi'&&!['contract_price','contract_price_payment_corp','player_donation','corporation_payment','corporation_bulk_payment','corporation_account_withdrawal'].includes(String((p.raw as Record<string,unknown>).ref_type)))throw new Error('Bounty, market or other income cannot prove a buyback payment');
    if(p.characterId&&t.characterId&&p.characterId!==t.characterId)throw new Error('Payment owner does not match payout recipient');
   }
