@@ -69,6 +69,10 @@
     "derivedNetProfit": {
       "anyOf": [
         {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+        },
+        {
           "type": "number",
           "minimum": -90000000000000,
           "maximum": 90000000000000,
@@ -127,6 +131,10 @@
         "wallet": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -143,6 +151,10 @@
         },
         "buyEscrow": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,
@@ -193,6 +205,10 @@
         "inventoryCostBasis": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -209,6 +225,10 @@
         },
         "sellOrderCostBasis": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,
@@ -227,6 +247,10 @@
         "openSellOrderAskValue": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -243,6 +267,10 @@
         },
         "reportedCapitalBound": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,

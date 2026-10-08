@@ -12,7 +12,10 @@
     "plexContribution": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -20,6 +23,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
@@ -29,7 +36,10 @@
     "physicalPlex": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -37,13 +47,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "iskAllocatedForPlex": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -51,6 +68,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
@@ -60,7 +81,10 @@
         "iskPerPlex": {
           "anyOf": [
             {
-              "type": "number"
+              "type": "number",
+              "minimum": 0,
+              "maximum": 90000000000000,
+              "multipleOf": 0.01
             },
             {
               "type": "string",
@@ -68,6 +92,10 @@
                 "unknown",
                 "not_reported"
               ]
+            },
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
             }
           ]
         },
@@ -79,13 +107,15 @@
         "source": {
           "type": "string"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "sixMonthTargetPlex": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -93,13 +123,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "twelveMonthTargetPlex": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -107,13 +144,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "releasedContributionSinceLastSnapshot": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -121,6 +165,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     }

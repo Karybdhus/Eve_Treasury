@@ -12,7 +12,10 @@
     "plexContribution": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -20,6 +23,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
@@ -29,7 +36,10 @@
     "realizedRevenue": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -37,11 +47,19 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "netProfit": {
       "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+        },
         {
           "type": "number"
         },
@@ -116,7 +134,10 @@
     "pocoTaxes": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -124,13 +145,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "importExportCosts": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -138,6 +166,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },

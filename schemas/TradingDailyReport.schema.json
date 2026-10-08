@@ -69,6 +69,10 @@
     "derivedNetProfit": {
       "anyOf": [
         {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+        },
+        {
           "type": "number",
           "minimum": -90000000000000,
           "maximum": 90000000000000,
@@ -129,6 +133,10 @@
         "realizedRevenue": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -145,6 +153,10 @@
         },
         "operatingCosts": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,
@@ -163,6 +175,10 @@
         "internalTransfers": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": -90000000000000,
               "maximum": 90000000000000,
@@ -179,6 +195,10 @@
         },
         "plexPurchases": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,
@@ -197,6 +217,10 @@
         "costOfGoodsSold": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -213,6 +237,10 @@
         },
         "brokerFees": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,
@@ -231,6 +259,10 @@
         "salesTax": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -247,6 +279,10 @@
         },
         "relistCosts": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,
@@ -265,6 +301,10 @@
         "legacyLiquidationRevenue": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -281,6 +321,10 @@
         },
         "legacyLiquidationCostBasis": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,
@@ -299,6 +343,10 @@
         "legacyLiquidationFees": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -316,6 +364,10 @@
         "averageCapitalEmployed": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -332,6 +384,10 @@
         },
         "legacyLiquidationNet": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": -90000000000000,

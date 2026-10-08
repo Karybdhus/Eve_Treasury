@@ -69,6 +69,10 @@
     "derivedNetProfit": {
       "anyOf": [
         {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+        },
+        {
           "type": "number",
           "minimum": -90000000000000,
           "maximum": 90000000000000,
@@ -169,6 +173,10 @@
         "realizedRevenue": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -185,6 +193,10 @@
         },
         "operatingCosts": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,
@@ -203,6 +215,10 @@
         "internalTransfers": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": -90000000000000,
               "maximum": 90000000000000,
@@ -220,6 +236,10 @@
         "plexPurchases": {
           "anyOf": [
             {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
+            {
               "type": "number",
               "minimum": 0,
               "maximum": 90000000000000,
@@ -236,6 +256,10 @@
         },
         "pocoCosts": {
           "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+            },
             {
               "type": "number",
               "minimum": 0,

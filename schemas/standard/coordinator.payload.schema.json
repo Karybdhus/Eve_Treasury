@@ -12,7 +12,10 @@
     "plexContribution": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -20,6 +23,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
@@ -29,7 +36,10 @@
     "physicalPlex": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -37,13 +47,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "freeLiquidity": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -51,13 +68,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "capitalBound": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -65,6 +89,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
@@ -75,6 +103,10 @@
       },
       "additionalProperties": {
         "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+          },
           {
             "type": "number"
           },
@@ -96,7 +128,10 @@
       "additionalProperties": {
         "anyOf": [
           {
-            "type": "number"
+            "type": "number",
+            "minimum": 0,
+            "maximum": 90000000000000,
+            "multipleOf": 0.01
           },
           {
             "type": "string",
@@ -104,12 +139,20 @@
               "unknown",
               "not_reported"
             ]
+          },
+          {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
           }
         ]
       }
     },
     "totalRealizedProfit": {
       "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+        },
         {
           "type": "number"
         },
@@ -128,7 +171,10 @@
         "iskPerPlex": {
           "anyOf": [
             {
-              "type": "number"
+              "type": "number",
+              "minimum": 0,
+              "maximum": 90000000000000,
+              "multipleOf": 0.01
             },
             {
               "type": "string",
@@ -136,6 +182,10 @@
                 "unknown",
                 "not_reported"
               ]
+            },
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
             }
           ]
         },
@@ -147,8 +197,7 @@
         "source": {
           "type": "string"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "openIssues": {
       "type": "array",

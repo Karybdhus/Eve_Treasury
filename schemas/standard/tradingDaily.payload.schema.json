@@ -12,7 +12,10 @@
     "plexContribution": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -20,6 +23,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
@@ -29,7 +36,10 @@
     "grossBuys": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -37,13 +47,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "grossSales": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -51,13 +68,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "costOfGoodsSold": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -65,13 +89,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "operatingCosts": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -79,6 +110,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
@@ -97,7 +132,10 @@
     "salesTax": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -105,13 +143,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "brokerFees": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -119,13 +164,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "relistFees": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -133,11 +185,19 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "realizedTradingProfit": {
       "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+        },
         {
           "type": "number"
         },
@@ -153,6 +213,10 @@
     "oldInventoryLiquidationNet": {
       "anyOf": [
         {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+        },
+        {
           "type": "number"
         },
         {
@@ -166,6 +230,10 @@
     },
     "internalTransfers": {
       "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
+        },
         {
           "type": "number"
         },
@@ -181,7 +249,10 @@
     "capitalBound": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -189,13 +260,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "freeLiquidity": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -203,6 +281,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },

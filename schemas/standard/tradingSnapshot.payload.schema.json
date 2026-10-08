@@ -12,7 +12,10 @@
     "plexContribution": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -20,6 +23,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
@@ -29,7 +36,10 @@
     "wallet": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -37,13 +47,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "escrow": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -51,13 +68,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "openBuyOrders": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -65,13 +89,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "openSellOrders": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -79,13 +110,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "sellOrdersGross": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -93,13 +131,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "inventoryValue": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -107,13 +152,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "freeOrderSlots": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -121,13 +173,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "capitalBound": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -135,13 +194,20 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     },
     "freeLiquidity": {
       "anyOf": [
         {
-          "type": "number"
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90000000000000,
+          "multipleOf": 0.01
         },
         {
           "type": "string",
@@ -149,6 +215,10 @@
             "unknown",
             "not_reported"
           ]
+        },
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]{1,2})?$"
         }
       ]
     }
