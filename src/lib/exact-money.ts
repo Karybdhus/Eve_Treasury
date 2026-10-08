@@ -8,6 +8,7 @@ export function signedCents(value:string):bigint {
  return (negative?-1n:1n)*(BigInt(whole)*100n+BigInt(fraction.padEnd(2,'0')));
 }
 export function moneyFact(input:unknown):MoneyFact {
+ if(typeof input==='string'){const token=monetaryToken(input);if(token!==null)input=token;}
  if(typeof input==='string'&&/^-?(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/.test(input))return {value:decimal(signedCents(input)),quality:'exact'};
  if(typeof input==='number'&&Number.isFinite(input)){
   const text=String(input);
@@ -29,4 +30,16 @@ export function roundedRatio(numerator:bigint,denominator:bigint):bigint {
 export function compatibilityNumber(value:string|null):number|'unknown'{
  if(value===null)return 'unknown';const n=Number(value);
  return moneyFact(n).value===value?n:'unknown';
+}
+
+export function monetaryToken(token:string):string|null {
+ const m=/^(-?)(\d+)(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/.exec(token);
+ if(!m)return null;
+ const exponent=Number(m[4]??0);if(!Number.isSafeInteger(exponent)||Math.abs(exponent)>100)return null;
+ let digits=m[2]+(m[3]??''),point=m[2].length+exponent;
+ if(point<=0){digits='0'.repeat(-point+1)+digits;point=1;}
+ if(point>=digits.length)digits=digits+'0'.repeat(point-digits.length);
+ const whole=(digits.slice(0,point)||'0').replace(/^0+(?=\d)/,''),fraction=digits.slice(point).replace(/0+$/,'');
+ if(fraction.length>2)return null;
+ return (m[1]&&!(whole==='0'&&!fraction)?'-':'')+whole+(fraction?'.'+fraction:'');
 }
