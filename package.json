@@ -14,6 +14,7 @@
     "secrets": "tsx scripts/secrets.ts"
   },
   "dependencies": {
+    "exceljs": "^4.4.0",
     "jose": "^6.2.12",
     "lossless-json": "^4.3.1",
     "next": "^16.0.0",
@@ -35,5 +36,10 @@
   },
   "engines": {
     "node": ">=24.0.0"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "^11.1.1"
+    }
   }
 }

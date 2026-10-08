@@ -16,12 +16,23 @@ export const MIGRATION_V2 = [
 'CREATE TABLE IF NOT EXISTS wallet_classifications (deduplication_key TEXT PRIMARY KEY REFERENCES project_records(deduplication_key), category TEXT NOT NULL, quality TEXT NOT NULL, rule_version TEXT NOT NULL)',
 ...['mining_entry','pi_colony','pi_pin','wallet_journal','wallet_transaction','industry_job','market_order'].map(kind=>'CREATE VIEW IF NOT EXISTS '+({mining_entry:'mining_entries',pi_colony:'pi_colonies',pi_pin:'pi_pins',wallet_journal:'wallet_journal_entries',wallet_transaction:'wallet_transactions',industry_job:'industry_jobs',market_order:'market_orders'}[kind])+" AS SELECT * FROM project_records WHERE kind='"+kind+"'"),
 ];
+export const MIGRATION_V3=[
+'CREATE TABLE IF NOT EXISTS buyback_bookings(booking_id TEXT PRIMARY KEY,week_start TEXT NOT NULL,contract_id TEXT,body TEXT NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL)',
+'CREATE TABLE IF NOT EXISTS buyback_audit(audit_id TEXT PRIMARY KEY,booking_id TEXT NOT NULL,action TEXT NOT NULL,changed_at TEXT NOT NULL,body TEXT NOT NULL)',
+'CREATE TABLE IF NOT EXISTS buyback_wallet_links(journal_key TEXT PRIMARY KEY REFERENCES project_records(deduplication_key),booking_id TEXT NOT NULL UNIQUE REFERENCES buyback_bookings(booking_id))',
+'CREATE TABLE IF NOT EXISTS buyback_imports(hash TEXT PRIMARY KEY,filename TEXT NOT NULL,imported_at TEXT NOT NULL,original_bytes BLOB NOT NULL,controls TEXT NOT NULL,result TEXT NOT NULL)',
+'CREATE TABLE IF NOT EXISTS app_settings(name TEXT PRIMARY KEY,body TEXT NOT NULL,updated_at TEXT NOT NULL)',
+'CREATE TABLE IF NOT EXISTS reported_profit_decimal(report_id TEXT PRIMARY KEY REFERENCES reports(report_id),value_decimal TEXT,quality TEXT NOT NULL)',
+"INSERT OR IGNORE INTO reported_profit_decimal SELECT report_id,CASE WHEN value IS NULL THEN NULL ELSE printf('%.2f',value) END,quality FROM reported_profit",
+];
 export function migrate(db:DatabaseSync) {
   const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
-  if(version>2)throw new Error('Database version is newer than this application');
+  if(version>3)throw new Error('Database version is newer than this application');
   if(version<2){
     db.exec('BEGIN IMMEDIATE');
     try{for(const sql of MIGRATION_V2)db.exec(sql);db.exec('PRAGMA user_version=2; COMMIT');}
     catch(e){db.exec('ROLLBACK');throw e;}
   }
+
+ if(version<3){db.exec('BEGIN IMMEDIATE');try{for(const sql of MIGRATION_V3)db.exec(sql);db.exec('PRAGMA user_version=3; COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}
 }

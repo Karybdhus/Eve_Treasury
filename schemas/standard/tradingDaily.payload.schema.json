@@ -54,6 +54,46 @@
         }
       ]
     },
+    "costOfGoodsSold": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "operatingCosts": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_reported"
+          ]
+        }
+      ]
+    },
+    "costBasisVerified": {
+      "type": "boolean"
+    },
+    "goodsOrigin": {
+      "type": "string",
+      "enum": [
+        "purchased",
+        "self_earned",
+        "legacy",
+        "unknown"
+      ]
+    },
     "salesTax": {
       "anyOf": [
         {

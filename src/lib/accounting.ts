@@ -1,5 +1,5 @@
 import type { Measure, Report } from './contracts';
-import {dateKey} from './time';
+import {dateKey,freshness} from './time';
 export const project = { start: '2026-10-04', end: '2026-12-31', accounts: 5, monthlyPlex: 500, targets: {6:7875,12:13500} };
 export const pillars = ['mining', 'pi', 'trading', 'industry'] as const;
 export function known(v: Measure | undefined): v is number { return typeof v === 'number'; }
@@ -15,6 +15,7 @@ export function difference(revenue: Measure, costs: Measure[]): Measure {
 }
 export function profit(r: Report): Measure {
   if (r.provenance==='historical_seed' || r.status !== 'actual' || r.reportType !== 'daily') return 'not_reported';
+  if(r.data.kind==='TradingDailyReport'&&![r.data.costOfGoodsSold,r.data.operatingCosts,r.data.brokerFees,r.data.salesTax,r.data.relistCosts].every(known))return 'unknown';
   if(r.derivedNetProfit!==undefined)return r.derivedNetProfit;
   const d = r.data;
   if (!('realizedRevenue' in d)) return 'not_reported';
@@ -26,22 +27,24 @@ export function latest<K extends Report['data']['kind']>(reports: Report[], kind
   return reports.filter(r=>r.data.kind===kind && r.status==='actual' && r.provenance!=='historical_seed').sort((a,b)=>Date.parse(b.period.to)-Date.parse(a.period.to))[0] as Extract<Report,{data:{kind:K}}> | undefined;
 }
 export function daysRemaining(now: Date) { return Math.max(0, Math.ceil((Date.parse(`${project.end}T23:59:59.999+01:00`) - Math.max(now.getTime(),Date.parse(project.start+'T00:00:00+02:00')))/86400000)); }
-export function funding(reports: Report[], now = new Date()) {
+export function funding(reports: Report[], now = new Date(),targetsConfig:{sixMonthPlex:number;twelveMonthPlex:number}={sixMonthPlex:7875,twelveMonthPlex:13500}) {
   const coordinator=latest(reports,'CoordinatorSnapshot');
   const goal=latest(reports,'PlexGoalSnapshot');
   const snapshot=goal&&(!coordinator||Date.parse(goal.period.to)>Date.parse(coordinator.period.to))?goal:coordinator;
   const d = snapshot?.data;
   const physical = d?.physicalPlex ?? 'not_reported';
   const released = d?.kind==='PlexGoalSnapshot'?d.iskAllocatedForPlex:d?.releasedPlexContribution ?? 'not_reported';
-  const price = d?.plexUnitPrice ?? 'not_reported';
+  const evidence=d?.priceEvidence;
+  const priceStatus=evidence?freshness(evidence.fetchedAt,evidence.fetchedAt,now.getTime()):'unknown';
+  const price:Measure = evidence?.quality==='actual'&&priceStatus==='recent_snapshot'?(d?.plexUnitPrice??'not_reported'):'not_reported';
   const equivalent: Measure = known(physical) && known(released) && known(price) ? physical + released/price : 'not_reported';
   const days = daysRemaining(now);
   const targets = [6,12].map(months=>{
-    const plex = project.targets[months as 6|12];
+    const plex = months===6?targetsConfig.sixMonthPlex:targetsConfig.twelveMonthPlex;
     const gap: Measure = known(physical) && known(released) && known(price) ? Math.max(0, (plex-physical)*price-released) : 'not_reported';
     return { months, plex, gap, weekly: known(gap) && days>0 ? gap/days*7 : 'not_reported' as Measure, progress: known(equivalent) ? Math.min(100,equivalent/plex*100) : 'not_reported' as Measure };
   });
-  return { snapshot, physical, released, price, equivalent, freeLiquidity:coordinator?.data.freeLiquidity ?? 'not_reported', days, targets };
+  return { snapshot, physical, released, price, priceStatus, equivalent, freeLiquidity:coordinator?.data.freeLiquidity ?? 'not_reported', days, targets };
 }
 export function weekStart(date: string) {
   const d = new Date((date.length===10?date:dateKey(date))+'T00:00:00Z'); d.setUTCHours(0,0,0,0); d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7)); return d.toISOString().slice(0,10);

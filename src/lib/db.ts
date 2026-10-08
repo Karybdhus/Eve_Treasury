@@ -15,6 +15,7 @@ export function openDatabase(filename=process.env.DASHBOARD_DB??path.join(proces
  db.exec('PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS reports (report_id TEXT PRIMARY KEY,scope_key TEXT NOT NULL UNIQUE,body TEXT NOT NULL,imported_at TEXT NOT NULL,filename TEXT NOT NULL);');
  const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
  if(filename!==':memory:'&&version===1&&!existsSync(filename+'.pre-v2.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v2.sqlite');
+ if(filename!==':memory:'&&version===2&&!existsSync(filename+'.pre-v3.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v3.sqlite');
  migrate(db);return db;
 }
 function scope(r:Report){
@@ -36,14 +37,14 @@ export function importReports(db:DatabaseSync,input:unknown,filename:string){
    const conflict=db.prepare('SELECT body FROM reports WHERE scope_key=?').get(scope(r));
    const semantic=db.prepare('SELECT body FROM reports').all() as {body:string}[];
    if(conflict||semantic.some(x=>scope(validateReport(JSON.parse(x.body)))===scope(r)))throw new Error('Overlapping report for '+scope(r)+'. One project-wide aggregate per status and period is allowed.');
-   if(r.status==='actual'&&r.provenance!=='historical_seed'&&r.reportType==='daily'&&typeof profit(r)==='number'&&profit(r)!==0){
+   if(r.status==='actual'&&r.provenance!=='historical_seed'&&r.reportType==='daily'&&(typeof profit(r)==='number'&&profit(r)!==0||typeof r.derivedNetProfit==='number'&&r.derivedNetProfit!==0)){
     const used=new Set(r.sourceTransactionIds??[]);
-    for(const prior of semantic){const oldReport=validateReport(JSON.parse(prior.body));if(oldReport.status==='actual'&&oldReport.provenance!=='historical_seed'&&oldReport.reportType==='daily'&&typeof profit(oldReport)==='number'&&profit(oldReport)!==0&&(oldReport.sourceTransactionIds??[]).some(id=>used.has(id)))throw new Error('Source transaction already used in another actual profit report; explicit reconciliation required');}
+    for(const prior of semantic){const oldReport=validateReport(JSON.parse(prior.body));if(oldReport.status==='actual'&&oldReport.provenance!=='historical_seed'&&oldReport.reportType==='daily'&&(typeof profit(oldReport)==='number'&&profit(oldReport)!==0||typeof oldReport.derivedNetProfit==='number'&&oldReport.derivedNetProfit!==0)&&(oldReport.sourceTransactionIds??[]).some(id=>used.has(id)))throw new Error('Source transaction already used in another actual profit report; explicit reconciliation required');}
    }
    const fetchedAt=new Date().toISOString();
    db.prepare('INSERT INTO reports VALUES (?,?,?,?,?)').run(r.reportId,scope(r),body,fetchedAt,path.basename(filename));
    db.prepare('INSERT INTO imported_source_reports VALUES (?,?,?)').run(r.reportId,rawBody,contract);
-   if(reportedProfit!==undefined)db.prepare('INSERT INTO reported_profit VALUES (?,?,?)').run(r.reportId,typeof reportedProfit==='number'?reportedProfit:null,typeof reportedProfit==='number'?'measured':reportedProfit);
+   if(reportedProfit!==undefined)db.prepare('INSERT INTO reported_profit_decimal VALUES (?,?,?)').run(r.reportId,typeof reportedProfit==='number'?reportedProfit.toFixed(2):null,typeof reportedProfit==='number'?'measured':reportedProfit);
    const rawId=storeRaw(db,{source:r.source,endpoint:'json-import',entityId:r.reportId,fetchedAt,sourceTimestamp:r.period.to,payloadText:rawBody});
    storeRecord(db,{kind:'report',source:r.source,sourceClass:sourceClass(r.source),sourceEntityId:r.reportId,fetchedAt,sourceTimestamp:r.period.to,dataQuality:r.provenance==='historical_seed'?'historical_seed':'partial',status:r.status,deduplicationKey:'report:'+r.reportId,data:r,rawId});
    imported++;

@@ -1,3 +1,6 @@
+import {skillRecords,SkillSnapshot,Queue,economicSkills} from './skills';
+import {z} from 'zod';
+import {readSettings} from '../settings';
 import {randomUUID} from 'node:crypto';
 import {getDatabase} from '../db';
 import {records,storeRaw,storeRecord,type ProjectRecord} from '../source-records';
@@ -14,7 +17,9 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
  if(!character||character.connection_status!=='connected')throw new Error('Character is not connected');
  const generation=character.generation;
  const db=getDatabase(),runId=randomUUID(),leaseId=randomUUID();
+ if(!readSettings(db).sources.esi){db.close();throw new Error('Sync disabled in settings');}
  try{
+
   db.exec('BEGIN IMMEDIATE');
   db.prepare('DELETE FROM sync_locks WHERE expires_at<?').run(Date.now());
   if(db.prepare('SELECT character_id FROM sync_locks WHERE character_id=?').get(characterId))throw new Error('Sync already running for this character');
@@ -76,6 +81,18 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
  });
  await area('industry',async()=>{const path=base+'/industry/jobs',response=await client.get(path,'char-industry',{include_completed:'true'});return [{path,response,rows:jobRecords(characterId,response)}];});
  await area('market',async()=>{const path=base+'/orders',response=await client.get(path,'char-market');return [{path,response,rows:orderRecords(characterId,response)}];},['market_order']);
+ await area('skills',async()=>{const path=base+'/skills',response=await client.get(path,'char-detail'),attrs=await client.get(base+'/attributes','char-detail');return [{path,response,rows:skillRecords(characterId,response,'skill_snapshot')},{path:base+'/attributes',response:attrs,rows:skillRecords(characterId,attrs,'character_attributes')}];});
+ await area('skillqueue',async()=>{const path=base+'/skillqueue',response=await client.get(path,'char-detail');return [{path,response,rows:skillRecords(characterId,response,'skill_queue')}];});
+ await area('implants',async()=>{const path=base+'/implants',response=await client.get(path,'char-detail');return [{path,response,rows:skillRecords(characterId,response,'character_implants')}];});
+ // Metadata is bounded and cached. Failure does not discard a valid skill snapshot.
+ if(scopes.has(ESI_SCOPES.skills)||scopes.has(ESI_SCOPES.skillqueue)){
+  try{const read=getDatabase();let rows:ProjectRecord[];try{rows=records(read).filter(r=>r.sourceCharacterId===characterId);}finally{read.close();}
+   const snapshot=rows.find(r=>r.kind==='skill_snapshot'),queue=rows.find(r=>r.kind==='skill_queue');
+   const ids=[...new Set([...(queue?Queue.parse(queue.data.queue).map(q=>q.skill_id):[]),...economicSkills.map(s=>s.id),...(snapshot?SkillSnapshot.parse(snapshot.data).skills.map(s=>s.skill_id):[])])].slice(0,80);
+   for(const id of ids){const path='/universe/types/'+id,response=await client.get(path,'universe'),data=z.object({name:z.string(),type_id:z.number().int().safe(),description:z.string().optional()}).passthrough().parse(response.data),write=getDatabase();try{const rawId=storeRaw(write,{source:'esi',endpoint:path,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp,payloadText:response.rawText});storeRecord(write,{kind:'type_metadata',source:'esi',sourceClass:'automatic',sourceEntityId:id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured',status:'actual',deduplicationKey:'esi:type:'+id,data,rawId});}finally{write.close();}}
+   results.type_names={status:'success',records:ids.length};
+  }catch(e){results.type_names={status:'error',error:safeError(e)};}
+ }
  const errors=Object.values(results).filter(r=>r.status==='error');
  finish(errors.length===0,errors.map(r=>r.error).join('; '));return {runId,results};
  function finish(success:boolean,error:string){
