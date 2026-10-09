@@ -544,5 +544,3 @@ export function originCategories(origin: Origin): Category[] { return origin.ups
 export function sliceCategories(slice: Slice): Category[] { if (slice.manualCategoryOverride)
     return [slice.category]; return slice.origins?.length ? slice.origins.flatMap(originCategories) : [slice.category]; }
 export function inventorySuggestions(db: DatabaseSync, p: Position) { return inventoryCandidates(db, p).slice(0, 25); }
-
-

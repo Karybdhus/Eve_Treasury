@@ -79,4 +79,3 @@ export async function POST(request: Request) {
         db.close();
     }
 }
-
