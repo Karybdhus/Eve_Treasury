@@ -26,6 +26,7 @@ export function openDatabase(filename=process.env.DASHBOARD_DB??path.join(proces
  if(filename!==':memory:'&&version===3&&!existsSync(filename+'.pre-v4.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v4.sqlite');
  if(filename!==':memory:'&&version<5){const backup=filename+'.pre-v5-'+Date.now()+'.sqlite';db.prepare('VACUUM INTO ?').run(backup);}
  if(filename!==':memory:'&&version<6){db.prepare('VACUUM INTO ?').run(filename+'.pre-v6-'+Date.now()+'.sqlite');}
+ if(filename!==':memory:'&&version<7){const backup=filename+'.pre-v7-'+Date.now()+'.sqlite';db.prepare('VACUUM INTO ?').run(backup);const copy=new DatabaseSync(backup,{readOnly:true});try{const result=copy.prepare('PRAGMA integrity_check').get() as {integrity_check:string};if(result.integrity_check!=='ok')throw new Error('Pre-v7 backup integrity check failed');}finally{copy.close();}}
  migrate(db);return db;
  }catch(error){db.close();throw error;}
 }

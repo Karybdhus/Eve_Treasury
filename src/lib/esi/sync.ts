@@ -1,3 +1,4 @@
+import {observeInventory} from '../inventory-provenance';
 import {Contract,contractRecords,archiveContract} from '../esi-contracts';
 import {skillRecords,SkillSnapshot,Queue,economicSkills} from './skills';
 import {z} from 'zod';
@@ -90,6 +91,7 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
  await area('industry',async()=>{const path=base+'/industry/jobs',response=await client.get(path,'char-industry',{include_completed:'true'});return [{path,response,rows:jobRecords(characterId,response)}];});
  await area('market',async()=>{const path=base+'/orders',response=await client.get(path,'char-market');return [{path,response,rows:orderRecords(characterId,response)}];},['market_order']);
  await area('assets',async()=>{const path=base+'/assets';return(await client.pages(path,'char-asset')).map(response=>({path,response,rows:z.array(Asset).parse(response.data).map(data=>({kind:'asset_snapshot',source:'esi',sourceClass:'automatic' as const,sourceCharacterId:characterId,sourceEntityId:data.item_id,fetchedAt:response.fetchedAt,sourceTimestamp:response.sourceTimestamp??response.fetchedAt,dataQuality:'measured' as const,status:'actual' as const,deduplicationKey:'esi:'+characterId+':asset:'+data.item_id,data}))}));},['asset_snapshot']);
+ if(results.assets?.status==='success'){const inventoryDb=getDatabase();try{observeInventory(inventoryDb);}finally{inventoryDb.close();}}
  await area('skills',async()=>{const path=base+'/skills',response=await client.get(path,'char-detail'),attrs=await client.get(base+'/attributes','char-detail');return [{path,response,rows:skillRecords(characterId,response,'skill_snapshot')},{path:base+'/attributes',response:attrs,rows:skillRecords(characterId,attrs,'character_attributes')}];});
  await area('skillqueue',async()=>{const path=base+'/skillqueue',response=await client.get(path,'char-detail');return [{path,response,rows:skillRecords(characterId,response,'skill_queue')}];});
  await area('implants',async()=>{const path=base+'/implants',response=await client.get(path,'char-detail');return [{path,response,rows:skillRecords(characterId,response,'character_implants')}];});
