@@ -13,6 +13,6 @@ export async function GET(request:NextRequest){
   await completeAuthorization(state,code);
  }catch{result='sso_failed';}
  const response=NextResponse.redirect(appOrigin()+'/characters?'+(result==='connected'?'notice=':'error=')+result,303);
- response.cookies.set('eve_sso_state','',{httpOnly:true,sameSite:'lax',path:'/api/auth/eve',maxAge:0});
+ response.cookies.set('eve_sso_state','',{httpOnly:true,sameSite:'lax',secure:appOrigin().startsWith('https:'),path:'/api/auth/eve',maxAge:0});
  response.headers.set('Cache-Control','no-store');response.headers.set('Referrer-Policy','no-referrer');return response;
 }

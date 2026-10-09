@@ -8,22 +8,26 @@ import path from 'node:path';
 import {isDeepStrictEqual} from 'node:util';
 import {validateReport,type Report} from './contracts';
 import {normalizeImport} from './report-standard';
-import {migrate} from './migrations';
+import {migrate,supportedDatabaseVersion} from './migrations';
+import {resolveDatabasePath} from './database-path';
 import {profit} from './accounting';
 import {dateKey} from './time';
 import {storeRaw,storeRecord,sourceClass} from './source-records';
 export type StoredReport={report:Report;importedAt:string;filename:string};
 export function openDatabase(filename=process.env.DASHBOARD_DB??path.join(process.cwd(),'data','dashboard.sqlite')){
+ filename=resolveDatabasePath(filename);
  if(filename!==':memory:')mkdirSync(path.dirname(filename),{recursive:true});
  const db=new DatabaseSync(filename);
+ try{
+ const version=supportedDatabaseVersion(db);
  db.exec('PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS reports (report_id TEXT PRIMARY KEY,scope_key TEXT NOT NULL UNIQUE,body TEXT NOT NULL,imported_at TEXT NOT NULL,filename TEXT NOT NULL);');
- const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
  if(filename!==':memory:'&&version===1&&!existsSync(filename+'.pre-v2.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v2.sqlite');
  if(filename!==':memory:'&&version===2&&!existsSync(filename+'.pre-v3.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v3.sqlite');
  if(filename!==':memory:'&&version===3&&!existsSync(filename+'.pre-v4.sqlite'))db.prepare('VACUUM INTO ?').run(filename+'.pre-v4.sqlite');
  if(filename!==':memory:'&&version<5){const backup=filename+'.pre-v5-'+Date.now()+'.sqlite';db.prepare('VACUUM INTO ?').run(backup);}
  if(filename!==':memory:'&&version<6){db.prepare('VACUUM INTO ?').run(filename+'.pre-v6-'+Date.now()+'.sqlite');}
  migrate(db);return db;
+ }catch(error){db.close();throw error;}
 }
 function scope(r:Report){
  if(r.reportType==='daily')return r.pillar+':daily:'+r.status+':'+dateKey(r.period.from,r.reportingTimezone??'UTC');
@@ -64,7 +68,7 @@ export function seedDatabase(db:DatabaseSync){
  const n=db.prepare('SELECT COUNT(*) AS n FROM reports').get() as {n:number};
  if(!n.n){const dir=path.join(process.cwd(),'seed');for(const name of readdirSync(dir).filter(n=>n.endsWith('.json')).sort())importReports(db,JSON.parse(readFileSync(path.join(dir,name),'utf8')),name);}
 }
-export function getDatabase(){if(accessMode()==='private'&&(process.env.DASHBOARD_DATABASE_ROLE!=='primary'||process.env.DASHBOARD_DEMO_SEED!=='0'||!process.env.DASHBOARD_DB||!path.isAbsolute(process.env.DASHBOARD_DB)||process.env.DASHBOARD_DB.startsWith('\\\\')))throw new Error('Private mode requires an explicit primary local database');const db=openDatabase();if(process.env.DASHBOARD_DEMO_SEED!=='0')seedDatabase(db);return db;}
+export function getDatabase(){if(accessMode()==='private'&&(process.env.DASHBOARD_DATABASE_ROLE!=='primary'||process.env.DASHBOARD_DEMO_SEED!=='0'||!process.env.DASHBOARD_DB||!path.isAbsolute(process.env.DASHBOARD_DB)||process.env.DASHBOARD_DB.startsWith('\\\\')))throw new Error('Private mode requires an explicit primary local database');const db=openDatabase();try{if(process.env.DASHBOARD_DEMO_SEED!=='0')seedDatabase(db);return db;}catch(error){db.close();throw error;}}
 export function readReports(db:DatabaseSync):StoredReport[]{
  return (db.prepare('SELECT body,imported_at,filename FROM reports ORDER BY imported_at DESC,report_id').all() as {body:string;imported_at:string;filename:string}[]).map(r=>({report:validateReport(JSON.parse(r.body)),importedAt:r.imported_at,filename:r.filename}));
 }

@@ -10,7 +10,7 @@ export async function POST(request:Request){
   if(id&&!/^\d+$/.test(String(id)))throw new Error('Invalid character ID');
   const flow=beginAuthorization(id?String(id):undefined);
   const response=NextResponse.redirect(flow.url,303);
-  response.cookies.set('eve_sso_state',stateCookie(flow.state),{httpOnly:true,sameSite:'lax',secure:false,path:'/api/auth/eve',maxAge:600});
+  response.cookies.set('eve_sso_state',stateCookie(flow.state),{httpOnly:true,sameSite:'lax',secure:appOrigin().startsWith('https:'),path:'/api/auth/eve',maxAge:600});
   response.headers.set('Cache-Control','no-store');return response;
  }catch{return NextResponse.redirect(appOrigin()+'/characters?error=configuration_or_request',303);}
 }

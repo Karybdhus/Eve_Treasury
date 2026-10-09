@@ -12,3 +12,14 @@ data/sde/
 data/order03-qa*
 data/night05/
 data/order06/
+
+# Local SQLite alternate suffixes and preview runtime artifacts
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+data/preview-demo*/
+data/order07/
+
+# Runtime data is private; existing tracked historical files need separate review
+/data/
