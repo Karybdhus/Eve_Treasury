@@ -24,4 +24,3 @@ export function financialReadModel(db:DatabaseSync){
  if(models.size>8)models.delete(models.keys().next().value!);
  return state;
 }
-
