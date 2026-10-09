@@ -1,3 +1,10 @@
 import type {ProjectRecord} from '@/lib/source-records';
-import {freshness} from '@/lib/time';
-export function AssetsPanel({rows}:{rows:ProjectRecord[]}){const assets=rows.filter(r=>r.kind==='asset_snapshot'),names=new Map(rows.filter(r=>r.kind==='type_metadata').map(r=>[r.sourceEntityId,String(r.data.name)]));return <section className="panel"><h2>Assets / Bestands-Snapshots</h2><p>Ein Bestand weist keine konkrete Hacking-Site, Miningproduktion oder Gewinne nach. Herkunft und Sessionzuordnung werden separat dokumentiert. Gegenstaende werden nicht zusaetzlich zu Wallet oder Buyback als Einnahmen addiert.</p><details><summary>{assets.length} gespeicherte aktuelle Asset-Positionen</summary><div className="table-wrap"><table><thead><tr><th>Charakter / Item-ID</th><th>Typ</th><th>Menge</th><th>Ort / Container</th><th>Quelldatum / Abruf</th></tr></thead><tbody>{assets.map(r=><tr key={r.deduplicationKey}><td>{r.sourceCharacterId}<br/>{String(r.data.item_id)}</td><td>{names.get(String(r.data.type_id))??'Type #'+r.data.type_id}</td><td>{String(r.data.quantity)}</td><td>{String(r.data.location_id)} / {String(r.data.location_type)} / {String(r.data.location_flag)}</td><td>{r.sourceTimestamp}<br/>{r.fetchedAt}<br/>{freshness(r.fetchedAt,r.sourceTimestamp)}</td></tr>)}</tbody></table></div></details></section>;}
+import type {Character} from '@/lib/esi/sync';
+import {assetGroups} from '@/lib/asset-groups';
+import {nameResolver} from '@/lib/names';
+import {AssetList} from './asset-list';
+export function AssetsPanel({rows,characters=[]}:{rows:ProjectRecord[];characters?:Character[]}){
+ const names=nameResolver(rows,characters);
+ const groups=assetGroups(rows).map(g=>({...g,name:names.type(g.typeId),positions:g.positions.map(p=>({...p,owner:names.character(p.owner),location:names.entity(p.location)}))}));
+ return <section className="panel"><h2>Gegenstaende / aktueller Bestand</h2><p>Nach Gegenstandstyp zusammengefasst. Einzelstuecke und Blueprint-Kopien bleiben getrennt. Inventar ist kein realisierter Gewinn.</p><AssetList groups={groups}/></section>;
+}

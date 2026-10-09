@@ -26,6 +26,8 @@ const categories:Record<string,FinancialCategory>={ore_ice:'BUYBACK_MINING',pi:'
 function audit(db:DatabaseSync,action:string,data:unknown){db.prepare('INSERT INTO reconciliation_audit VALUES (?,?,?,?)').run(randomUUID(),action,new Date().toISOString(),JSON.stringify(data));}
 export function collectFinancialSources(db:DatabaseSync):FinancialSource[]{
  const settings=readSettings(db),out:FinancialSource[]=[],contracts=contractArchive(db);
+ const rawResponses=new Map<string,unknown>();
+ const rawIndexes=new Map<string,Map<string,unknown>>();
  const owned=new Set((db.prepare('SELECT character_id FROM characters').all() as {character_id:string}[]).map(x=>x.character_id));
  for(const b of listBuybacks(db)){
   const costs=exactSum(b.lines.map(l=>l.operatingCostsISK)),value=b.actualPayoutISK;
@@ -35,7 +37,16 @@ export function collectFinancialSources(db:DatabaseSync):FinancialSource[]{
  for(const r of records(db)){
   if(!['wallet_journal','wallet_transaction','motor_trade','industry_job','mining_entry','pi_colony','pi_pin','market_order','wallet_snapshot','wallet_balance'].includes(r.kind))continue;
   const d=r.data,key=r.deduplicationKey;let raw:unknown=d;
-  if(r.rawId){const original=db.prepare('SELECT payload_text FROM raw_source_records WHERE raw_id=?').get(r.rawId) as {payload_text:string}|undefined;if(original)try{const all=exactJson(original.payload_text);raw=Array.isArray(all)?all.find(x=>x&&typeof x==='object'&&['id','transaction_id','job_id','order_id'].some(k=>(x as Record<string,unknown>)[k]===r.sourceEntityId))??d:all;writeMoneyFacts(db,key,d,JSON.stringify(raw));}catch{}}
+  if(r.rawId){try{
+   if(!rawResponses.has(r.rawId)){
+    const original=db.prepare('SELECT payload_text FROM raw_source_records WHERE raw_id=?').get(r.rawId) as {payload_text:string}|undefined;
+    const all=original?exactJson(original.payload_text):undefined;rawResponses.set(r.rawId,all);
+    if(Array.isArray(all)){const index=new Map<string,unknown>();for(const item of all)if(item&&typeof item==='object')for(const field of ['id','transaction_id','job_id','order_id']){const id=(item as Record<string,unknown>)[field];if(id!==undefined&&!index.has(String(id)))index.set(String(id),item);}rawIndexes.set(r.rawId,index);}
+   }
+   const all=rawResponses.get(r.rawId);raw=Array.isArray(all)?rawIndexes.get(r.rawId)?.get(r.sourceEntityId??'')??d:all??d;
+   writeMoneyFacts(db,key,d,JSON.stringify(raw));
+  }catch{}}
+
   const get=(field:string)=>fact(db,key,field,d[field]).value,timestamp=String(d.date??d.timestamp??d.start_date??r.sourceTimestamp??''),day=timestamp&&Number.isFinite(Date.parse(timestamp))?dateKey(timestamp):null;
   let references:string[]=[];let category:FinancialCategory='UNKNOWN',amount:string|null=null,cost:string|null=null,net:string|null=null,role:FinancialSource['role']='cash',identity:string|null=null,legacy=false,complete=true;
   if(r.kind==='motor_trade'){
@@ -138,14 +149,18 @@ export function decideReconciliation(db:DatabaseSync,input:{action:'link'|'rejec
   db.exec('COMMIT');
  }catch(e){db.exec('ROLLBACK');throw e;}return reconciliation(db);
 }
-export function consolidatedFinancials(db:DatabaseSync,filter:{from?:string;to?:string;characterId?:string;source?:string}={}){
- const state=reconciliation(db),from=filter.from??project.start,to=filter.to??project.end;
+export function consolidatedFinancials(db:DatabaseSync,filter:{from?:string;to?:string;characterId?:string;source?:string}={},state=reconciliation(db)){
+ const from=filter.from??project.start,to=filter.to??project.end;
  const bank=essObservations(db,{from,to,characterId:filter.characterId});
  const projection=allocationProjection(db,state.sources);
  const selected=state.sources.map(s=>({...s,category:projection.categories.get(s.key)??s.category})).filter(s=>!projection.suppressed.has(s.key)).filter(s=>s.eligible&&!['production','snapshot'].includes(s.role)&&(s.date?s.date>=from&&s.date<=to:s.source==='buyback'&&(s.raw as {weekStart:string}).weekStart>=from&&(s.raw as {weekEnd:string}).weekEnd<=to)&&(!filter.characterId||s.characterId===filter.characterId)&&(!filter.source||s.source===filter.source)),keys=new Set(selected.map(s=>s.key));
+ const eventBySource=new Map(state.links.map(link=>[link.source_key,link.event_id]));
+ const factsByEvent=new Map<string,FinancialSource[]>();
+ for(const source of selected){const event=eventBySource.get(source.key);if(event){const group=factsByEvent.get(event)??[];group.push(source);factsByEvent.set(event,group);}}
+ const overridden=new Set((db.prepare("SELECT body FROM reconciliation_audit WHERE action='classify'").all() as {body:string}[]).map(a=>String(JSON.parse(a.body).eventId)));
  const events=state.events.flatMap(e=>{
-  const facts=selected.filter(s=>state.links.some(l=>l.source_key===s.key&&l.event_id===e.event_id)),ordered=[...facts].sort((a,b)=>(a.source==='buyback'?-10:a.source==='motor_market'?-5:0)-(b.source==='buyback'?-10:b.source==='motor_market'?-5:0)),s=ordered[0];if(!s)return [];
-  const conflict=facts.some(f=>facts.some(g=>f.key!==g.key&&!compatible(f,g))),override=(db.prepare("SELECT body FROM reconciliation_audit WHERE action='classify' ORDER BY changed_at DESC").all() as {body:string}[]).some(a=>JSON.parse(a.body).eventId===e.event_id);
+  const facts=factsByEvent.get(e.event_id)??[],ordered=[...facts].sort((a,b)=>(a.source==='buyback'?-10:a.source==='motor_market'?-5:0)-(b.source==='buyback'?-10:b.source==='motor_market'?-5:0)),s=ordered[0];if(!s)return [];
+  const conflict=facts.some(f=>facts.some(g=>f.key!==g.key&&!compatible(f,g))),override=overridden.has(e.event_id);
   return [{eventId:e.event_id,category:override?e.category:s.category,source:s,facts,conflict,amountISK:conflict?null:s.amountISK,netISK:conflict?null:ordered.find(f=>f.netISK!==null)?.netISK??null,costsISK:conflict?null:ordered.find(f=>f.costsISK!==null)?.costsISK??null}];
  });
  const cash=events.filter(e=>['cash','report'].includes(e.source.role)&&!['INTERNAL_TRANSFER','PLEX_PURCHASE','TRADING_PURCHASE','UNKNOWN'].includes(e.category)),pending=state.proposals.filter(p=>p.status!=='rejected'&&(keys.has(p.left)||keys.has(p.right))&&state.sources.find(s=>s.key===p.left)?.role!=='snapshot'&&state.sources.find(s=>s.key===p.right)?.role!=='snapshot'),unknown=events.filter(e=>e.conflict||e.category==='UNKNOWN'&&['cash','cost','report'].includes(e.source.role)||e.source.precision==='precision_unknown'||!e.source.complete);

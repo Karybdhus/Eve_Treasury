@@ -10,3 +10,4 @@ data/imports/
 *.sqlite*
 data/sde/
 data/order03-qa*
+data/night05/

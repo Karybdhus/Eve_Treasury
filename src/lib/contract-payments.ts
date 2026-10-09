@@ -3,8 +3,8 @@ import {contractArchive} from './esi-contracts';
 import {reconciliation} from './reconciliation';
 import {allocateEvidence} from './reconciliation-allocations';
 import {signedCents} from './exact-money';
-export function contractPaymentEvidence(db:DatabaseSync){
- const contracts=contractArchive(db),state=reconciliation(db);
+export function contractPaymentEvidence(db:DatabaseSync,state=reconciliation(db)){
+ const contracts=contractArchive(db);
  return contracts.map(c=>({contractId:c.contractId,completed:c.completed,purpose:c.purpose,
  paid:state.allocation.rows.some(a=>a.status==='active'&&a.kind==='payout'&&a.target_key===c.key),
  payments:state.sources.filter(s=>s.role==='cash'&&s.source==='esi'&&s.eligible&&s.characterId===String(c.raw.issuer_id)&&s.amountISK!==null&&s.raw&&typeof s.raw==='object'&&'amount' in s.raw&&signedCents(String(s.raw.amount))>0n&&s.identity==='contract:'+c.contractId).map(s=>({key:s.key,date:s.date,amountISK:s.amountISK}))}));

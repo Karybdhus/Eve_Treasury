@@ -17,3 +17,5 @@ nav a[aria-current="page"]{background:#17302f;color:var(--accent);border-left:2p
 .form-grid>label{min-width:0;display:flex;flex-direction:column;gap:6px}.panel pre{max-width:100%;overflow:auto}.panel>p{overflow-wrap:anywhere}
 .compact-overview .metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.overview-status{display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap}.compact-overview .actions{margin:18px 0}.compact-overview .actions a{border:1px solid var(--border);border-radius:6px;padding:9px 14px;color:var(--accent)}.form-grid>button{align-self:end}nav a[href="/industry"]{opacity:.7}@media(max-width:900px){.compact-overview .metrics{grid-template-columns:1fr}.overview-status{gap:8px}}
 .contract-review{max-height:32rem;overflow:auto;overscroll-behavior:contain}
+
+.readable-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.readable-facts div{padding:10px;border:1px solid #243342;border-radius:8px}.readable-facts dt{color:#94a6b6;font-size:.85rem}.readable-facts dd{margin:4px 0;font-weight:600}details.session>summary{display:flex;flex-wrap:wrap;gap:12px;cursor:pointer}details.session{margin:12px 0}
