@@ -6,8 +6,8 @@ import {freshness} from '@/lib/time';
 import {nameResolver} from '@/lib/names';
 export function PiColonies({rows,characters}:{rows:ProjectRecord[];characters:Character[]}){
  const names=nameResolver(rows,characters),schematics=new Map(rows.filter(r=>r.kind==='schematic_metadata').map(r=>[r.sourceEntityId,r]));
- const colonies=rows.filter(r=>r.kind==='pi_colony');
- return <section className="panel"><h2>PI / Kolonien</h2><p>{colonies.length} Kolonien. Produktion und Lager stammen aus dem letzten Snapshot; sie sind kein Verkaufserloes.</p>{colonies.map(r=>{
+ const colonies=rows.filter(r=>r.kind==='pi_colony'),owners=[...new Set(colonies.map(r=>r.sourceCharacterId))];
+ return <section className="panel"><h2>PI / Kolonien</h2><p>{colonies.length} Kolonien. Produktion und Lager stammen aus dem letzten Snapshot; sie sind kein Verkaufserloes.</p>{owners.map(owner=><details className="pi-owner" key={owner??'unknown'}><summary><strong>{names.character(owner)}</strong><span>{colonies.filter(r=>r.sourceCharacterId===owner).length} Kolonien</span><small>Produktion / Lager / Laufzeiten</small></summary>{colonies.filter(r=>r.sourceCharacterId===owner).map(r=>{
   const pins=(Array.isArray(r.data.pins)?r.data.pins:[]).map(p=>Pin.parse(p));
   const products=[...new Set(pins.map(p=>p.extractor_details?.product_type_id?names.type(p.extractor_details.product_type_id):String(schematics.get(p.factory_details?.schematic_id??p.schematic_id??'')?.data.schematic_name??'')).filter(Boolean))];
   const expiry=pins.map(p=>p.expiry_time).filter((t):t is string=>!!t).sort()[0];
@@ -16,5 +16,5 @@ export function PiColonies({rows,characters}:{rows:ProjectRecord[];characters:Ch
    const schematic=p.factory_details?.schematic_id??p.schematic_id,meta=schematics.get(schematic),storage=storageSnapshot(p,rows);
    return <tr key={p.pin_id}><td>{names.type(p.type_id)}</td><td>{p.extractor_details?.product_type_id?names.type(p.extractor_details.product_type_id):String(meta?.data.schematic_name??'Kein Programm')}<br/><small>{p.expiry_time?new Date(p.expiry_time).toLocaleString('de-DE'):meta?String(meta.data.cycle_time)+' Sekunden je konfiguriertem Zyklus':''}</small></td><td>{p.contents?.map(c=>names.type(c.type_id)+': '+c.amount.toLocaleString('de-DE')).join('; ')||'Nicht gemeldet'}</td><td>{storage.percent===null?'Unbekannt':storage.percent.toFixed(0)+' %'}</td></tr>;
   })}</tbody></table></div><p>{Array.isArray(r.data.links)?r.data.links.length:0} Links / {Array.isArray(r.data.routes)?r.data.routes.length:0} Routen. Durchsatz ohne belegte Betriebsdaten unbekannt.</p></details>;
- })}{!colonies.length&&<p>Keine Koloniedaten fuer die Auswahl gemeldet.</p>}</section>;
+ })}</details>)}{!colonies.length&&<p>Keine Koloniedaten fuer die Auswahl gemeldet.</p>}</section>;
 }

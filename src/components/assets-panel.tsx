@@ -1,10 +1,4 @@
 import type {ProjectRecord} from '@/lib/source-records';
-import type {Character} from '@/lib/esi/sync';
-import {assetGroups} from '@/lib/asset-groups';
-import {nameResolver} from '@/lib/names';
+import {assetPage} from '@/lib/display-pages';
 import {AssetList} from './asset-list';
-export function AssetsPanel({rows,characters=[]}:{rows:ProjectRecord[];characters?:Character[]}){
- const names=nameResolver(rows,characters);
- const groups=assetGroups(rows).map(g=>({...g,name:names.type(g.typeId),positions:g.positions.map(p=>({...p,owner:names.character(p.owner),location:names.entity(p.location)}))}));
- return <section className="panel"><h2>Gegenstaende / aktueller Bestand</h2><p>Nach Gegenstandstyp zusammengefasst. Einzelstuecke und Blueprint-Kopien bleiben getrennt. Inventar ist kein realisierter Gewinn.</p><AssetList groups={groups}/></section>;
-}
+export function AssetsPanel({rows,characters=[],query='',page=0,characterId}:{rows:ProjectRecord[];characters?:{character_id:string;name:string}[];query?:string;page?:number;characterId?:string}){return <section className="panel"><h2>Gegenstaende / aktueller Bestand</h2><p>Typen zusammengefasst; Einzelstuecke und Blueprint-Kopien getrennt. Inventar ist kein realisierter Gewinn. Besitzer und Orte erst bei Bedarf laden.</p><AssetList data={assetPage(rows,characters,query,page)} characterId={characterId}/></section>;}

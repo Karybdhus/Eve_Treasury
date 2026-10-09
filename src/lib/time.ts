@@ -1,6 +1,9 @@
 export const REPORTING_TIMEZONE = 'Europe/Berlin';
+const dateFormatters=new Map<string,Intl.DateTimeFormat>();
 export function dateKey(value:string|Date, timezone=REPORTING_TIMEZONE) {
-  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(value));
+  let formatter=dateFormatters.get(timezone);
+  if(!formatter){formatter=new Intl.DateTimeFormat('en-CA',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit'});dateFormatters.set(timezone,formatter);if(dateFormatters.size>64)dateFormatters.delete(dateFormatters.keys().next().value!);}
+  const parts=formatter.formatToParts(new Date(value));
   const get=(name:string)=>parts.find(p=>p.type===name)?.value;
   return get('year')+'-'+get('month')+'-'+get('day');
 }

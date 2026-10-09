@@ -1,0 +1,3 @@
+'use client';
+import {useEffect,useRef} from 'react';
+export function BrowserReady(){const output=useRef<HTMLOutputElement>(null);useEffect(()=>{const frame=requestAnimationFrame(()=>{const n=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;const ready=performance.now();if(output.current)output.current.dataset.metrics=JSON.stringify({ttfbMs:n?.responseStart??null,responseEndMs:n?.responseEnd??null,domInteractiveMs:n?.domInteractive??null,domContentLoadedMs:n?.domContentLoadedEventEnd??null,reactReadyMs:ready,afterResponseReadyMs:n?Math.max(0,ready-n.responseEnd):null});});return()=>cancelAnimationFrame(frame);},[]);return <output ref={output} id="qa-browser-ready" hidden aria-hidden="true"/>;}
