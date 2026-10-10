@@ -544,3 +544,27 @@ export function originCategories(origin: Origin): Category[] { return origin.ups
 export function sliceCategories(slice: Slice): Category[] { if (slice.manualCategoryOverride)
     return [slice.category]; return slice.origins?.length ? slice.origins.flatMap(originCategories) : [slice.category]; }
 export function inventorySuggestions(db: DatabaseSync, p: Position) { return inventoryCandidates(db, p).slice(0, 25); }
+
+// Called inside a contract transaction. Reserving origin consumes availability only.
+export function reserveContractOrigin(db:DatabaseSync,input:{itemId:string;revision:number;sliceId:string;quantity:string;reason:string;reservationId:string}){
+ const p=inventoryPosition(db,input.itemId);if(!p||p.revision!==input.revision)throw new Error('Revision conflict');
+ const s=p.slices.find(s=>s.id===input.sliceId&&s.active&&s.status!=='suggested');
+ const q=quantity(input.quantity);if(p.conflict||!s||!q||q==='0'||BigInt(q)>BigInt(s.quantity))throw new Error('Origin quantity unavailable');
+ const part=BigInt(q),total=BigInt(s.quantity),cost=s.costCents===null?null:BigInt(s.costCents)*part/total;
+ const original=structuredClone(s);
+ s.quantity=(total-part).toString();if(cost!==null)s.costCents=(BigInt(s.costCents!)-cost).toString();if(s.quantity==='0')s.active=false;
+ p.reservedOut=(BigInt(p.reservedOut)+part).toString();p.revision++;
+ const claim=db.prepare('SELECT source_key,quantity FROM inventory_evidence_claims WHERE slice_id=? AND active=1').get(s.id) as {source_key:string;quantity:string}|undefined;
+ if(claim){if(BigInt(claim.quantity)<part)throw new Error('Origin evidence quantity unavailable');db.prepare('UPDATE inventory_evidence_claims SET quantity=? WHERE slice_id=?').run((BigInt(claim.quantity)-part).toString(),s.id);db.prepare('INSERT INTO inventory_evidence_claims VALUES(?,?,?,?,1)').run(input.reservationId,claim.source_key,p.itemId,q);}
+ save(db,recalculate(p));audit(db,p.itemId,'contract_origin_reserved',{...input,costCents:cost?.toString()??null});
+ return {slice:original,quantity:q,costCents:cost?.toString()??null,positionRevision:p.revision,asOf:p.asOf,owner:p.owner,typeId:p.typeId,evidenceSource:claim?.source_key??null};
+}
+export function releaseContractOrigin(db:DatabaseSync,input:{itemId:string;positionRevision:number;slice:Slice;quantity:string;costCents:string|null;reservationId:string;evidenceSource:string|null;reason:string}){
+ const p=inventoryPosition(db,input.itemId);if(!p||p.revision!==input.positionRevision)throw new Error('Stock changed after reservation; explicit stock review required');
+ const q=BigInt(input.quantity);if(q>BigInt(p.reservedOut))throw new Error('Reservation already consumed');
+ const s=p.slices.find(s=>s.id===input.slice.id);if(!s)throw new Error('Origin slice missing');
+ s.quantity=(BigInt(s.quantity)+q).toString();s.active=true;if(s.costCents!==null&&input.costCents!==null)s.costCents=(BigInt(s.costCents)+BigInt(input.costCents)).toString();
+ p.reservedOut=(BigInt(p.reservedOut)-q).toString();p.revision++;
+ if(input.evidenceSource){db.prepare('UPDATE inventory_evidence_claims SET active=0 WHERE slice_id=?').run(input.reservationId);db.prepare('UPDATE inventory_evidence_claims SET quantity=? WHERE slice_id=?').run(s.quantity,s.id);}
+ save(db,recalculate(p));audit(db,p.itemId,'contract_origin_released',input);return p;
+}
