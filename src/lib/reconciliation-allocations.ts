@@ -1,3 +1,4 @@
+import {readWalletBinding} from './contract-wallet-state';
 import {contractArchive} from './esi-contracts';
 import type {DatabaseSync} from 'node:sqlite';
 import {randomUUID} from 'node:crypto';
@@ -31,6 +32,7 @@ export function allocateEvidence(db:DatabaseSync,raw:unknown){
   if(!creditEligible(p)||!t.eligible)throw new Error('Source is not eligible cash evidence');
   if(input.kind==='payout'&&(!(t.role==='snapshot'&&t.identity?.startsWith('contract:')||t.source==='buyback')||p.role!=='cash'))throw new Error('Payout target must be a contract or buyback');
   if(input.kind==='payout'){
+   const binding=readWalletBinding(db,p.key);if(binding?.active&&t.identity!=='contract:'+binding.contractId)throw new Error('Whole journal is reserved for another contract');
    if(input.expectedContractRevision!==undefined){const c=contractArchive(db).find(c=>c.key===t.key);if(!c?.completed||!c.candidate||c.revision!==input.expectedContractRevision)throw new Error('Contract changed; reload before confirming payment');}
    if(p.source==='esi'&&!['contract_price','contract_price_payment_corp','player_donation','corporation_payment','corporation_bulk_payment','corporation_account_withdrawal'].includes(String((p.raw as Record<string,unknown>).ref_type)))throw new Error('Bounty, market or other income cannot prove a buyback payment');
    if(p.characterId&&t.characterId&&p.characterId!==t.characterId)throw new Error('Payment owner does not match payout recipient');

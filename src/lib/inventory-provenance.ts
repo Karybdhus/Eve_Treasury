@@ -1,3 +1,4 @@
+import {currentWalletBinding,type WalletBinding} from './contract-wallet-state';
 import { moneyFact, signedCents } from './exact-money';
 import type { DatabaseSync } from 'node:sqlite';
 import { randomUUID, createHash } from 'node:crypto';
@@ -304,7 +305,11 @@ function inventoryCandidates(db: DatabaseSync, p: Position) {
             if (quantities.length && quantities.every((q: string | null) => q !== null)) {
                 const amount = quantities.reduce((n: bigint, q: string) => n + BigInt(q), 0n);
                 if (amount > 0n)
-                    candidates.push({ key: r.deduplication_key + ':incoming:' + p.owner + ':' + p.typeId, quantity: amount.toString(), category: 'MISC', method: 'takeover', evidence: 'Abgeschlossener Contract mit Item-Beleg; konkrete Bestandsbewegung muss bestaetigt werden', costCents: null });
+                    {const incomingAll=d.items.filter((i:{is_included:boolean})=>(accepts&&i.is_included)||(issues&&!i.is_included));
+ const bindings=(db.prepare("SELECT body FROM app_settings WHERE name LIKE 'contract_wallet:%'").all() as {body:string}[]).map(r=>JSON.parse(r.body) as WalletBinding).filter(b=>b.active&&b.component==='item_purchase'&&b.contractId===String(d.contract_id)&&b.owner===p.owner);
+ let costCents:string|null=null;
+ if(incomingAll.length===1&&bindings.length===1){const b=bindings[0],receipt=db.prepare('SELECT body FROM project_records WHERE deduplication_key=? AND is_current=1').get(b.paymentKey) as {body:string}|undefined;if(receipt&&currentWalletBinding(b,p.owner,JSON.parse(receipt.body),d)&&signedCents(b.amountISK)<0n)costCents=(-signedCents(b.amountISK)).toString();}
+ candidates.push({ key:r.deduplication_key+':incoming:'+p.owner+':'+p.typeId,quantity:amount.toString(),category:'MISC',method:costCents===null?'takeover':'purchase',evidence:'Bestaetigter Item-Eingang; Zweck und Bestandszuordnung bleiben explizit. Kosten nur bei eindeutigem ganzen Zahlungsbeleg.',costCents });}
             }
         }
         if (r.kind === 'pi_pin' && Array.isArray(d.contents))
@@ -557,7 +562,7 @@ export function reserveContractOrigin(db:DatabaseSync,input:{itemId:string;revis
  const claim=db.prepare('SELECT source_key,quantity FROM inventory_evidence_claims WHERE slice_id=? AND active=1').get(s.id) as {source_key:string;quantity:string}|undefined;
  if(claim){if(BigInt(claim.quantity)<part)throw new Error('Origin evidence quantity unavailable');db.prepare('UPDATE inventory_evidence_claims SET quantity=? WHERE slice_id=?').run((BigInt(claim.quantity)-part).toString(),s.id);db.prepare('INSERT INTO inventory_evidence_claims VALUES(?,?,?,?,1)').run(input.reservationId,claim.source_key,p.itemId,q);}
  save(db,recalculate(p));audit(db,p.itemId,'contract_origin_reserved',{...input,costCents:cost?.toString()??null});
- return {slice:original,quantity:q,costCents:cost?.toString()??null,positionRevision:p.revision,asOf:p.asOf,owner:p.owner,typeId:p.typeId,evidenceSource:claim?.source_key??null};
+ return {slice:original,quantity:q,costCents:cost?.toString()??null,positionRevision:p.revision,asOf:p.asOf,owner:p.owner,typeId:p.typeId,auditRowid:Number(db.prepare('SELECT last_insert_rowid() id').get()!.id),evidenceSource:claim?.source_key??null};
 }
 export function releaseContractOrigin(db:DatabaseSync,input:{itemId:string;positionRevision:number;slice:Slice;quantity:string;costCents:string|null;reservationId:string;evidenceSource:string|null;reason:string}){
  const p=inventoryPosition(db,input.itemId);if(!p||p.revision!==input.positionRevision)throw new Error('Stock changed after reservation; explicit stock review required');
