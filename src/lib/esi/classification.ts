@@ -16,8 +16,8 @@ export function classifyJournal(row:Record<string,unknown>,projectCharacterIds:S
   return {category:both?'internal_transfer':'transfer_unresolved',quality:both?'measured':'unknown'};
  }
  if(type==='market_transaction')return {category:'market_transaction',quality:'partial'};
- if(['brokers_fee','contract_brokers_fee'].includes(type))return {category:'broker_fee',quality:'measured'};
- if(type==='transaction_tax')return {category:'sales_tax',quality:'measured'};
+ if(['brokers_fee','contract_brokers_fee'].includes(type))return {category:owned&&delta!==null&&signedCents(delta)<0n?'broker_fee':'fee_unvalidated',quality:owned&&delta!==null&&signedCents(delta)<0n?'measured':'unknown'};
+ if(type==='transaction_tax')return {category:owned&&delta!==null&&signedCents(delta)<0n?'sales_tax':'fee_unvalidated',quality:owned&&delta!==null&&signedCents(delta)<0n?'measured':'unknown'};
  if(['planetary_import_tax','planetary_export_tax'].includes(type))return {category:'poco_tax',quality:'measured'};
  if(['manufacturing','reaction','copying','industry_job_tax','industry_security_tax','factory_slot_rental_fee','researching_material_productivity','researching_time_productivity','researching_technology','reverse_engineering'].includes(type))return {category:'industry_fee',quality:'measured'};
  if(type.endsWith('_corporation_tax')||type==='corporate_reward_tax')return {category:'corporation_tax',quality:'partial'};
