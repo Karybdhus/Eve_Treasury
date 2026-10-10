@@ -16,7 +16,7 @@ export function ContractHub({data,characters}:{data:ContractPage;characters:{cha
  function listPage(page:number){const q=new URLSearchParams(Object.entries(data.filters).filter(([,v])=>v!==undefined&&v!=='').map(([k,v])=>[k,String(v)]));q.set('page',String(page));router.push('/contracts?'+q);}
  const h=detail?.header;
  return <>
- <section className="panel"><div className="section-title"><h2>Vertraege</h2><span>{data.total} Treffer / {data.reviewed} geprueft / {data.unreviewed} offen</span></div><form className="form-grid" onSubmit={filter}>
+ <section className="panel"><div className="section-title"><h2>Vertraege</h2><span>{data.total} Treffer / {data.reviewed} geprueft / {data.unreviewed} offen</span></div><p>Zeitraum nach Ausstellungsdatum. Wirtschaftsbelege verwenden den Zahlungstag.</p><form className="form-grid" onSubmit={filter}>
  <label>Suche / Contract-ID<input name="q" maxLength={200} defaultValue={data.filters.q}/></label><label>Eigener Charakter<select name="characterId" defaultValue={data.filters.characterId??''}><option value="">Alle Charaktere</option>{characters.map(c=><option key={c.character_id} value={c.character_id}>{c.name}</option>)}</select></label>
  <label>Vertragstyp<select name="type" defaultValue={data.filters.type??''}><option value="">Alle Typen</option>{['item_exchange','courier','other','auction','loan','unknown'].map(v=><option key={v} value={v}>{v.replaceAll('_',' ')}</option>)}</select></label>
  <label>Zweck<select name="purpose" defaultValue={data.filters.purpose??''}><option value="">Alle Zwecke</option>{Object.entries(contractPurposeLabels).map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label>

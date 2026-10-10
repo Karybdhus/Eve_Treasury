@@ -21,8 +21,9 @@ import {dateKey} from './time';
 import {project,weekStart} from './accounting';
 import {classifyJournal} from './esi/classification';
 import {readSettings} from './settings';
-export const financialCategories=['BUYBACK_MINING','BUYBACK_PI','BUYBACK_RATLOOT','BUYBACK_HACKING','BUYBACK_SALVAGE','BUYBACK_MIXED','TRADING_SALE','TRADING_PURCHASE','TRADING_FEE','RATTING_BOUNTY','ESS_INCOME','INDUSTRY_COST','OTHER_INCOME','OPERATING_COST','INTERNAL_TRANSFER','PLEX_PURCHASE','SERVICE_INCOME','SERVICE_COST','MISC_INCOME','MISC_COST','CAPITAL_TRANSFER','UNKNOWN'] as const;
-export type FinancialCategory=typeof financialCategories[number];
+import {financialCategories,type FinancialCategory} from './financial-categories';
+export {financialCategories,type FinancialCategory} from './financial-categories';
+
 export type FinancialSource={key:string;source:string;sourceId:string;characterId:string|null;date:string|null;category:FinancialCategory;amountISK:string|null;costsISK:string|null;netISK:string|null;status:string;precision:string;eligible:boolean;role:'cash'|'report'|'cost'|'snapshot'|'production';identity:string|null;references:string[];legacy:boolean;complete:boolean;raw:unknown};
 type Link={source_key:string;event_id:string;method:string;evidence:string;confirmed_at:string;manual:number};
 export type Match={pairKey:string;left:string;right:string;reason:string;status:'proposal'|'conflict'|'rejected'};
@@ -174,10 +175,10 @@ export function decideReconciliation(db:DatabaseSync,input:{action:'link'|'rejec
  }catch(e){db.exec('ROLLBACK');throw e;}return reconciliation(db);
 }
 export function consolidatedFinancials(db:DatabaseSync,filter:{from?:string;to?:string;characterId?:string;source?:string}={},state=reconciliation(db)){
- const from=filter.from??project.start,to=filter.to??project.end;
+ const from=filter.from??project.start,to=filter.to??project.end,today=dateKey(new Date());
  const bank=essObservations(db,{from,to,characterId:filter.characterId});
  const projection=allocationProjection(db,state.sources);
- const selected=state.sources.map(s=>({...s,category:projection.categories.get(s.key)??s.category})).filter(s=>!projection.suppressed.has(s.key)).filter(s=>s.eligible&&!['production','snapshot'].includes(s.role)&&(s.date?s.date>=from&&s.date<=to:s.source==='buyback'&&(s.raw as {weekStart:string}).weekStart>=from&&(s.raw as {weekEnd:string}).weekEnd<=to)&&(!filter.characterId||s.characterId===filter.characterId)&&(!filter.source||s.source===filter.source)),keys=new Set(selected.map(s=>s.key));
+ const selected=state.sources.map(s=>({...s,category:projection.categories.get(s.key)??s.category})).filter(s=>!projection.suppressed.has(s.key)).filter(s=>s.eligible&&!['production','snapshot'].includes(s.role)&&(s.date?s.date>=from&&s.date<=to&&s.date<=today:s.source==='buyback'&&(s.raw as {weekStart:string}).weekStart>=from&&(s.raw as {weekEnd:string}).weekEnd<=to&&(s.raw as {weekEnd:string}).weekEnd<=today)&&(!filter.characterId||s.characterId===filter.characterId)&&(!filter.source||s.source===filter.source)),keys=new Set(selected.map(s=>s.key));
  const eventBySource=new Map(state.links.map(link=>[link.source_key,link.event_id]));
  const factsByEvent=new Map<string,FinancialSource[]>();
  for(const source of selected){const event=eventBySource.get(source.key);if(event){const group=factsByEvent.get(event)??[];group.push(source);factsByEvent.set(event,group);}}
@@ -185,7 +186,7 @@ export function consolidatedFinancials(db:DatabaseSync,filter:{from?:string;to?:
  const events=state.events.flatMap(e=>{
   const facts=factsByEvent.get(e.event_id)??[],ordered=[...facts].sort((a,b)=>(a.source==='buyback'?-10:a.source==='motor_market'?-5:0)-(b.source==='buyback'?-10:b.source==='motor_market'?-5:0)),s=ordered[0];if(!s)return [];
   const conflict=facts.some(f=>facts.some(g=>f.key!==g.key&&!compatible(f,g))),override=overridden.has(e.event_id);
-  const category=override?e.category:s.category;const delta=moneyFact((s.raw as Record<string,unknown>)?.amount).value;const source=category==='TRADING_FEE'&&delta!==null&&signedCents(delta)<0n?{...s,role:'cost' as const,costsISK:s.amountISK,complete:s.amountISK!==null}:s;
+  const category=override?e.category:s.category;const delta=moneyFact((s.raw as Record<string,unknown>)?.amount).value;const source=['TRADING_FEE','OPERATING_COST','INDUSTRY_COST','SERVICE_COST','MISC_COST'].includes(category)&&delta!==null&&signedCents(delta)<0n?{...s,role:'cost' as const,costsISK:s.amountISK,complete:s.amountISK!==null}:s;
   return [{eventId:e.event_id,category,source,facts,conflict,amountISK:conflict?null:s.amountISK,netISK:conflict?null:ordered.find(f=>f.netISK!==null)?.netISK??null,costsISK:conflict?null:ordered.find(f=>f.costsISK!==null)?.costsISK??null}];
  });
  const cash=events.filter(e=>['cash','report'].includes(e.source.role)&&!['INTERNAL_TRANSFER','PLEX_PURCHASE','TRADING_PURCHASE','CAPITAL_TRANSFER','UNKNOWN'].includes(e.category)),pending=state.proposals.filter(p=>p.status!=='rejected'&&(keys.has(p.left)||keys.has(p.right))&&state.sources.find(s=>s.key===p.left)?.role!=='snapshot'&&state.sources.find(s=>s.key===p.right)?.role!=='snapshot'),unknown=events.filter(e=>e.conflict||e.category==='UNKNOWN'&&['cash','cost','report'].includes(e.source.role)||e.source.precision==='precision_unknown'||!e.source.complete);

@@ -3,8 +3,9 @@ import {RawEvidence} from './raw-evidence';
 import {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import type {reconciliation,FinancialCategory} from '@/lib/reconciliation';
+import {financialCategories} from '@/lib/financial-categories';
 import {displayMoney} from '@/lib/money';
-const categories=['BUYBACK_MINING','BUYBACK_PI','BUYBACK_RATLOOT','BUYBACK_HACKING','BUYBACK_SALVAGE','BUYBACK_MIXED','TRADING_SALE','TRADING_PURCHASE','TRADING_FEE','RATTING_BOUNTY','ESS_INCOME','INDUSTRY_COST','OTHER_INCOME','OPERATING_COST','INTERNAL_TRANSFER','PLEX_PURCHASE','UNKNOWN'];
+const categories=financialCategories;
 export function ReconciliationPanel({state}:{state:ReturnType<typeof reconciliation>}){
  const router=useRouter(),[error,setError]=useState(''),[busy,setBusy]=useState(false),[left,setLeft]=useState(''),[right,setRight]=useState(''),[reason,setReason]=useState(''),[category,setCategory]=useState('UNKNOWN'),[filter,setFilter]=useState('all'),[search,setSearch]=useState(''),[sourcePage,setSourcePage]=useState(0),[proposalPage,setProposalPage]=useState(0);
  const matching=state.sources.filter(s=>[s.key,s.date,s.category,s.amountISK].join(' ').toLowerCase().includes(search.toLowerCase()));
