@@ -1,3 +1,4 @@
+import {contractJournalEconomics} from './contract-economics';
 import {essObservations} from './ess-observations';
 import {costComponents} from './reconciliation-costs';
 import {contractArchive} from './esi-contracts';
@@ -16,7 +17,7 @@ import {dateKey} from './time';
 import {project,weekStart} from './accounting';
 import {classifyJournal} from './esi/classification';
 import {readSettings} from './settings';
-export const financialCategories=['BUYBACK_MINING','BUYBACK_PI','BUYBACK_RATLOOT','BUYBACK_HACKING','BUYBACK_SALVAGE','BUYBACK_MIXED','TRADING_SALE','TRADING_PURCHASE','TRADING_FEE','RATTING_BOUNTY','ESS_INCOME','INDUSTRY_COST','OTHER_INCOME','OPERATING_COST','INTERNAL_TRANSFER','PLEX_PURCHASE','UNKNOWN'] as const;
+export const financialCategories=['BUYBACK_MINING','BUYBACK_PI','BUYBACK_RATLOOT','BUYBACK_HACKING','BUYBACK_SALVAGE','BUYBACK_MIXED','TRADING_SALE','TRADING_PURCHASE','TRADING_FEE','RATTING_BOUNTY','ESS_INCOME','INDUSTRY_COST','OTHER_INCOME','OPERATING_COST','INTERNAL_TRANSFER','PLEX_PURCHASE','SERVICE_INCOME','SERVICE_COST','MISC_INCOME','MISC_COST','CAPITAL_TRANSFER','UNKNOWN'] as const;
 export type FinancialCategory=typeof financialCategories[number];
 export type FinancialSource={key:string;source:string;sourceId:string;characterId:string|null;date:string|null;category:FinancialCategory;amountISK:string|null;costsISK:string|null;netISK:string|null;status:string;precision:string;eligible:boolean;role:'cash'|'report'|'cost'|'snapshot'|'production';identity:string|null;references:string[];legacy:boolean;complete:boolean;raw:unknown};
 type Link={source_key:string;event_id:string;method:string;evidence:string;confirmed_at:string;manual:number};
@@ -64,8 +65,10 @@ export function collectFinancialSources(db:DatabaseSync):FinancialSource[]{
    if(category==='INTERNAL_TRANSFER')identity='transfer:'+d.id;
    if(d.ref_type==='market_transaction'){category=delta!==null&&signedCents(delta)<0n?'TRADING_PURCHASE':'TRADING_SALE';identity='journal:'+r.sourceCharacterId+':'+d.id;}
    if(d.ref_type==='contract_price'&&d.context_id_type==='contract_id'&&d.context_id){identity='contract:'+d.context_id;const c=contracts.find(x=>x.contractId===String(d.context_id));if(c?.candidate&&c.completed&&c.category&&['AUTO_CONFIRMED','MANUALLY_CONFIRMED'].includes(c.quality)&&String(c.raw.issuer_id)===r.sourceCharacterId&&delta!==null&&signedCents(delta)>0n)category=categories[c.category]??'UNKNOWN';}
+   const contractEconomics=contractJournalEconomics(d,r.sourceCharacterId,owned,contracts.find(c=>c.contractId===String(d.context_id))?.raw);
+   if(contractEconomics){category=contractEconomics.category;if(d.context_id_type==='contract_id')identity='contract:'+d.context_id;if(category==='SERVICE_COST'||category==='MISC_COST'){role='cost';cost=amount;}if(category==='SERVICE_INCOME'||category==='MISC_INCOME')net=amount;}
    if(category==='RATTING_BOUNTY'||category==='ESS_INCOME')net=amount;
-   if(delta!==null&&signedCents(delta)<0n&&role==='cash'&&category!=='INTERNAL_TRANSFER'){category='UNKNOWN';complete=false;}
+   if(delta!==null&&signedCents(delta)<0n&&role==='cash'&&!['INTERNAL_TRANSFER','CAPITAL_TRANSFER'].includes(category)){category='UNKNOWN';complete=false;}
   }else if(r.kind==='industry_job'){role='cost';category='INDUSTRY_COST';amount=get('cost');cost=amount;complete=false;}
   else {role=['mining_entry','pi_colony','pi_pin'].includes(r.kind)?'production':'snapshot';complete=false;}
     const event=db.prepare('SELECT event_id FROM event_sources WHERE source_key=?').get(key) as {event_id:string}|undefined;
@@ -163,7 +166,7 @@ export function consolidatedFinancials(db:DatabaseSync,filter:{from?:string;to?:
   const conflict=facts.some(f=>facts.some(g=>f.key!==g.key&&!compatible(f,g))),override=overridden.has(e.event_id);
   return [{eventId:e.event_id,category:override?e.category:s.category,source:s,facts,conflict,amountISK:conflict?null:s.amountISK,netISK:conflict?null:ordered.find(f=>f.netISK!==null)?.netISK??null,costsISK:conflict?null:ordered.find(f=>f.costsISK!==null)?.costsISK??null}];
  });
- const cash=events.filter(e=>['cash','report'].includes(e.source.role)&&!['INTERNAL_TRANSFER','PLEX_PURCHASE','TRADING_PURCHASE','UNKNOWN'].includes(e.category)),pending=state.proposals.filter(p=>p.status!=='rejected'&&(keys.has(p.left)||keys.has(p.right))&&state.sources.find(s=>s.key===p.left)?.role!=='snapshot'&&state.sources.find(s=>s.key===p.right)?.role!=='snapshot'),unknown=events.filter(e=>e.conflict||e.category==='UNKNOWN'&&['cash','cost','report'].includes(e.source.role)||e.source.precision==='precision_unknown'||!e.source.complete);
+ const cash=events.filter(e=>['cash','report'].includes(e.source.role)&&!['INTERNAL_TRANSFER','PLEX_PURCHASE','TRADING_PURCHASE','CAPITAL_TRANSFER','UNKNOWN'].includes(e.category)),pending=state.proposals.filter(p=>p.status!=='rejected'&&(keys.has(p.left)||keys.has(p.right))&&state.sources.find(s=>s.key===p.left)?.role!=='snapshot'&&state.sources.find(s=>s.key===p.right)?.role!=='snapshot'),unknown=events.filter(e=>e.conflict||e.category==='UNKNOWN'&&['cash','cost','report'].includes(e.source.role)||e.source.precision==='precision_unknown'||!e.source.complete);
  const value=(rows:typeof events,key:'amountISK'|'netISK'|'costsISK')=>exactSum(rows.map(e=>e[key])),buybacks=cash.filter(e=>e.facts.some(f=>f.source==='buyback')||e.category.startsWith('BUYBACK_')),trades=cash.filter(e=>e.category==='TRADING_SALE'&&!e.source.legacy&&!buybacks.includes(e)),legacy=cash.filter(e=>e.category==='TRADING_SALE'&&e.source.legacy),other=cash.filter(e=>!buybacks.includes(e)&&!trades.includes(e)&&!legacy.includes(e)),expenses=events.filter(e=>e.source.role==='cost'&&!e.conflict);
  const aggregateOverlap=events.some(e=>e.source.role==='report'&&e.facts.length===1)&&events.some(e=>e.source.role==='cash');
  const costOverlap=expenses.length>0&&cash.some(e=>e.costsISK!==null);
