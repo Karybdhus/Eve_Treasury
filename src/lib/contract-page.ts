@@ -1,0 +1,58 @@
+import {currentWalletBinding,type WalletBinding} from './contract-wallet-state';import {effectiveContractSplit} from './contract-split-state';
+import type {DatabaseSync,SQLInputValue} from 'node:sqlite';import {z} from 'zod';import {staticNames} from './names';import {moneyFact} from './exact-money';import {contractPurposes} from './contract-management';
+import {contractPurposeLabels,contractDirectionLabels,reviewLabels} from './contract-labels';
+export {contractPurposeLabels,contractDirectionLabels,reviewLabels};
+const Filter=z.object({q:z.string().max(200).default(''),page:z.coerce.number().int().nonnegative().default(0),characterId:z.string().regex(/^\d+$/).optional(),type:z.string().max(100).optional(),purpose:z.enum(contractPurposes).optional(),status:z.string().max(100).optional(),from:z.iso.date().optional(),to:z.iso.date().optional(),evidence:z.enum(['open','purpose','direction','origin','payment','split','conflict','done']).optional()}).strict().refine(v=>!v.from||!v.to||v.from<=v.to,'Date range invalid');
+export type ContractFilters=z.input<typeof Filter>;
+export type ContractListRow={contractId:string;type:string;status:string;date:string;ownId:string|null;ownName:string|null;counterpartyId:string|null;counterpartyName:string|null;purpose:string;direction:string;review:string;revision:number;priceISK:string|null;rewardISK:string|null;collateralISK:string|null};
+const base=`WITH raw AS (
+ SELECT p.source_entity_id contractId,p.body,json_extract(p.body,'$.type') type,json_extract(p.body,'$.status') status,json_extract(p.body,'$.date_issued') date,
+ json_extract(p.body,'$.issuer_id') issuer,json_extract(p.body,'$.acceptor_id') acceptor,
+ CASE WHEN json_extract(p.body,'$.for_corporation')=0 AND a.character_id IS NOT NULL THEN 1 ELSE 0 END ownsIssuer,
+ CASE WHEN json_extract(p.body,'$.for_corporation')=0 AND b.character_id IS NOT NULL THEN 1 ELSE 0 END ownsAcceptor,
+ CASE WHEN json_extract(p.body,'$.for_corporation')=0 THEN coalesce(a.character_id,b.character_id) END ownId,
+ CASE WHEN json_extract(p.body,'$.for_corporation')=0 THEN coalesce(a.name,b.name) END ownName,
+ m.body management,coalesce(d.revision,0) revision
+ FROM project_records p LEFT JOIN characters a ON a.character_id=json_extract(p.body,'$.issuer_id') LEFT JOIN characters b ON b.character_id=json_extract(p.body,'$.acceptor_id') LEFT JOIN app_settings m ON m.name='contract_purpose:'||p.source_entity_id LEFT JOIN contract_decisions d ON d.contract_id=p.source_entity_id
+ WHERE p.kind='contract_archive'
+), flow AS (
+ SELECT *,CASE WHEN ownsIssuer=1 AND ownsAcceptor=1 THEN 'internal' WHEN type='courier' THEN CASE WHEN ownsIssuer=1 THEN 'courier_issuer' WHEN ownsAcceptor=1 THEN 'courier_runner' ELSE 'unknown' END
+ WHEN type='item_exchange' AND (ownsIssuer=1 OR ownsAcceptor=1) AND json_type(body,'$.items')='array' THEN CASE
+ WHEN EXISTS(SELECT 1 FROM json_each(body,'$.items') i WHERE json_extract(i.value,'$.is_included')=ownsIssuer) AND EXISTS(SELECT 1 FROM json_each(body,'$.items') i WHERE json_extract(i.value,'$.is_included')!=ownsIssuer) THEN 'exchange'
+ WHEN EXISTS(SELECT 1 FROM json_each(body,'$.items') i WHERE json_extract(i.value,'$.is_included')=ownsIssuer) THEN 'outgoing'
+ WHEN EXISTS(SELECT 1 FROM json_each(body,'$.items') i WHERE json_extract(i.value,'$.is_included')!=ownsIssuer) THEN 'incoming' ELSE 'unknown' END ELSE 'unknown' END automaticDirection,
+ CASE WHEN ownsIssuer=1 THEN CASE WHEN acceptor!='0' THEN acceptor ELSE json_extract(body,'$.assignee_id') END WHEN ownsAcceptor=1 THEN issuer END counterpartyId
+ FROM raw
+), classified AS (
+ SELECT *,CASE WHEN json_extract(management,'$.management.active')=1 THEN json_extract(management,'$.management.direction') ELSE automaticDirection END direction,
+ CASE WHEN json_extract(management,'$.management.active')=1 THEN json_extract(management,'$.management.purpose') WHEN json_extract(management,'$.purpose')='buyback' THEN 'material_sale' WHEN json_extract(management,'$.purpose')='other' THEN 'other'
+ ELSE CASE automaticDirection WHEN 'outgoing' THEN 'material_sale' WHEN 'incoming' THEN 'material_purchase' WHEN 'internal' THEN 'internal_transfer' WHEN 'courier_issuer' THEN 'transport_order' WHEN 'courier_runner' THEN 'transport_service' ELSE 'unknown' END END purpose,
+ CASE WHEN contract_review_conflict(contractId)=1 THEN 1 WHEN json_extract(management,'$.management.active')=1 AND (json_extract(management,'$.management.type')!=type OR json_extract(management,'$.management.issuer')!=issuer OR json_extract(management,'$.management.acceptor')!=acceptor OR json_extract(management,'$.management.corporation')!=json_extract(body,'$.for_corporation') OR automaticDirection!='unknown' AND json_extract(management,'$.management.direction')!=automaticDirection) THEN 1 ELSE 0 END conflict
+ FROM flow
+), reviewed AS (
+ SELECT *,CASE WHEN conflict=1 THEN 'conflict' WHEN json_extract(management,'$.management.active')=1 AND json_extract(management,'$.management.reviewed')=1 THEN 'done'
+ WHEN purpose='unknown' THEN 'purpose' WHEN direction='unknown' THEN 'direction'
+ WHEN type='item_exchange' AND direction IN ('outgoing','exchange') AND NOT EXISTS(SELECT 1 FROM contract_item_origins o WHERE o.contract_id=contractId AND o.status='active') THEN 'origin'
+ WHEN status IN ('finished','finished_issuer','finished_contractor','failed') AND direction!='internal' AND NOT EXISTS(SELECT 1 FROM app_settings w WHERE w.name LIKE 'contract_wallet:%' AND json_extract(w.body,'$.contractId')=contractId AND json_extract(w.body,'$.active')=1) THEN 'payment'
+ WHEN type='item_exchange' AND direction IN ('outgoing','exchange') AND NOT EXISTS(SELECT 1 FROM app_settings s WHERE s.name LIKE 'contract_split:%' AND json_extract(s.body,'$.contractId')=contractId AND json_extract(s.body,'$.active')=1) THEN 'split' ELSE 'direction' END review
+ FROM classified
+)`;
+export function contractPage(db:DatabaseSync,raw:Record<string,unknown>={}){
+ const conflicts=new Set<string>();const own=new Set((db.prepare('SELECT character_id FROM characters').all() as {character_id:string}[]).map(r=>r.character_id));
+ for(const r of db.prepare("SELECT w.body binding,p.body journal,p.source_character_id owner,c.body contract FROM app_settings w LEFT JOIN project_records p ON p.deduplication_key=json_extract(w.body,'$.paymentKey') AND p.is_current=1 LEFT JOIN project_records c ON c.kind='contract_archive' AND c.source_entity_id=json_extract(w.body,'$.contractId') WHERE w.name LIKE 'contract_wallet:%' AND json_extract(w.body,'$.active')=1").all() as {binding:string;journal:string|null;owner:string|null;contract:string|null}[]){const b=JSON.parse(r.binding) as WalletBinding;if(!r.journal||!r.contract||!r.owner||!own.has(b.owner)||own.has(b.issuer)&&own.has(b.acceptor)||!currentWalletBinding(b,r.owner,JSON.parse(r.journal),JSON.parse(r.contract)))conflicts.add(b.contractId);}
+ for(const r of db.prepare("SELECT json_extract(body,'$.paymentKey') paymentKey,json_extract(body,'$.contractId') contractId FROM app_settings WHERE name LIKE 'contract_split:%' AND json_extract(body,'$.active')=1").all() as {paymentKey:string;contractId:string}[])if(!effectiveContractSplit(db,r.paymentKey))conflicts.add(r.contractId);
+ db.function('contract_review_conflict',{deterministic:true},(id)=>conflicts.has(String(id))?1:0);
+ const filter=Filter.parse(Object.fromEntries(Object.entries(raw).filter(([,v])=>v!==undefined&&v!==''))),where=['1=1'],args:SQLInputValue[]=[];
+ if(filter.q){where.push("(contractId LIKE ? ESCAPE '\\' OR ownName LIKE ? ESCAPE '\\' OR json_extract(body,'$.title') LIKE ? ESCAPE '\\')");const term='%'+filter.q.replace(/[\\%_]/g,c=>'\\'+c)+'%';args.push(term,term,term);}
+ if(filter.characterId){where.push('(ownsIssuer=1 AND issuer=? OR ownsAcceptor=1 AND acceptor=?)');args.push(filter.characterId,filter.characterId);}
+ for(const [key,column] of [['type','type'],['purpose','purpose'],['status','status'],['evidence','review']] as const){if(filter[key]){if(key==='evidence'&&filter[key]==='open')where.push("review!='done'");else if(key==='type'&&filter[key]==='other')where.push("type NOT IN ('item_exchange','courier')");else{where.push(column+'=?');args.push(filter[key]!);}}}
+ if(filter.from){where.push('substr(date,1,10)>=?');args.push(filter.from);}if(filter.to){where.push('substr(date,1,10)<=?');args.push(filter.to);}
+ const condition=' WHERE '+where.join(' AND '),total=Number(db.prepare(base+' SELECT COUNT(*) total FROM reviewed'+condition).get(...args)!.total),pages=Math.max(1,Math.ceil(total/25)),page=Math.min(filter.page,pages-1);
+ const rows=db.prepare(base+" SELECT contractId,type,status,date,ownId,ownName,counterpartyId,purpose,direction,review,revision,json_extract(body,'$.price') price,json_extract(body,'$.reward') reward,json_extract(body,'$.collateral') collateral FROM reviewed"+condition+' ORDER BY date DESC,contractId DESC LIMIT 25 OFFSET ?').all(...args,page*25) as (Omit<ContractListRow,'priceISK'|'rewardISK'|'collateralISK'|'counterpartyName'>&{price:unknown;reward:unknown;collateral:unknown})[];
+ const catalog=staticNames(),people=new Map((db.prepare('SELECT character_id,name FROM characters').all() as {character_id:string;name:string}[]).map(r=>[r.character_id,r.name]));
+ const output=rows.map(r=>{const {price,reward,collateral,...rest}=r;const metadata=r.counterpartyId?db.prepare("SELECT json_extract(body,'$.name') name FROM project_records WHERE kind='entity_metadata' AND source_entity_id=? LIMIT 1").get(r.counterpartyId):undefined;return {...rest,counterpartyName:r.counterpartyId?people.get(r.counterpartyId)??catalog?.entities[r.counterpartyId]?.name??metadata?.name as string??null:null,priceISK:moneyFact(price).value,rewardISK:moneyFact(reward).value,collateralISK:moneyFact(collateral).value};});
+ const stats=db.prepare(base+" SELECT COUNT(*) total,SUM(CASE WHEN review='done' THEN 1 ELSE 0 END) reviewed FROM reviewed"+condition).get(...args)!;
+ return {rows:output,total,page,pages,filters:filter,reviewed:Number(stats.reviewed??0),unreviewed:total-Number(stats.reviewed??0)};
+}
+export type ContractPage=ReturnType<typeof contractPage>;
+export function historicalContractPage(db:DatabaseSync,page=0){if(!Number.isSafeInteger(page)||page<0)throw new Error('Invalid history page');const total=Number(db.prepare('SELECT COUNT(*) total FROM buyback_bookings').get()!.total),pages=Math.max(1,Math.ceil(total/25)),current=Math.min(page,pages-1);const rows=db.prepare("SELECT booking_id bookingId,week_start weekStart,contract_id contractId,json_extract(body,'$.historicalAggregate') historicalAggregate,json_extract(body,'$.source') source,json_extract(body,'$.actualPayoutISK') payoutISK,json_extract(body,'$.payoutDate') payoutDate,json_extract(body,'$.reportingStatus') status,json_extract(body,'$.notes') notes FROM buyback_bookings ORDER BY week_start DESC,booking_id LIMIT 25 OFFSET ?").all(current*25);return {rows:rows.map(r=>({...r})),total,page:current,pages};}

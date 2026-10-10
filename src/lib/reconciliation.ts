@@ -123,6 +123,7 @@ function merge(db:DatabaseSync,a:FinancialSource,b:FinancialSource,method:string
  if(!compatible(a,b))throw new Error('Conflicting amount, character, role or known costs. Correct classification/evidence before linking.');
  const first=eventFor(db,a),second=eventFor(db,b);if(first===second)return;
  const old=db.prepare('SELECT * FROM event_sources WHERE event_id IN (?,?)').all(first,second),rows=db.prepare('SELECT s.body FROM financial_sources s JOIN event_sources l USING(source_key) WHERE l.event_id IN (?,?) AND s.is_current=1').all(first,second) as {body:string}[],facts=rows.map(x=>JSON.parse(x.body) as FinancialSource);
+ const bindings=facts.map(f=>readWalletBinding(db,f.key)).filter(b=>b?.active);if(new Set(bindings.map(b=>b!.contractId)).size>1)throw new Error('Wallet evidence belongs to different contracts');
  if(facts.some(x=>facts.some(y=>!compatible(x,y))))throw new Error('Existing event evidence conflicts');
  db.prepare('UPDATE event_sources SET event_id=?,method=?,evidence=?,confirmed_at=?,manual=? WHERE event_id IN (?,?)').run(first,method,evidence,new Date().toISOString(),manual?1:0,first,second);
  db.prepare('UPDATE economic_events SET revision=revision+1 WHERE event_id IN (?,?)').run(first,second);

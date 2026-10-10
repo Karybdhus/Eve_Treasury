@@ -1,3 +1,4 @@
+import {readWalletBinding} from './contract-wallet-state';
 import {detachFinancialSource} from './reconciliation-links';
 import {moneyFact,signedCents} from './exact-money';
 import {z} from 'zod';
@@ -51,6 +52,7 @@ export function buybackAnalytics(bookings:Booking[],start=project.start,end=proj
 }
 export function linkBuybackWallet(db:DatabaseSync,bookingId:string,journalKey:string){
  db.exec('BEGIN IMMEDIATE');try{const b=listBuybacks(db).find(x=>x.bookingId===bookingId);if(!b||b.reportingStatus!=='confirmed_payout'||b.historicalAggregate)throw new Error('Select a confirmed individual payout');
+ const binding=readWalletBinding(db,journalKey);if(binding?.active&&(binding.component!=='item_sale'||!b.contractId||binding.contractId!==b.contractId))throw new Error('Wallet source is already reserved for another contract');
  const row=db.prepare("SELECT body,source_character_id FROM project_records WHERE deduplication_key=? AND kind='wallet_journal' AND source='esi'").get(journalKey) as {body:string;source_character_id:string}|undefined;
  if(!row)throw new Error('Journal entry not found');const data=JSON.parse(row.body);
  const owned=new Set((db.prepare('SELECT character_id FROM characters').all() as {character_id:string}[]).map(c=>c.character_id));if(owned.has(String(data.first_party_id))&&owned.has(String(data.second_party_id)))throw new Error('Internal transfers are not buyback income');

@@ -1,0 +1,3 @@
+export const contractPurposeLabels:Record<string,string>={material_sale:'Materialverkauf',material_purchase:'Wareneinkauf',internal_transfer:'Interner Transfer',transport_order:'Transport beauftragt',transport_service:'Transport ausgefuehrt',other:'Sonstiger Vorgang',unknown:'Zweck offen'};
+export const contractDirectionLabels:Record<string,string>={outgoing:'Abgegeben',incoming:'Erhalten',exchange:'Tausch',internal:'Intern',courier_issuer:'Auftraggeber',courier_runner:'Auftragnehmer',unknown:'Richtung offen'};
+export const reviewLabels:Record<string,string>={open:'Alle offenen Pruefungen',purpose:'Zweck pruefen',direction:'Richtung pruefen',origin:'Herkunft pruefen',payment:'Zahlung fehlt',split:'Erloes aufteilen',conflict:'Widerspruch pruefen',done:'Geprueft'};

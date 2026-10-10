@@ -12,12 +12,12 @@ export function walletLiquidity(rows:ProjectRecord[]){
  return {amountISK:exactSum([...latest.values()].map(r=>moneyFact(r.data.wallet).value)),count:latest.size,stale:[...latest.values()].some(r=>r.connectionStatus==='disconnected')};
 }
 export function realizedStatistics(summary:Summary){
- const relevant=summary.events.filter(e=>!e.conflict&&!e.legacy&&!['INTERNAL_TRANSFER','PLEX_PURCHASE','TRADING_PURCHASE','UNKNOWN','TRADING_FEE','OPERATING_COST','INDUSTRY_COST'].includes(e.category));
+ const relevant=summary.events.filter(e=>!e.conflict&&!e.legacy&&!['INTERNAL_TRANSFER','PLEX_PURCHASE','TRADING_PURCHASE','UNKNOWN','TRADING_FEE','OPERATING_COST','INDUSTRY_COST','SERVICE_COST','MISC_COST','CAPITAL_TRANSFER'].includes(e.category));
  const ambiguous=summary.unresolved>0;
  const bounty=summary.events.filter(e=>!e.conflict&&['RATTING_BOUNTY','ESS_INCOME'].includes(e.category));
  const other=relevant.filter(e=>!e.category.startsWith('BUYBACK_')&&!e.sources.some(s=>s.startsWith('buyback:'))&&!['RATTING_BOUNTY','ESS_INCOME','TRADING_SALE'].includes(e.category));
  return {grossRevenueISK:ambiguous?null:exactSum(relevant.map(e=>e.amountISK)),bountiesISK:exactSum(bounty.map(e=>e.amountISK)),otherRevenueISK:ambiguous?null:exactSum(other.map(e=>e.amountISK)),
- costs:summary.events.filter(e=>['TRADING_FEE','OPERATING_COST','INDUSTRY_COST'].includes(e.category)||e.costsISK!==null),
+ costs:summary.events.filter(e=>['TRADING_FEE','OPERATING_COST','INDUSTRY_COST','SERVICE_COST','MISC_COST'].includes(e.category)||e.costsISK!==null),
  buybacks:summary.events.filter(e=>(e.category.startsWith('BUYBACK_')||e.sources.some(s=>s.startsWith('buyback:')))&&!e.conflict)};
 }
 export function buybackPeriods(summary:Summary,grain:'week'|'month'|'year'){

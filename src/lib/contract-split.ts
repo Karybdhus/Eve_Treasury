@@ -9,7 +9,7 @@ export function decideContractSplit(db:DatabaseSync,input:unknown){const v=Input
  const before=readContractSplit(db,v.paymentKey),segments=splitSegments(db,v.contractId),at=new Date().toISOString();let after:ConfirmedSplit;
  if(v.action==='revoke'){if(!before?.active)throw new Error('Confirmed split missing');after={...before,active:false,reason:v.reason};}
  else{
-  if(!c.completed||c.quality==='conflict'||!v.lines||v.unallocatedISK===undefined||new Set(v.lines.map(l=>l.id)).size!==v.lines.length)throw new Error('Complete unique split entries and explicit remainder required');
+  if(c.role==='internal'||c.role==='unknown'||!c.completed||c.quality==='conflict'||!v.lines||v.unallocatedISK===undefined||new Set(v.lines.map(l=>l.id)).size!==v.lines.length)throw new Error('Complete unique split entries and explicit remainder required');
   const whole=signedCents(binding.amountISK),sum=v.lines.reduce((n,l)=>n+signedCents(l.amountISK),0n)+signedCents(v.unallocatedISK);if(whole<=0n||sum!==whole)throw new Error('Split must conserve the whole payout exactly');
   const lines=v.lines.map(l=>{const origin=segments.find(s=>s.id===l.id);if(!origin)throw new Error('Unknown or stale origin segment');return {...origin,amountISK:moneyFact(l.amountISK).value!,profitISK:null as string|null};});
   const trades=lines.filter(l=>l.category==='TRADEPROFIT'),costRows=db.prepare("SELECT kind,treatment,amount_decimal FROM event_cost_components WHERE event_id=? AND kind IN ('fee','tax')").all(event.event_id) as {kind:string;treatment:string;amount_decimal:string|null}[];
