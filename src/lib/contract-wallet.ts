@@ -12,7 +12,7 @@ export function decideContractWallet(db:DatabaseSync,input:unknown){const v=Inpu
   if(d.context_id_type==='contract_id'&&String(d.context_id)!==v.contractId)throw new Error('Journal references another contract');
   if(!Number.isFinite(Date.parse(d.date))||Date.parse(d.date)<Date.parse(c.dateIssued))throw new Error('Journal date precedes contract');
   const positive=signedCents(amount)>0n,completed=c.completed,ref=String(d.ref_type),incoming=c.items?.some(i=>i.direction==='incoming'),outgoing=c.items?.some(i=>i.direction==='outgoing');
-  if(component==='item_sale'&&!(completed&&c.type==='item_exchange'&&outgoing&&positive&&['contract_price','player_donation'].includes(ref)))throw new Error('Completed outgoing sale and whole receipt required');
+  if(component==='item_sale'&&!(completed&&c.type==='item_exchange'&&outgoing&&positive&&['contract_price','contract_price_payment_corp','player_donation'].includes(ref)))throw new Error('Completed outgoing sale and whole receipt required');
   if(component==='item_purchase'&&!(completed&&c.type==='item_exchange'&&incoming&&!positive&&ref==='contract_price'))throw new Error('Completed incoming purchase and whole payment required');
   if(component==='courier_reward'&&!(completed&&c.type==='courier'&&(c.role==='acceptor'&&positive&&ref==='contract_reward'||c.role==='issuer'&&!positive&&['contract_reward','contract_reward_deposited'].includes(ref))))throw new Error('Completed courier and actual reward proof required');
   if(component==='collateral_loss'&&!(c.type==='courier'&&c.status==='failed'&&c.role==='acceptor'&&!positive&&['contract_collateral','contract_collateral_payout'].includes(ref)))throw new Error('Failed accepted courier and actual deposit/loss proof required');

@@ -27,6 +27,7 @@ function audit(db:DatabaseSync,action:string,body:unknown){db.prepare('INSERT IN
 export function allocateEvidence(db:DatabaseSync,raw:unknown){
  const input=Input.parse(raw),n=signedCents(input.amountISK);if(n<=0n||input.payment===input.target)throw new Error('Positive allocation between different sources required');
  db.exec('BEGIN IMMEDIATE');try{
+  if(db.prepare("SELECT 1 FROM app_settings WHERE name LIKE 'trading_refund:%' AND json_extract(body,'$.active')=1 AND (json_extract(body,'$.refundKey')=? OR json_extract(body,'$.refundKey')=?)").get(input.payment,input.target))throw new Error('Refund evidence is reserved for a cost correction');
   const p=source(db,input.payment),t=source(db,input.target),links=db.prepare('SELECT event_id FROM event_sources WHERE source_key IN (?,?)').all(p.key,t.key) as {event_id:string}[];
   if(links.length!==2||links[0].event_id===links[1].event_id)throw new Error('Already the same event; allocation would duplicate evidence');
   if(!creditEligible(p)||!t.eligible)throw new Error('Source is not eligible cash evidence');
