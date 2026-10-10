@@ -71,7 +71,7 @@ export function collectFinancialSources(db:DatabaseSync):FinancialSource[]{
    const contractEconomics=contractJournalEconomics(d,r.sourceCharacterId,owned,contracts.find(c=>c.contractId===String(d.context_id))?.raw);
    if(contractEconomics){category=contractEconomics.category;if(d.context_id_type==='contract_id')identity='contract:'+d.context_id;if(category==='SERVICE_COST'||category==='MISC_COST'){role='cost';cost=amount;}if(category==='SERVICE_INCOME'||category==='MISC_INCOME')net=amount;}
    const walletBinding=readWalletBinding(db,key);
-   if(walletBinding?.active){if(owned.has(walletBinding.owner)&&!(owned.has(walletBinding.issuer)&&owned.has(walletBinding.acceptor))&&currentWalletBinding(walletBinding,r.sourceCharacterId??'',d,contracts.find(c=>c.contractId===walletBinding.contractId)?.raw)){
+   if(walletBinding?.active){if(owned.has(walletBinding.owner)&&!(owned.has(walletBinding.issuer)&&owned.has(walletBinding.acceptor))&&currentWalletBinding(walletBinding,r.sourceCharacterId??'',d,contracts.find(c=>c.contractId===walletBinding.contractId)?.raw,db)){
     identity='contract:'+walletBinding.contractId;
     const component=walletBinding.component;
     if(component==='item_purchase')category='TRADING_PURCHASE';
