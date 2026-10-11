@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {baselineFixture} from './order15-fixtures';
+import {archive,item,payment} from './followup-fixtures';
+import {processContractPurchases} from '../src/lib/inventory-contract-purchases';
+import {inventoryLots,consumeOriginLots} from '../src/lib/inventory-continuity';
+import {decideContractManagement} from '../src/lib/contract-management';
+import {consolidatedFinancials} from '../src/lib/reconciliation';
+function purchase(db:ReturnType<typeof baselineFixture>,extra:Record<string,unknown>={}){archive(db,{issuer_id:'9001',acceptor_id:'1001',price:'50.01',date_issued:'2026-10-08T00:00:00Z',date_completed:'2026-10-09T00:00:00Z',...extra},[item({record_id:'1',type_id:'9848',quantity:'3'})]);}
+function receipt(db:ReturnType<typeof baselineFixture>){payment(db,'1','-50.01',{date:'2026-10-09T01:00:00Z',first_party_id:'1001',second_party_id:'9001'});}
+test('Order15 personal Contract purchase preserves actual acquisition costs and never produces PI income',()=>{const db=baselineFixture('0');try{purchase(db);receipt(db);const before=consolidatedFinancials(db);processContractPurchases(db,['1001']);const lots=inventoryLots(db);assert.equal(lots.length,1);assert.equal(lots[0].category,'TRADEPROFIT');assert.equal(lots[0].costCents,'5001');assert.equal(lots[0].quantity,'3');processContractPurchases(db,['1001']);assert.equal(inventoryLots(db).length,1);assert.equal(consolidatedFinancials(db).eventCount,before.eventCount);}finally{db.close();}});
+test('Order15 late Contract payment corrects unknown acquisition and consumed costs without adding stock',()=>{const db=baselineFixture('0');try{purchase(db);processContractPurchases(db,['1001']);assert.equal(inventoryLots(db)[0].costCents,null);consumeOriginLots(db,{sourceKey:'synthetic disposal',owner:'1001',typeId:'9848',quantity:'1',at:'2026-10-10T00:00:00.000Z',kind:'consumption',evidence:['synthetic consumption']});receipt(db);processContractPurchases(db,['1001']);const lot=inventoryLots(db)[0];assert.equal(lot.origin,'CONTRACT_PURCHASE');assert.equal(lot.remaining,'2');assert.equal(lot.remainingCostCents,'3334');assert.equal(inventoryLots(db).length,1);processContractPurchases(db,['1001']);assert.equal(inventoryLots(db).length,1);}finally{db.close();}});
+test('Order15 revoked Contract management is protected against automatic purchase attribution',()=>{const db=baselineFixture('0');try{purchase(db);receipt(db);decideContractManagement(db,{contractId:'99',revision:0,action:'revoke',reason:'Synthetic manual refusal'});processContractPurchases(db,['1001']);assert.equal(inventoryLots(db).length,0);}finally{db.close();}});
+test('Order15 pre-opening Contract acquisition cannot create new post-opening inventory',()=>{const db=baselineFixture('0');try{purchase(db,{date_completed:'2026-10-06T00:00:00Z'});receipt(db);processContractPurchases(db,['1001']);assert.equal(inventoryLots(db).length,0);}finally{db.close();}});

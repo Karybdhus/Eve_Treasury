@@ -35,6 +35,7 @@ data/order09/
 /docs/qa/
 /docs/ORDER_*
 !/docs/ORDER_14_ACCEPTANCE.md
+!/docs/ORDER_15_ACCEPTANCE.md
 /docs/NIGHT_*
 /docs/FOLLOWUP_*
 /docs/FINAL_REPORT.md
@@ -72,3 +73,6 @@ esi-raw/
 qa-screenshots/
 /scripts/order*
 /scripts/night*
+
+# Isolated production acceptance build
+.next-acceptance/

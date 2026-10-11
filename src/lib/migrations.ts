@@ -1,3 +1,4 @@
+import {BASELINE_SCHEMA} from './economic-baseline';
 import {CONTRACT_SCHEMA} from './contract-schema';
 import {PROVENANCE_SCHEMA} from './inventory-provenance';
 import {backfillMoneyFacts} from './financial-facts';
@@ -50,7 +51,7 @@ export const MIGRATION_V6=[
  'CREATE TABLE event_cost_components(component_id TEXT PRIMARY KEY,event_id TEXT NOT NULL REFERENCES economic_events(event_id),kind TEXT NOT NULL,treatment TEXT NOT NULL,amount_decimal TEXT,gross_decimal TEXT,net_decimal TEXT,reason TEXT NOT NULL,created_at TEXT NOT NULL)',
  'CREATE TABLE sde_imports(build TEXT PRIMARY KEY,source_url TEXT NOT NULL,sha256 TEXT NOT NULL,imported_at TEXT NOT NULL,body TEXT NOT NULL)',
 ];
-export const CURRENT_SCHEMA_VERSION=8;
+export const CURRENT_SCHEMA_VERSION=9;
 export function supportedDatabaseVersion(db:DatabaseSync){
  const version=(db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version;
  if(version>CURRENT_SCHEMA_VERSION)throw new Error('Database version is newer than this application');
@@ -59,6 +60,6 @@ export function supportedDatabaseVersion(db:DatabaseSync){
 }
 export function migrate(db:DatabaseSync) {
  const version=supportedDatabaseVersion(db);
- const steps:[number,string[]][]=[[2,MIGRATION_V2],[3,MIGRATION_V3],[4,MIGRATION_V4],[5,MIGRATION_V5],[6,MIGRATION_V6],[7,PROVENANCE_SCHEMA],[8,CONTRACT_SCHEMA]];
+ const steps:[number,string[]][]=[[2,MIGRATION_V2],[3,MIGRATION_V3],[4,MIGRATION_V4],[5,MIGRATION_V5],[6,MIGRATION_V6],[7,PROVENANCE_SCHEMA],[8,CONTRACT_SCHEMA],[9,BASELINE_SCHEMA]];
  for(const [target,statements] of steps){if(version>=target)continue;db.exec('BEGIN IMMEDIATE');try{for(const sql of statements)db.exec(sql);if(target===5)backfillMoneyFacts(db);db.exec('PRAGMA user_version='+target+'; COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}
 }

@@ -8,7 +8,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {createServer} from 'node:net';
 import {once} from 'node:events';
-test('All views work with an empty database; local forms save; agent API excludes secrets', {skip:!existsSync('.next/BUILD_ID'),timeout:45000},async()=>{
+test('All views work with an empty database; local forms save; agent API excludes secrets', {skip:!existsSync((process.env.DASHBOARD_ISOLATED_BUILD==='1'?'.next-acceptance':'.next')+'/BUILD_ID'),timeout:45000},async()=>{
  const dir=mkdtempSync(path.join(tmpdir(),'eve-runtime-')),probe=createServer();probe.listen(0,'127.0.0.1');await once(probe,'listening');const address=probe.address();assert.ok(address&&typeof address==='object');const port=address.port;probe.close();await once(probe,'close');
  const origin='http://127.0.0.1:'+port,readKey='runtime-test-key-that-is-only-a-fixture';
  const child=spawn(process.execPath,[path.resolve('node_modules/next/dist/bin/next'),'start','--hostname','127.0.0.1','--port',String(port)],{cwd:process.cwd(),windowsHide:true,stdio:'ignore',env:{...process.env,DASHBOARD_DB:path.join(dir,'empty.sqlite'),DASHBOARD_DEMO_SEED:'0',EVE_CLIENT_ID:'',EVE_CALLBACK_URL:origin+'/api/auth/eve/callback',TOKEN_ENCRYPTION_KEY:'',APPLICATION_SECRET:'',AGENT_READ_API_KEY:readKey}});
@@ -48,7 +48,7 @@ function fixtureFetch(url:string,init:RequestInit={}):Promise<Response>{
   });request.on('error',reject);request.end(init.body??undefined);
  });
 }
-test('Prepared private mode protects pages and APIs over an isolated local production server',{skip:!existsSync('.next/BUILD_ID'),timeout:45000},async()=>{
+test('Prepared private mode protects pages and APIs over an isolated local production server',{skip:!existsSync((process.env.DASHBOARD_ISOLATED_BUILD==='1'?'.next-acceptance':'.next')+'/BUILD_ID'),timeout:45000},async()=>{
  const dir=mkdtempSync(path.join(tmpdir(),'eve-private-runtime-')),probe=createServer();probe.listen(0,'127.0.0.1');await once(probe,'listening');const address=probe.address();assert.ok(address&&typeof address==='object');const port=address.port;probe.close();await once(probe,'close');
  const local='http://127.0.0.1:'+port,origin='https://dashboard.fixture.ts.net',password='synthetic-secret-only-private-runtime-fixture-password-32-characters';
  const authorization='Basic '+Buffer.from('fixture:'+password).toString('base64');

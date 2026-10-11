@@ -1,3 +1,4 @@
+import {inventoryLots,transferOriginLots,transformOriginLots} from './inventory-continuity';
 import {currentWalletBinding,type WalletBinding} from './contract-wallet-state';
 import { moneyFact, signedCents } from './exact-money';
 import type { DatabaseSync } from 'node:sqlite';
@@ -363,6 +364,7 @@ export function transferInventory(db: DatabaseSync, input: {
             s.costCents = (BigInt(s.costCents) - BigInt(cost!)).toString();
         if (s.quantity === '0')
             s.active = false;
+        if(a.owner!==b.owner&&inventoryLots(db,a.owner,a.typeId).length)transferOriginLots(db,{sourceKey:'confirmed-transfer:'+a.itemId+':'+b.itemId+':'+input.fromRevision+':'+input.toRevision,fromOwner:a.owner,toOwner:b.owner,typeId:a.typeId,quantity:q,at:new Date().toISOString(),evidence:[input.reason,'inventory-slice:'+input.sliceId]});
         const newId = randomUUID();
         b.slices.push({ ...s, id: newId, quantity: q, costCents: cost, active: true, evidence: input.reason + ' / Ursprung ' + input.from });
         const claim = db.prepare('SELECT source_key,quantity FROM inventory_evidence_claims WHERE slice_id=? AND active=1').get(s.id) as {
@@ -408,6 +410,9 @@ export function transformInventory(db: DatabaseSync, input: {
     try {
         if (db.prepare('SELECT 1 FROM inventory_transformations WHERE id=?').get(input.id))
             throw new Error('Transformation bereits bestaetigt');
+        const continuousInputs=input.inputs.map(i=>{const p=inventoryPosition(db,i.itemId);return p?{owner:p.owner,typeId:p.typeId,quantity:i.quantity}:null;});
+        const continuousOutputs=input.outputs.map(o=>{const p=inventoryPosition(db,o.itemId);return p?{owner:p.owner,typeId:p.typeId,quantity:o.quantity}:null;});
+        if(continuousInputs.every(i=>i!==null)&&continuousOutputs.every(o=>o!==null)&&continuousInputs.some(i=>inventoryLots(db,i!.owner,i!.typeId).length))transformOriginLots(db,{sourceKey:'confirmed-transformation:'+input.id,inputs:continuousInputs.filter(i=>i!==null),outputs:continuousOutputs.filter(o=>o!==null),at:new Date().toISOString(),evidence:[input.reason,'inventory-transformation:'+input.id]});
         const origins: Origin[] = [];
         for (const i of input.inputs) {
             const p = inventoryPosition(db, i.itemId), q = quantity(i.quantity);

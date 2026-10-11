@@ -1,0 +1,40 @@
+import {industryProductionEvidence} from './industry-production-origin';
+import {piProductionEvidence} from './pi-production-origin';
+import {processObservedTransfers} from './inventory-observed-transfers';
+import {processContractPurchases} from './inventory-contract-purchases';
+import {exactJson} from './exact-money';
+import {growProductionLot} from './inventory-continuity';
+import {decideObservedOrigin} from './inventory-origin-rules';
+import type {DatabaseSync} from 'node:sqlite';import {records} from './source-records';import {baselineForCharacter,openingBaseline} from './economic-baseline';import {adoptLatePurchase,addOriginLot,lotAcquisition,inventoryLots,quantityBalance} from './inventory-continuity';import {moneyFact,signedCents} from './exact-money';import {decimal} from './money';
+export function processInventoryAcquisitions(db:DatabaseSync,successfulOwners:string[],completePeriodOwners?:string[]){
+ const opening=openingBaseline(db);if(!opening)return {newLots:0,balances:[]};const selected=new Set(successfulOwners.filter(id=>baselineForCharacter(db,id)!==null)),rows=records(db),own=new Set(db.prepare('SELECT character_id FROM characters').all().map(r=>String(r.character_id))),before=inventoryLots(db).length;
+ processObservedTransfers(db,[...selected]);
+ processContractPurchases(db,[...selected]);
+ db.exec('BEGIN IMMEDIATE');try{
+  for(const row of rows.filter(r=>r.kind==='wallet_transaction'&&r.source==='esi'&&r.status==='actual'&&r.dataQuality!=='historical_seed'&&selected.has(r.sourceCharacterId??''))){const data=row.data;if(data.is_buy!==true||data.is_personal!==true||own.has(String(data.client_id))||typeof data.date!=='string'||!Number.isFinite(Date.parse(data.date))||Date.parse(data.date)>Date.now()||Date.parse(data.date)<=Date.parse(baselineForCharacter(db,row.sourceCharacterId!)!.createdAt))continue;
+   const quantity=String(data.quantity),unit=moneyFact(data.unit_price).value;if(!/^[1-9][0-9]*$/.test(quantity)||typeof data.quantity==='number'&&!Number.isSafeInteger(data.quantity)||unit!==null&&signedCents(unit)<0n)continue;
+   const acquisition=lotAcquisition({sourceKey:row.deduplicationKey,owner:row.sourceCharacterId!,typeId:String(data.type_id),quantity,at:data.date,origin:'MARKET_PURCHASE',category:'TRADEPROFIT',quality:'proven',costISK:unit===null?null:decimal(signedCents(unit)*BigInt(quantity)),evidence:[row.deduplicationKey,...(row.rawId?[row.rawId]:[])]});if(!adoptLatePurchase(db,acquisition))addOriginLot(db,acquisition);
+  }
+
+  const openingMining=new Map<string,bigint>();
+  for(const coverage of db.prepare("SELECT json_extract(body,'$.coverage') coverage FROM economic_baselines WHERE kind IN ('opening','entry')").all().flatMap(row=>JSON.parse(String(row.coverage)) as import('./economic-baseline').BaselineSource[]).filter(c=>c.source==='mining'))for(const rawId of coverage.rawIds){const raw=db.prepare('SELECT payload_text FROM raw_source_records WHERE raw_id=?').get(rawId);if(!raw)continue;const list=exactJson(String(raw.payload_text));if(!Array.isArray(list))continue;for(const entry of list){const key=[coverage.characterId,entry.date,entry.type_id,entry.solar_system_id].join(':');openingMining.set(key,BigInt(String(entry.quantity)));}}
+  for(const row of rows.filter(r=>r.kind==='mining_entry'&&r.source==='esi'&&r.status==='actual'&&r.dataQuality!=='historical_seed'&&selected.has(r.sourceCharacterId??''))){const baseline=baselineForCharacter(db,row.sourceCharacterId!)!;const data=row.data,key=[row.sourceCharacterId,data.sourceDate,data.typeId,data.solarSystemId].join(':'),sourceDay=String(data.sourceDate),quantity=String(data.quantity);
+   if(!/^(0|[1-9][0-9]*)$/.test(quantity)||sourceDay<baseline.createdAt.slice(0,10)||sourceDay===baseline.createdAt.slice(0,10)&&!openingMining.has(key))continue;
+   const difference=BigInt(quantity)-(openingMining.get(key)??0n);if(difference<=0n)continue;
+   growProductionLot(db,lotAcquisition({sourceKey:'production:'+row.deduplicationKey,owner:row.sourceCharacterId!,typeId:String(data.typeId),quantity:difference.toString(),at:new Date(Math.min(Date.parse(row.fetchedAt),Date.parse(sourceDay+'T23:59:59.999Z'))).toISOString(),origin:'MINING',category:'MINING',quality:'proven',costISK:null,evidence:[row.deduplicationKey,...(row.rawId?[row.rawId]:[])]}));
+  }
+  db.exec('COMMIT');
+ }catch(e){db.exec('ROLLBACK');throw e;}
+ const observed=new Map<string,bigint>(),assetRows=new Map<string,typeof rows>();for(const row of rows.filter(r=>r.kind==='asset_snapshot'&&r.source==='esi'&&r.status==='actual'&&selected.has(r.sourceCharacterId??''))){const quantity=String(row.data.quantity);if(!/^(0|[1-9][0-9]*)$/.test(quantity))continue;const key=row.sourceCharacterId+':'+row.data.type_id;observed.set(key,(observed.get(key)??0n)+BigInt(quantity));const grouped=assetRows.get(key);if(grouped)grouped.push(row);else assetRows.set(key,[row]);}
+ const historicalPurchases=new Map<string,bigint>();for(const row of rows){const owner=row.sourceCharacterId??'',baseline=selected.has(owner)?baselineForCharacter(db,owner):null,data=row.data;if(row.kind!=='wallet_transaction'||row.source!=='esi'||row.status!=='actual'||!baseline||data.is_buy!==true||data.is_personal!==true||own.has(String(data.client_id))||Date.parse(String(data.date))>Date.parse(baseline.createdAt)||!Number.isFinite(Date.parse(String(data.date)))||Date.parse(row.fetchedAt)<=Date.parse(baseline.createdAt)||!/^[1-9][0-9]*$/.test(String(data.quantity)))continue;const key=owner+':'+data.type_id;historicalPurchases.set(key,(historicalPurchases.get(key)??0n)+BigInt(String(data.quantity)));}
+ const completeOwner=(owner:string)=>(completePeriodOwners===undefined||completePeriodOwners.includes(owner))&&['wallet','assets','contracts','mining','pi','industry'].every(source=>{const row=db.prepare('SELECT body FROM app_settings WHERE name=?').get('esi_sync:source:'+owner+':'+source);return row&&JSON.parse(String(row.body)).status==='success';});
+ for(const [key,quantity] of observed){const [owner,typeId]=key.split(':');const expected=inventoryLots(db,owner,typeId).reduce((n,l)=>n+BigInt(l.remaining),0n),difference=quantity-expected;if(difference<=0n||!completeOwner(owner))continue;
+  const baseline=baselineForCharacter(db,owner)!;const openingQuality=db.prepare("SELECT json_extract(body,'$.acceptedIncomplete') incomplete FROM economic_baselines WHERE id=?").get(baseline.id);if(openingQuality?.incomplete===1)continue;const assets=assetRows.get(key)!;const evidence=assets.map(r=>r.deduplicationKey+':'+r.rawId).sort();
+  // A late historical acquisition cannot become new self-earned stock by type inference.
+  const lateHistoricalPurchase=(historicalPurchases.get(key)??0n)>=difference;
+  if(lateHistoricalPurchase)continue;
+  const at=assets.map(r=>r.fetchedAt).sort().at(-1)!;const pi=piProductionEvidence(rows,{owner,typeId,cutover:baselineForCharacter(db,owner)!.createdAt,observedAt:at,quantity:difference.toString()});const industry=industryProductionEvidence(rows,{owner,typeId,cutover:baselineForCharacter(db,owner)!.createdAt,observedAt:at,quantity:difference.toString()});const decision=pi.length?{origin:'PI' as const,category:'PI' as const,quality:'rule_based' as const}:industry.length?{origin:'INDUSTRY' as const,category:null,quality:'rule_based' as const}:decideObservedOrigin({typeId,quantity:difference.toString(),evidence:[],completePeriod:true});if(decision.quality!=='rule_based')continue;
+  addOriginLot(db,lotAcquisition({sourceKey:'derived:'+owner+':'+typeId+':'+evidence.join('|'),owner,typeId,quantity:difference.toString(),at:assets.map(r=>r.fetchedAt).sort().at(-1)!,origin:decision.origin,category:decision.category,quality:'rule_based',costISK:null,evidence:[...evidence,...pi,...industry]}));
+ }
+ const balances=[...new Set([...observed.keys(),...inventoryLots(db).filter(l=>selected.has(l.owner)).map(l=>l.owner+':'+l.typeId)])].map(key=>{const [owner,typeId]=key.split(':');return {owner,typeId,...quantityBalance(db,owner,typeId,(observed.get(key)??0n).toString())};});return {newLots:inventoryLots(db).length-before,balances};
+}

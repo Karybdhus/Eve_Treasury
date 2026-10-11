@@ -1,0 +1,9 @@
+import {baselineForCharacter,openingBaseline} from './economic-baseline';
+import type {DatabaseSync} from 'node:sqlite';import {records} from './source-records';import {contractManagement} from './contract-management';import {automaticContractReconciliation} from './contract-automation-sync';import {marketSaleEvidenceIndex,processMarketSaleOrigins} from './inventory-market-sales';
+export function continuousSaleSync(db:DatabaseSync,owners:string[]){
+ const rows=records(db),marketIndex=marketSaleEvidenceIndex(rows),steps=rows.filter(r=>r.kind==='wallet_transaction'&&r.source==='esi'&&owners.includes(r.sourceCharacterId??'')&&r.data.is_buy===false).map(r=>({at:String(r.data.date),kind:'market',key:r.deduplicationKey}));
+ const opening=openingBaseline(db);const candidates=rows.filter(r=>r.kind==='contract_archive').filter(row=>{if(!opening)return true;const issuer=String(row.data.issuer_id),acceptor=String(row.data.acceptor_id),owner=owners.includes(issuer)?issuer:acceptor,baseline=baselineForCharacter(db,owner);return baseline&&Date.parse(String(row.data.date_issued))>Date.parse(baseline.createdAt);});for(const id of new Set(candidates.map(r=>r.sourceEntityId!))){const c=contractManagement(db,id);const owner=c.role==='issuer'?c.issuerId:c.acceptorId,baseline=baselineForCharacter(db,owner);if(owners.includes(owner)&&(!opening||baseline&&Date.parse(c.dateIssued)>Date.parse(baseline.createdAt)))steps.push({at:c.dateIssued,kind:'contract',key:id});}
+ steps.sort((a,b)=>Date.parse(a.at)-Date.parse(b.at)||(a.key<b.key?-1:a.key>b.key?1:0));let marketChanges=0;const contracts=[];
+ for(const step of steps){if(step.kind==='market')marketChanges+=processMarketSaleOrigins(db,owners,step.key,marketIndex);else contracts.push(...automaticContractReconciliation(db,owners,[step.key]));}
+ return {marketChanges,contracts};
+}

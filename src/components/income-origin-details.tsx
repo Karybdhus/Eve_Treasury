@@ -1,0 +1,4 @@
+import type {incomeOriginDetails} from '@/lib/income-origin-details';
+import {displayMoney} from '@/lib/money';
+const quality:Record<string,string>={proven:'Nachgewiesen',rule_based:'Regelbasiert',manually_confirmed:'Manuell bestaetigt',unknown:'Unbekannt',conflict:'Widerspruch'};
+export function IncomeOriginDetails({lines}:{lines:ReturnType<typeof incomeOriginDetails>}){if(!lines.length)return null;return <details><summary>Warenherkunft, Mengen und Kostenbasis</summary>{lines.map((line,index)=><div key={index} className="session"><h3>{line.item}</h3><p>{line.origin} / {new Intl.NumberFormat('de-DE').format(BigInt(line.quantity))} Einheiten</p><p><span className={'badge '+(line.quality==='proven'?'actual':'estimate')}>{quality[line.quality]??'Unbekannt'}</span> / Regel {line.ruleVersion} / {line.evidenceCount} Herkunftsbelege</p><p>Verbrauchte Anschaffungskosten: {displayMoney(line.costISK)}. Fehlende Kosten sind kein Nullpreis.</p></div>)}</details>;}

@@ -28,6 +28,7 @@ export function openDatabase(filename=process.env.DASHBOARD_DB??path.join(proces
  if(filename!==':memory:'&&version<6){db.prepare('VACUUM INTO ?').run(filename+'.pre-v6-'+Date.now()+'.sqlite');}
  if(filename!==':memory:'&&version<7){const backup=filename+'.pre-v7-'+Date.now()+'.sqlite';db.prepare('VACUUM INTO ?').run(backup);const copy=new DatabaseSync(backup,{readOnly:true});try{const result=copy.prepare('PRAGMA integrity_check').get() as {integrity_check:string};if(result.integrity_check!=='ok')throw new Error('Pre-v7 backup integrity check failed');}finally{copy.close();}}
  if(filename!==':memory:'&&version<8){const backup=filename+'.pre-v8-'+Date.now()+'.sqlite';db.prepare('VACUUM INTO ?').run(backup);const copy=new DatabaseSync(backup,{readOnly:true});try{if(copy.prepare('PRAGMA integrity_check').get()!.integrity_check!=='ok')throw new Error('Pre-v8 backup integrity check failed');}finally{copy.close();}}
+ if(filename!==':memory:'&&version<9){const backup=filename+'.pre-v9-'+Date.now()+'.sqlite';db.prepare('VACUUM INTO ?').run(backup);const copy=new DatabaseSync(backup,{readOnly:true});try{if(copy.prepare('PRAGMA integrity_check').get()!.integrity_check!=='ok')throw new Error('Pre-v9 backup integrity check failed');}finally{copy.close();}}
  migrate(db);return db;
  }catch(error){db.close();throw error;}
 }

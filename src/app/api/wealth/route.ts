@@ -1,0 +1,3 @@
+import {getDatabase} from '@/lib/db';import {assertLocalRequest} from '@/lib/esi/config';import {economicWealth} from '@/lib/economic-wealth';
+export const runtime='nodejs';export const dynamic='force-dynamic';
+export async function GET(request:Request){try{assertLocalRequest(request);}catch{return Response.json({error:'Access denied'},{status:403});}const db=getDatabase();try{return Response.json(economicWealth(db),{headers:{'Cache-Control':'no-store'}});}finally{db.close();}}

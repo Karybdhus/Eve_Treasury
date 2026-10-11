@@ -1,0 +1,2 @@
+export const inventoryOriginLabels:Record<string,string>={OPENING_STOCK:'Altbestand',MARKET_PURCHASE:'Market-Kauf',CONTRACT_PURCHASE:'Contract-Kauf',MINING:'Mining / Ice',PI:'Eigene PI-Produktion',SALVAGE:'Salvage',HACKING:'Hacking',LOOT:'Loot',INDUSTRY:'Weiterverarbeitung / Industry',UNKNOWN:'Herkunft offen'};
+export function readableInventoryOrigin(value:string){const match=/^([A-Z_]+)(.*)$/.exec(value);return match&&inventoryOriginLabels[match[1]]?inventoryOriginLabels[match[1]]+match[2]:value==='Unknown'?'Herkunft offen':value;}

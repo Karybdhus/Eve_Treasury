@@ -46,7 +46,7 @@ test('Existing V1 database migrates additively, with backup and unchanged report
  legacy.prepare('INSERT INTO reports VALUES (?,?,?,?,?)').run('26000000-0000-4000-8000-000000000001','old-scope',raw,'2026-10-04T00:00:00Z','seed.json');legacy.close();
  const db=openDatabase(filename);
  try{
-  assert.equal((db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version,8);
+  assert.equal((db.prepare('PRAGMA user_version').get() as {user_version:number}).user_version,9);
   assert.equal((db.prepare('SELECT body FROM reports').get() as {body:string}).body,raw);
   assert.equal(readReports(db).length,1);assert.equal(existsSync(filename+'.pre-v2.sqlite'),true);
  }finally{db.close();cleanup(dir);}

@@ -1,0 +1,9 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {baselineFixture} from './order15-fixtures';
+import {createComparisonBaseline,selectBaseline,openingBaseline} from '../src/lib/economic-baseline';
+import {baselineFinancialFilter,sourceAfterBaseline} from '../src/lib/baseline-financial-filter';
+import {consolidatedFinancials} from '../src/lib/reconciliation';
+import {payment} from './followup-fixtures';
+import {inventoryLots} from '../src/lib/inventory-continuity';
+test('Order15 comparison selection changes default economic period without changing source history or stock',()=>{const db=baselineFixture();try{payment(db,'1','100',{date:'2026-10-07T00:30:00Z'});payment(db,'2','200',{date:'2026-10-08T00:00:00Z'});const opening=openingBaseline(db)!,stock=inventoryLots(db),before=consolidatedFinancials(db);const initial=baselineFinancialFilter(db,{});assert.equal(initial.baselineId,opening.id);const state=consolidatedFinancials(db,initial);assert.equal(state.events.length,1);const comparison=createComparisonBaseline(db,{name:'Synthetic comparison',now:'2026-10-09T00:00:00.000Z'});selectBaseline(db,comparison.id);assert.equal(consolidatedFinancials(db,baselineFinancialFilter(db,{})).events.length,0);assert.equal(consolidatedFinancials(db).eventCount,before.eventCount);assert.deepEqual(inventoryLots(db),stock);assert.equal(baselineFinancialFilter(db,{from:'2026-10-04'}).baselineId,undefined);selectBaseline(db,opening.id);assert.equal(consolidatedFinancials(db,baselineFinancialFilter(db,{})).events.length,1);}finally{db.close();}});
+test('Order15 ambiguous cutover-day receipts stay outside the precise baseline perspective',()=>{assert.equal(sourceAfterBaseline({date:'2026-10-07',raw:{payoutDate:'2026-10-07'}},'2026-10-07T12:00:00Z'),false);assert.equal(sourceAfterBaseline({date:'2026-10-08',raw:{payoutDate:'2026-10-08'}},'2026-10-07T12:00:00Z'),true);});
