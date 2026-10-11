@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {mkdtempSync,mkdirSync,writeFileSync,readFileSync} from 'node:fs';import {tmpdir} from 'node:os';import path from 'node:path';import {spawnSync} from 'node:child_process';import {git,scanRepository,localComparisons} from '../../scripts/security-core.mjs';
+const rootPolicy=readFileSync(new URL('../../.gitignore',import.meta.url),'utf8');
+test('Force-added private data and staged secrets fail even when the worktree is clean',()=>{
+ const root=mkdtempSync(path.join(tmpdir(),'treasury-security-'));git(root,['init']);git(root,['config','user.email','fixture@example.invalid']);git(root,['config','user.name','Synthetic Fixture']);
+ writeFileSync(path.join(root,'.gitignore'),rootPolicy);writeFileSync(path.join(root,'example.txt'),'public');git(root,['add','.']);git(root,['commit','-m','Synthetic baseline']);
+ mkdirSync(path.join(root,'nested'));writeFileSync(path.join(root,'nested','.env.local'),'fixture');git(root,['add','-f','nested/.env.local']);assert.equal(scanRepository(root).summary.passed,false);git(root,['reset','--','nested/.env.local']);
+ const token=['ghp','b'.repeat(36)].join('_');writeFileSync(path.join(root,'example.txt'),token);git(root,['add','example.txt']);writeFileSync(path.join(root,'example.txt'),'public');assert.ok(scanRepository(root).findings.some(f=>f.scope==='staged'&&f.rule==='github-token'));
+ git(root,['commit','-m','Synthetic injection']);writeFileSync(path.join(root,'example.txt'),'public');git(root,['add','example.txt']);git(root,['commit','-m','Remove synthetic injection']);assert.ok(scanRepository(root,{history:true}).findings.some(f=>f.scope==='history'&&f.rule==='github-token'));
+ const names=['nested/.env.local','nested/account.sqlite','nested/AGENTS.md','nested/REPORT_SYNC_STATE.json','nested/DASHBOARD_TEST_RESULTS.md','private/report.md','data/evidence.json'];for(const file of names)assert.equal(spawnSync('git',['-C',root,'check-ignore','-q',file]).status,0,file);
+ for(const file of ['.env.example','src/lib/migrations.ts','schemas/report.json'])assert.equal(spawnSync('git',['-C',root,'check-ignore','-q',file]).status,1,file);
+});
+test('Unavailable required local comparisons never claim success',()=>{const root=mkdtempSync(path.join(tmpdir(),'treasury-no-local-'));const result=localComparisons(root,{loadSecrets:true,requireLocal:true,environment:{}});assert.ok(result.coverage.errors.length);assert.equal(result.coverage.completeRequestedComparison,false);});

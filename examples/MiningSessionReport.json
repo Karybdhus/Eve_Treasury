@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "bbbbbbbb-0000-4000-8000-000000000007",
+  "period": {
+    "from": "2026-10-05T00:00:00Z",
+    "to": "2026-10-05T23:59:59Z"
+  },
+  "generatedAt": "2026-10-06T00:00:00Z",
+  "source": "manual",
+  "status": "actual",
+  "currency": "ISK",
+  "provenance": "historical_seed",
+  "notes": "Synthetic public demo fixture; no actual account, wallet or production observation. Never counted as current income.",
+  "pillar": "mining",
+  "reportType": "session",
+  "data": {
+    "kind": "MiningSessionReport",
+    "sessionId": "synthetic-mining-session",
+    "durationHours": "not_reported",
+    "fleetHours": 2.5,
+    "output": [
+      {
+        "item": "Blue Ice",
+        "category": "ice",
+        "quantity": 100,
+        "unit": "compressed_blocks"
+      },
+      {
+        "item": "Dark Glitter",
+        "category": "ice",
+        "quantity": 200,
+        "unit": "compressed_blocks"
+      },
+      {
+        "item": "Gelidus",
+        "category": "ice",
+        "quantity": 300,
+        "unit": "compressed_blocks"
+      },
+      {
+        "item": "Glare Crust",
+        "category": "ice",
+        "quantity": 400,
+        "unit": "compressed_blocks"
+      },
+      {
+        "item": "Krystallos",
+        "category": "ice",
+        "quantity": 500,
+        "unit": "compressed_blocks"
+      }
+    ],
+    "realizedRevenue": "not_reported",
+    "operatingCosts": "not_reported",
+    "internalTransfers": "not_reported",
+    "plexPurchases": "not_reported"
+  }
+}

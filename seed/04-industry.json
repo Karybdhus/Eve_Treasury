@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "26000000-0000-4000-8000-000000000004",
+  "pillar": "industry",
+  "reportType": "snapshot",
+  "period": {
+    "from": "2026-10-04T00:00:00Z",
+    "to": "2026-10-04T00:00:00Z"
+  },
+  "generatedAt": "2026-10-04T00:00:00Z",
+  "source": "manual",
+  "status": "plan",
+  "currency": "ISK",
+  "provenance": "historical_seed",
+  "notes": "Synthetic public demo fixture; no actual account, wallet or production observation. Never counted as current income.",
+  "data": {
+    "kind": "IndustryStatusReport",
+    "operationalStatus": "planning",
+    "project": "Example reaction plan",
+    "realizedRevenue": "not_reported",
+    "operatingCosts": "not_reported",
+    "internalTransfers": "not_reported",
+    "plexPurchases": "not_reported",
+    "jobs": "not_reported"
+  }
+}

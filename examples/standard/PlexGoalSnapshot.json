@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "eeeeeeee-0000-4000-8000-000000000009",
+  "pillar": "plex_goal",
+  "reportType": "snapshot",
+  "period": {
+    "from": "2026-10-05T23:59:59+02:00",
+    "to": "2026-10-05T23:59:59+02:00"
+  },
+  "generatedAt": "2026-10-06T00:00:00+02:00",
+  "source": "agent",
+  "status": "actual",
+  "currency": "ISK",
+  "provenance": "historical_seed",
+  "notes": "Vorlage, nicht automatisch geladen. Vor Verwendung ID, Zeitraum, provenance und Messwerte ersetzen; kein Ist-Fakt.",
+  "data": {
+    "physicalPlex": "not_reported",
+    "iskAllocatedForPlex": "not_reported",
+    "plexPrice": {
+      "iskPerPlex": "not_reported"
+    },
+    "sixMonthTargetPlex": 7875,
+    "twelveMonthTargetPlex": 13500,
+    "releasedContributionSinceLastSnapshot": "not_reported"
+  }
+}

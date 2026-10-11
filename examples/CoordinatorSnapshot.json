@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "bbbbbbbb-0000-4000-8000-000000000005",
+  "period": {
+    "from": "2026-10-04T00:00:00Z",
+    "to": "2026-10-04T00:00:00Z"
+  },
+  "generatedAt": "2026-10-04T00:00:00Z",
+  "source": "manual",
+  "status": "actual",
+  "currency": "ISK",
+  "provenance": "historical_seed",
+  "notes": "Synthetic public demo fixture; no actual account, wallet or production observation. Never counted as current income.",
+  "pillar": "coordinator",
+  "reportType": "snapshot",
+  "data": {
+    "kind": "CoordinatorSnapshot",
+    "physicalPlex": 100,
+    "freeLiquidity": "not_reported",
+    "releasedPlexContribution": "not_reported",
+    "plexUnitPrice": "not_reported"
+  }
+}

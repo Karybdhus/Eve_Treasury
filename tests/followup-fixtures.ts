@@ -1,0 +1,15 @@
+import {openDatabase} from '../src/lib/db';
+import type {DatabaseSync} from 'node:sqlite';
+import {contractRecords,archiveContract,saveBuybackPolicy,confirmContract} from '../src/lib/esi-contracts';
+import {storeRecord} from '../src/lib/source-records';
+import {reconciliation} from '../src/lib/reconciliation';
+import {allocateEvidence} from '../src/lib/reconciliation-allocations';
+export const now='2026-10-08T00:00:00Z';
+export function fixtureDb(filename=':memory:'){const db=openDatabase(filename);for(const id of ['1001','1002'])db.prepare('INSERT INTO characters VALUES (?,?,?,?,?,?,?,?,?)').run(id,'Fixture '+id,'[]','fixture','connected','g',now,null,null);saveBuybackPolicy(db,{recipients:['9001'],rules:[{typeId:'34',category:'ore_ice',quality:'AUTO_CONFIRMED',reason:'Fixture ore provenance rule'}]});return db;}
+export function header(extra:Record<string,unknown>={}){return {contract_id:'99',issuer_id:'1001',issuer_corporation_id:'9002',assignee_id:'9001',acceptor_id:'9001',type:'item_exchange',status:'finished',for_corporation:false,availability:'corporation',price:'-500.00',date_issued:'2026-10-05T00:00:00Z',date_expired:'2026-11-05T00:00:00Z',date_completed:'2026-10-07T00:00:00Z',...extra};}
+export function item(extra:Record<string,unknown>={}){return {record_id:'9223372036854775807',type_id:'34',quantity:'9007199254740993',is_included:true,is_singleton:false,...extra};}
+export function archive(db:DatabaseSync,extra:Record<string,unknown>={},items:unknown[]|null=[item()],observer='1001',at=now){const c=header(extra),response={data:[c],rawText:JSON.stringify([c]),fetchedAt:at,pages:1,cached:false},map=new Map<string,unknown[]>();if(items!==null)map.set(String(c.contract_id),items);const row=contractRecords(observer,response,map)[0];archiveContract(db,row);return row;}
+export function confirm(db:DatabaseSync,id='99',amount='500.00',category='ore_ice' as 'ore_ice'|'pi'){confirmContract(db,{contractId:id,category,reason:'Fixture explicit expected payout evidence',expectedPayoutISK:amount,expectedRevision:0});}
+export function payment(db:DatabaseSync,id='1',amount='200.00',extra:Record<string,unknown>={}){const key='esi:1001:wallet_journal:'+id;storeRecord(db,{kind:'wallet_journal',source:'esi',sourceClass:'automatic',sourceCharacterId:'1001',sourceEntityId:id,fetchedAt:now,sourceTimestamp:'2026-10-07T10:00:00Z',status:'actual',dataQuality:'measured',deduplicationKey:key,data:{id,date:'2026-10-07T10:00:00Z',amount,ref_type:'contract_price',context_id:'99',context_id_type:'contract_id',...extra}});return key;}
+export function revision(db:DatabaseSync,key:string){const state=reconciliation(db);return state.events.find(e=>e.event_id===state.links.find(l=>l.source_key===key)?.event_id)!.revision;}
+export function allocate(db:DatabaseSync,p:string,target='esi:contract:99',amount='200.00',kind='payout' as 'payout'|'aggregate'|'included_cost'){return allocateEvidence(db,{payment:p,target,amountISK:amount,kind,reason:'Fixture explicit allocation evidence',paymentRevision:revision(db,p),targetRevision:revision(db,target)});}

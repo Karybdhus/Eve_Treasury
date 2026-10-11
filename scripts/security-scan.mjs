@@ -1,0 +1,10 @@
+import {readFileSync,existsSync,mkdirSync,writeFileSync} from 'node:fs';import path from 'node:path';import {scanRepository,localComparisons,defaultPolicy} from './security-core.mjs';
+const args=process.argv.slice(2),option=name=>{const at=args.indexOf(name);return at<0?null:args[at+1];};const known=new Set(['--history','--local-secrets','--require-local','--entropy','--root','--output','--range']);const values=new Set(['--root','--output','--range']);
+try{
+ for(let i=0;i<args.length;i++){if(!known.has(args[i]))throw Error('Unknown scan option');if(values.has(args[i])&&!args[++i])throw Error('Missing scan option value');}
+ const root=path.resolve(option('--root')??process.cwd()),policyFile=path.join(root,'security-policy.json'),policy=existsSync(policyFile)?JSON.parse(readFileSync(policyFile,'utf8')):defaultPolicy;
+ const local=localComparisons(root,{loadSecrets:args.includes('--local-secrets'),requireLocal:args.includes('--require-local')});if(local.coverage.errors.length)throw Error(local.coverage.errors.join('; '));
+ const result=scanRepository(root,{policy,history:args.includes('--history'),range:option('--range'),comparisons:local.comparisons,entropy:args.includes('--entropy')});result.coverage.localComparisons=local.coverage;
+ const output=option('--output');if(output){const dir=path.resolve(root,output);if(!dir.startsWith(root+path.sep+'data'+path.sep))throw Error('Detailed reports must stay in ignored local data');mkdirSync(dir,{recursive:true});writeFileSync(path.join(dir,'findings.json'),JSON.stringify(result.findings,null,2));writeFileSync(path.join(dir,'inventory.json'),JSON.stringify(result.inventory,null,2));writeFileSync(path.join(dir,'summary.json'),JSON.stringify({at:new Date().toISOString(),coverage:result.coverage,...result.summary},null,2));}
+ console.log(JSON.stringify({coverage:result.coverage,...result.summary}));process.exitCode=result.summary.passed?0:1;
+}catch{console.error('Security scan incomplete or invalid configuration; no pass reported. Review locally without publishing raw errors.');process.exitCode=2;}

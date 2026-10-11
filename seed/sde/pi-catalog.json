@@ -1,0 +1,8814 @@
+{
+  "accounting": [
+    {
+      "id": "16",
+      "internalName": "bounty",
+      "name": "Bounty"
+    },
+    {
+      "id": "17",
+      "internalName": "bounty_prize",
+      "name": "Bounty Prize"
+    },
+    {
+      "id": "71",
+      "internalName": "contract_price",
+      "name": "Contract Price"
+    },
+    {
+      "id": "85",
+      "internalName": "bounty_prizes",
+      "name": "Bounty Prizes"
+    },
+    {
+      "id": "155",
+      "internalName": "ess_escrow_transfer",
+      "name": "ESS Escrow Payment"
+    }
+  ],
+  "build": "3586130",
+  "releaseDate": "2026-10-07T11:10:05Z",
+  "sourceUrl": "https://developers.eveonline.com/static-data/tranquility/eve-online-static-data-3586130-jsonl.zip",
+  "sha256": "b6efc200ec30911e5d22decc8ee3c34cafeac1ecc49faa76491fd75fa6c36045",
+  "importedAt": "2026-10-08T11:45:11.382Z",
+  "types": [
+    {
+      "id": "12",
+      "name": "Planet (Ice)",
+      "groupId": "7",
+      "groupName": "Planet",
+      "categoryId": "2",
+      "volume": 1,
+      "capacity": null,
+      "tier": null,
+      "dogma": []
+    },
+    {
+      "id": "13",
+      "name": "Planet (Gas)",
+      "groupId": "7",
+      "groupName": "Planet",
+      "categoryId": "2",
+      "volume": 1,
+      "capacity": null,
+      "tier": null,
+      "dogma": []
+    },
+    {
+      "id": "44",
+      "name": "Enriched Uranium",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2014",
+      "name": "Planet (Oceanic)",
+      "groupId": "7",
+      "groupName": "Planet",
+      "categoryId": "2",
+      "volume": 1,
+      "capacity": null,
+      "tier": null,
+      "dogma": []
+    },
+    {
+      "id": "2016",
+      "name": "Planet (Barren)",
+      "groupId": "7",
+      "groupName": "Planet",
+      "categoryId": "2",
+      "volume": 1,
+      "capacity": null,
+      "tier": null,
+      "dogma": []
+    },
+    {
+      "id": "2017",
+      "name": "Planet (Storm)",
+      "groupId": "7",
+      "groupName": "Planet",
+      "categoryId": "2",
+      "volume": 1,
+      "capacity": null,
+      "tier": null,
+      "dogma": []
+    },
+    {
+      "id": "2073",
+      "name": "Microorganisms",
+      "groupId": "1035",
+      "groupName": "Planet Organic - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2129",
+      "name": "Limited Barren Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 100,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 9000
+        },
+        {
+          "attributeID": 48,
+          "value": 7057
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 1
+        },
+        {
+          "attributeID": 633,
+          "value": 1
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2130",
+      "name": "Standard Barren Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 200,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 12000
+        },
+        {
+          "attributeID": 48,
+          "value": 12136
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 2
+        },
+        {
+          "attributeID": 633,
+          "value": 2
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2131",
+      "name": "Improved Barren Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 400,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 15000
+        },
+        {
+          "attributeID": 48,
+          "value": 17215
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 3
+        },
+        {
+          "attributeID": 633,
+          "value": 3
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2132",
+      "name": "Advanced Barren Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 800,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 17000
+        },
+        {
+          "attributeID": 48,
+          "value": 21315
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 4
+        },
+        {
+          "attributeID": 633,
+          "value": 4
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2133",
+      "name": "Elite Barren Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1600,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 19000
+        },
+        {
+          "attributeID": 48,
+          "value": 25415
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 5
+        },
+        {
+          "attributeID": 633,
+          "value": 5
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2134",
+      "name": "Limited Gas Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 100,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 9000
+        },
+        {
+          "attributeID": 48,
+          "value": 7057
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 1
+        },
+        {
+          "attributeID": 633,
+          "value": 1
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2135",
+      "name": "Standard Gas Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 200,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 12000
+        },
+        {
+          "attributeID": 48,
+          "value": 12136
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 2
+        },
+        {
+          "attributeID": 633,
+          "value": 2
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2136",
+      "name": "Improved Gas Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 400,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 15000
+        },
+        {
+          "attributeID": 48,
+          "value": 17215
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 3
+        },
+        {
+          "attributeID": 633,
+          "value": 3
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2137",
+      "name": "Advanced Gas Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 800,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 17000
+        },
+        {
+          "attributeID": 48,
+          "value": 21315
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 4
+        },
+        {
+          "attributeID": 633,
+          "value": 4
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2138",
+      "name": "Elite Gas Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1600,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 19000
+        },
+        {
+          "attributeID": 48,
+          "value": 25415
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 5
+        },
+        {
+          "attributeID": 633,
+          "value": 5
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2139",
+      "name": "Limited Ice Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 100,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 9000
+        },
+        {
+          "attributeID": 48,
+          "value": 7057
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 1
+        },
+        {
+          "attributeID": 633,
+          "value": 1
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2140",
+      "name": "Standard Ice Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 200,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 12000
+        },
+        {
+          "attributeID": 48,
+          "value": 12136
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 2
+        },
+        {
+          "attributeID": 633,
+          "value": 2
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2141",
+      "name": "Improved Ice Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 400,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 15000
+        },
+        {
+          "attributeID": 48,
+          "value": 17215
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 3
+        },
+        {
+          "attributeID": 633,
+          "value": 3
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2142",
+      "name": "Advanced Ice Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 800,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 17000
+        },
+        {
+          "attributeID": 48,
+          "value": 21315
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 4
+        },
+        {
+          "attributeID": 633,
+          "value": 4
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2143",
+      "name": "Elite Ice Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1600,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 19000
+        },
+        {
+          "attributeID": 48,
+          "value": 25415
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 5
+        },
+        {
+          "attributeID": 633,
+          "value": 5
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2144",
+      "name": "Limited Lava Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 100,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 9000
+        },
+        {
+          "attributeID": 48,
+          "value": 7057
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 1
+        },
+        {
+          "attributeID": 633,
+          "value": 1
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2145",
+      "name": "Standard Lava Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 200,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 12000
+        },
+        {
+          "attributeID": 48,
+          "value": 12136
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 2
+        },
+        {
+          "attributeID": 633,
+          "value": 2
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2146",
+      "name": "Improved Lava Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 400,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 15000
+        },
+        {
+          "attributeID": 48,
+          "value": 17215
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 3
+        },
+        {
+          "attributeID": 633,
+          "value": 3
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2147",
+      "name": "Advanced Lava Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 800,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 17000
+        },
+        {
+          "attributeID": 48,
+          "value": 21315
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 4
+        },
+        {
+          "attributeID": 633,
+          "value": 4
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2148",
+      "name": "Elite Lava Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1600,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 19000
+        },
+        {
+          "attributeID": 48,
+          "value": 25415
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 5
+        },
+        {
+          "attributeID": 633,
+          "value": 5
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2149",
+      "name": "Limited Oceanic Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 100,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 9000
+        },
+        {
+          "attributeID": 48,
+          "value": 7057
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 1
+        },
+        {
+          "attributeID": 633,
+          "value": 1
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2150",
+      "name": "Standard Oceanic Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 200,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 12000
+        },
+        {
+          "attributeID": 48,
+          "value": 12136
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 2
+        },
+        {
+          "attributeID": 633,
+          "value": 2
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2151",
+      "name": "Improved Oceanic Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 400,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 15000
+        },
+        {
+          "attributeID": 48,
+          "value": 17215
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 3
+        },
+        {
+          "attributeID": 633,
+          "value": 3
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2152",
+      "name": "Advanced Oceanic Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 800,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 17000
+        },
+        {
+          "attributeID": 48,
+          "value": 21315
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 4
+        },
+        {
+          "attributeID": 633,
+          "value": 4
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2153",
+      "name": "Elite Oceanic Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1600,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 19000
+        },
+        {
+          "attributeID": 48,
+          "value": 25415
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 5
+        },
+        {
+          "attributeID": 633,
+          "value": 5
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2154",
+      "name": "Limited Plasma Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 100,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 9000
+        },
+        {
+          "attributeID": 48,
+          "value": 7057
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 1
+        },
+        {
+          "attributeID": 633,
+          "value": 1
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2155",
+      "name": "Standard Plasma Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 200,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 12000
+        },
+        {
+          "attributeID": 48,
+          "value": 12136
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 2
+        },
+        {
+          "attributeID": 633,
+          "value": 2
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2156",
+      "name": "Improved Plasma Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 400,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 15000
+        },
+        {
+          "attributeID": 48,
+          "value": 17215
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 3
+        },
+        {
+          "attributeID": 633,
+          "value": 3
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2157",
+      "name": "Advanced Plasma Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 800,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 17000
+        },
+        {
+          "attributeID": 48,
+          "value": 21315
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 4
+        },
+        {
+          "attributeID": 633,
+          "value": 4
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2158",
+      "name": "Elite Plasma Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1600,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 19000
+        },
+        {
+          "attributeID": 48,
+          "value": 25415
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 5
+        },
+        {
+          "attributeID": 633,
+          "value": 5
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2159",
+      "name": "Limited Storm Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 100,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 9000
+        },
+        {
+          "attributeID": 48,
+          "value": 7057
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 1
+        },
+        {
+          "attributeID": 633,
+          "value": 1
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2160",
+      "name": "Standard Storm Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 200,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 12000
+        },
+        {
+          "attributeID": 48,
+          "value": 12136
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 2
+        },
+        {
+          "attributeID": 633,
+          "value": 2
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2254",
+      "name": "Temperate Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1000,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 6000
+        },
+        {
+          "attributeID": 48,
+          "value": 1675
+        },
+        {
+          "attributeID": 633,
+          "value": 0
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2256",
+      "name": "Temperate Launchpad",
+      "groupId": "1030",
+      "groupName": "Spaceports",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 10000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 3600
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1638,
+          "value": 0.5
+        },
+        {
+          "attributeID": 1639,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2257",
+      "name": "Ice Storage Facility",
+      "groupId": "1029",
+      "groupName": "Storage Facilities",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 12000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        }
+      ]
+    },
+    {
+      "id": "2267",
+      "name": "Base Metals",
+      "groupId": "1032",
+      "groupName": "Planet Solid - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2268",
+      "name": "Aqueous Liquids",
+      "groupId": "1033",
+      "groupName": "Planet Liquid-Gas - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2270",
+      "name": "Noble Metals",
+      "groupId": "1032",
+      "groupName": "Planet Solid - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2272",
+      "name": "Heavy Metals",
+      "groupId": "1032",
+      "groupName": "Planet Solid - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2280",
+      "name": "Link",
+      "groupId": "1036",
+      "groupName": "Planetary Links",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 1000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 10
+        },
+        {
+          "attributeID": 49,
+          "value": 15
+        },
+        {
+          "attributeID": 1631,
+          "value": 1250
+        },
+        {
+          "attributeID": 1633,
+          "value": 0.15
+        },
+        {
+          "attributeID": 1634,
+          "value": 0.2
+        },
+        {
+          "attributeID": 1635,
+          "value": 1.4
+        },
+        {
+          "attributeID": 1636,
+          "value": 1.2
+        }
+      ]
+    },
+    {
+      "id": "2286",
+      "name": "Planktic Colonies",
+      "groupId": "1035",
+      "groupName": "Planet Organic - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2287",
+      "name": "Complex Organisms",
+      "groupId": "1035",
+      "groupName": "Planet Organic - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2288",
+      "name": "Carbon Compounds",
+      "groupId": "1035",
+      "groupName": "Planet Organic - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2305",
+      "name": "Autotrophs",
+      "groupId": "1035",
+      "groupName": "Planet Organic - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2306",
+      "name": "Non-CS Crystals",
+      "groupId": "1032",
+      "groupName": "Planet Solid - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2307",
+      "name": "Felsic Magma",
+      "groupId": "1032",
+      "groupName": "Planet Solid - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2308",
+      "name": "Suspended Plasma",
+      "groupId": "1033",
+      "groupName": "Planet Liquid-Gas - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2309",
+      "name": "Ionic Solutions",
+      "groupId": "1033",
+      "groupName": "Planet Liquid-Gas - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2310",
+      "name": "Noble Gas",
+      "groupId": "1033",
+      "groupName": "Planet Liquid-Gas - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2311",
+      "name": "Reactive Gas",
+      "groupId": "1033",
+      "groupName": "Planet Liquid-Gas - Raw Resource",
+      "categoryId": "42",
+      "volume": 0.005,
+      "capacity": null,
+      "tier": "P0",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 5
+        },
+        {
+          "attributeID": 1641,
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "2312",
+      "name": "Supertensile Plastics",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2317",
+      "name": "Oxides",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2319",
+      "name": "Test Cultures",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2321",
+      "name": "Polyaramids",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2327",
+      "name": "Microfiber Shielding",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2328",
+      "name": "Water-Cooled CPU",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2329",
+      "name": "Biocells",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2344",
+      "name": "Condensates",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2345",
+      "name": "Camera Drones",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2346",
+      "name": "Synthetic Synapses",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2348",
+      "name": "Gel-Matrix Biopaste",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2349",
+      "name": "Supercomputers",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2351",
+      "name": "Smartfab Units",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2352",
+      "name": "Nuclear Reactors",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2354",
+      "name": "Neocoms",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2358",
+      "name": "Biotech Research Reports",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2360",
+      "name": "Industrial Explosives",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2361",
+      "name": "Hermetic Membranes",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2366",
+      "name": "Hazmat Detection Systems",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2367",
+      "name": "Cryoprotectant Solution",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "2389",
+      "name": "Plasmoids",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2390",
+      "name": "Electrolytes",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2392",
+      "name": "Oxidizing Compound",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2393",
+      "name": "Bacteria",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2395",
+      "name": "Proteins",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2396",
+      "name": "Biofuels",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2397",
+      "name": "Industrial Fibers",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2398",
+      "name": "Reactive Metals",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2399",
+      "name": "Precious Metals",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2400",
+      "name": "Toxic Metals",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2401",
+      "name": "Chiral Structures",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "2409",
+      "name": "Barren Aqueous Liquid Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2268
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2412",
+      "name": "Temperate Aqueous Liquid Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2268
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2413",
+      "name": "Storm Aqueous Liquid Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2268
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2414",
+      "name": "Oceanic Aqueous Liquid Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2268
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2415",
+      "name": "Ice Aqueous Liquid Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2268
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2416",
+      "name": "Gas Aqueous Liquid Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2268
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2417",
+      "name": "Plasma Suspended Plasma Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2308
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2418",
+      "name": "Lava Suspended Plasma Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2308
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2419",
+      "name": "Storm Suspended Plasma Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2308
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2422",
+      "name": "Storm Ionic Solutions Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2309
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2423",
+      "name": "Ice Noble Gas Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2310
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2424",
+      "name": "Gas Ionic Solutions Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2309
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2425",
+      "name": "Storm Noble Gas Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2310
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2426",
+      "name": "Gas Noble Gas Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2310
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2427",
+      "name": "Gas Reactive Gas Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2311
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2428",
+      "name": "Lava Base Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2267
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2429",
+      "name": "Plasma Base Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2267
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2430",
+      "name": "Barren Base Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2267
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2431",
+      "name": "Storm Base Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2267
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2432",
+      "name": "Ice Microorganisms Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2073
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2433",
+      "name": "Gas Base Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2267
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2434",
+      "name": "Plasma Noble Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2270
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2435",
+      "name": "Barren Noble Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2270
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2438",
+      "name": "Ice Planktic Colonies Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2286
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2439",
+      "name": "Lava Heavy Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2272
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2440",
+      "name": "Plasma Heavy Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2272
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2441",
+      "name": "Ice Heavy Metals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2272
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2442",
+      "name": "Lava Non-CS Crystals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2306
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2443",
+      "name": "Plasma Non-CS Crystals Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2306
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2448",
+      "name": "Lava Felsic Magma Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2307
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2449",
+      "name": "Barren Microorganisms Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2073
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2450",
+      "name": "Temperate Microorganisms Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2073
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2451",
+      "name": "Oceanic Microorganisms Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2073
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2452",
+      "name": "Oceanic Planktic Colonies Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2286
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2453",
+      "name": "Temperate Complex Organisms Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2287
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2458",
+      "name": "Oceanic Complex Organisms Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2287
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2459",
+      "name": "Barren Carbon Compounds Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2288
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2460",
+      "name": "Temperate Carbon Compounds Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2288
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2461",
+      "name": "Oceanic Carbon Compounds Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2288
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2462",
+      "name": "Temperate Autotrophs Extractor",
+      "groupId": "1026",
+      "groupName": "Extractors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 709,
+          "value": 2305
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2463",
+      "name": "Nanites",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "2469",
+      "name": "Lava Basic Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        }
+      ]
+    },
+    {
+      "id": "2470",
+      "name": "Lava Advanced Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        }
+      ]
+    },
+    {
+      "id": "2471",
+      "name": "Plasma Basic Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        }
+      ]
+    },
+    {
+      "id": "2472",
+      "name": "Plasma Advanced Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        }
+      ]
+    },
+    {
+      "id": "2473",
+      "name": "Barren Basic Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        }
+      ]
+    },
+    {
+      "id": "2474",
+      "name": "Barren Advanced Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        }
+      ]
+    },
+    {
+      "id": "2475",
+      "name": "Barren High-Tech Production Plant",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 400
+        },
+        {
+          "attributeID": 49,
+          "value": 1100
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        }
+      ]
+    },
+    {
+      "id": "2480",
+      "name": "Temperate Advanced Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        }
+      ]
+    },
+    {
+      "id": "2481",
+      "name": "Temperate Basic Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        }
+      ]
+    },
+    {
+      "id": "2482",
+      "name": "Temperate High-Tech Production Plant",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 400
+        },
+        {
+          "attributeID": 49,
+          "value": 1100
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        }
+      ]
+    },
+    {
+      "id": "2483",
+      "name": "Storm Basic Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        }
+      ]
+    },
+    {
+      "id": "2484",
+      "name": "Storm Advanced Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        }
+      ]
+    },
+    {
+      "id": "2485",
+      "name": "Oceanic Advanced Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        }
+      ]
+    },
+    {
+      "id": "2490",
+      "name": "Oceanic Basic Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        }
+      ]
+    },
+    {
+      "id": "2491",
+      "name": "Ice Advanced Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        }
+      ]
+    },
+    {
+      "id": "2492",
+      "name": "Gas Basic Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        }
+      ]
+    },
+    {
+      "id": "2493",
+      "name": "Ice Basic Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 800
+        },
+        {
+          "attributeID": 49,
+          "value": 200
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        }
+      ]
+    },
+    {
+      "id": "2494",
+      "name": "Gas Advanced Industry Facility",
+      "groupId": "1028",
+      "groupName": "Processors",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        }
+      ]
+    },
+    {
+      "id": "2524",
+      "name": "Barren Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1000,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 6000
+        },
+        {
+          "attributeID": 48,
+          "value": 1675
+        },
+        {
+          "attributeID": 633,
+          "value": 0
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2525",
+      "name": "Oceanic Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1000,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 6000
+        },
+        {
+          "attributeID": 48,
+          "value": 1675
+        },
+        {
+          "attributeID": 633,
+          "value": 0
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2533",
+      "name": "Ice Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1000,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 6000
+        },
+        {
+          "attributeID": 48,
+          "value": 1675
+        },
+        {
+          "attributeID": 633,
+          "value": 0
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2534",
+      "name": "Gas Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1000,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 6000
+        },
+        {
+          "attributeID": 48,
+          "value": 1675
+        },
+        {
+          "attributeID": 633,
+          "value": 0
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2535",
+      "name": "Oceanic Storage Facility",
+      "groupId": "1029",
+      "groupName": "Storage Facilities",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 12000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        }
+      ]
+    },
+    {
+      "id": "2536",
+      "name": "Gas Storage Facility",
+      "groupId": "1029",
+      "groupName": "Storage Facilities",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 12000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        }
+      ]
+    },
+    {
+      "id": "2541",
+      "name": "Barren Storage Facility",
+      "groupId": "1029",
+      "groupName": "Storage Facilities",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 12000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        }
+      ]
+    },
+    {
+      "id": "2542",
+      "name": "Oceanic Launchpad",
+      "groupId": "1030",
+      "groupName": "Spaceports",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 10000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 3600
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1638,
+          "value": 0.5
+        },
+        {
+          "attributeID": 1639,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2543",
+      "name": "Gas Launchpad",
+      "groupId": "1030",
+      "groupName": "Spaceports",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 10000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 3600
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1638,
+          "value": 0.5
+        },
+        {
+          "attributeID": 1639,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2544",
+      "name": "Barren Launchpad",
+      "groupId": "1030",
+      "groupName": "Spaceports",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 10000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 3600
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1638,
+          "value": 0.5
+        },
+        {
+          "attributeID": 1639,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2549",
+      "name": "Lava Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1000,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 6000
+        },
+        {
+          "attributeID": 48,
+          "value": 1675
+        },
+        {
+          "attributeID": 633,
+          "value": 0
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2550",
+      "name": "Storm Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1000,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 6000
+        },
+        {
+          "attributeID": 48,
+          "value": 1675
+        },
+        {
+          "attributeID": 633,
+          "value": 0
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2551",
+      "name": "Plasma Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1000,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 6000
+        },
+        {
+          "attributeID": 48,
+          "value": 1675
+        },
+        {
+          "attributeID": 633,
+          "value": 0
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2552",
+      "name": "Ice Launchpad",
+      "groupId": "1030",
+      "groupName": "Spaceports",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 10000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 3600
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1638,
+          "value": 0.5
+        },
+        {
+          "attributeID": 1639,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2555",
+      "name": "Lava Launchpad",
+      "groupId": "1030",
+      "groupName": "Spaceports",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 10000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 3600
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1638,
+          "value": 0.5
+        },
+        {
+          "attributeID": 1639,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2556",
+      "name": "Plasma Launchpad",
+      "groupId": "1030",
+      "groupName": "Spaceports",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 10000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 3600
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1638,
+          "value": 0.5
+        },
+        {
+          "attributeID": 1639,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2557",
+      "name": "Storm Launchpad",
+      "groupId": "1030",
+      "groupName": "Spaceports",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 10000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 3600
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1638,
+          "value": 0.5
+        },
+        {
+          "attributeID": 1639,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "2558",
+      "name": "Lava Storage Facility",
+      "groupId": "1029",
+      "groupName": "Storage Facilities",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 12000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        }
+      ]
+    },
+    {
+      "id": "2560",
+      "name": "Plasma Storage Facility",
+      "groupId": "1029",
+      "groupName": "Storage Facilities",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 12000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        }
+      ]
+    },
+    {
+      "id": "2561",
+      "name": "Storm Storage Facility",
+      "groupId": "1029",
+      "groupName": "Storage Facilities",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 12000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        }
+      ]
+    },
+    {
+      "id": "2562",
+      "name": "Temperate Storage Facility",
+      "groupId": "1029",
+      "groupName": "Storage Facilities",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": 12000,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 700
+        },
+        {
+          "attributeID": 49,
+          "value": 500
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        }
+      ]
+    },
+    {
+      "id": "2574",
+      "name": "Improved Storm Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 400,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 15000
+        },
+        {
+          "attributeID": 48,
+          "value": 17215
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 3
+        },
+        {
+          "attributeID": 633,
+          "value": 3
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2576",
+      "name": "Advanced Storm Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 800,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 17000
+        },
+        {
+          "attributeID": 48,
+          "value": 21315
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 4
+        },
+        {
+          "attributeID": 633,
+          "value": 4
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2577",
+      "name": "Elite Storm Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1600,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 19000
+        },
+        {
+          "attributeID": 48,
+          "value": 25415
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 5
+        },
+        {
+          "attributeID": 633,
+          "value": 5
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2578",
+      "name": "Limited Temperate Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 100,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 9000
+        },
+        {
+          "attributeID": 48,
+          "value": 7057
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 1
+        },
+        {
+          "attributeID": 633,
+          "value": 1
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2581",
+      "name": "Standard Temperate Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 200,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 12000
+        },
+        {
+          "attributeID": 48,
+          "value": 12136
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 2
+        },
+        {
+          "attributeID": 633,
+          "value": 2
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2582",
+      "name": "Improved Temperate Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 400,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 15000
+        },
+        {
+          "attributeID": 48,
+          "value": 17215
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 3
+        },
+        {
+          "attributeID": 633,
+          "value": 3
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2585",
+      "name": "Advanced Temperate Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 800,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 17000
+        },
+        {
+          "attributeID": 48,
+          "value": 21315
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 4
+        },
+        {
+          "attributeID": 633,
+          "value": 4
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2586",
+      "name": "Elite Temperate Command Center",
+      "groupId": "1027",
+      "groupName": "Command Centers",
+      "categoryId": "41",
+      "volume": 1600,
+      "capacity": 500,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 11,
+          "value": 19000
+        },
+        {
+          "attributeID": 48,
+          "value": 25415
+        },
+        {
+          "attributeID": 182,
+          "value": 2505
+        },
+        {
+          "attributeID": 277,
+          "value": 5
+        },
+        {
+          "attributeID": 633,
+          "value": 5
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1639,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "2848",
+      "name": "Barren Extractor Control Unit",
+      "groupId": "1063",
+      "groupName": "Extractor Control Units",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 2600
+        },
+        {
+          "attributeID": 49,
+          "value": 400
+        },
+        {
+          "attributeID": 1632,
+          "value": 2016
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        },
+        {
+          "attributeID": 1690,
+          "value": 110
+        },
+        {
+          "attributeID": 1691,
+          "value": 550
+        }
+      ]
+    },
+    {
+      "id": "2867",
+      "name": "Broadcast Node",
+      "groupId": "1041",
+      "groupName": "Advanced Commodities - Tier 4",
+      "categoryId": "43",
+      "volume": 50,
+      "capacity": null,
+      "tier": "P4",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 1200000
+        },
+        {
+          "attributeID": 1641,
+          "value": 1200000
+        }
+      ]
+    },
+    {
+      "id": "2868",
+      "name": "Integrity Response Drones",
+      "groupId": "1041",
+      "groupName": "Advanced Commodities - Tier 4",
+      "categoryId": "43",
+      "volume": 50,
+      "capacity": null,
+      "tier": "P4",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 1200000
+        },
+        {
+          "attributeID": 1641,
+          "value": 1200000
+        }
+      ]
+    },
+    {
+      "id": "2869",
+      "name": "Nano-Factory",
+      "groupId": "1041",
+      "groupName": "Advanced Commodities - Tier 4",
+      "categoryId": "43",
+      "volume": 50,
+      "capacity": null,
+      "tier": "P4",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 1200000
+        },
+        {
+          "attributeID": 1641,
+          "value": 1200000
+        }
+      ]
+    },
+    {
+      "id": "2870",
+      "name": "Organic Mortar Applicators",
+      "groupId": "1041",
+      "groupName": "Advanced Commodities - Tier 4",
+      "categoryId": "43",
+      "volume": 50,
+      "capacity": null,
+      "tier": "P4",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 1200000
+        },
+        {
+          "attributeID": 1641,
+          "value": 1200000
+        }
+      ]
+    },
+    {
+      "id": "2871",
+      "name": "Recursive Computing Module",
+      "groupId": "1041",
+      "groupName": "Advanced Commodities - Tier 4",
+      "categoryId": "43",
+      "volume": 50,
+      "capacity": null,
+      "tier": "P4",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 1200000
+        },
+        {
+          "attributeID": 1641,
+          "value": 1200000
+        }
+      ]
+    },
+    {
+      "id": "2872",
+      "name": "Self-Harmonizing Power Core",
+      "groupId": "1041",
+      "groupName": "Advanced Commodities - Tier 4",
+      "categoryId": "43",
+      "volume": 50,
+      "capacity": null,
+      "tier": "P4",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 1200000
+        },
+        {
+          "attributeID": 1641,
+          "value": 1200000
+        }
+      ]
+    },
+    {
+      "id": "2875",
+      "name": "Sterile Conduits",
+      "groupId": "1041",
+      "groupName": "Advanced Commodities - Tier 4",
+      "categoryId": "43",
+      "volume": 50,
+      "capacity": null,
+      "tier": "P4",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 1200000
+        },
+        {
+          "attributeID": 1641,
+          "value": 1200000
+        }
+      ]
+    },
+    {
+      "id": "2876",
+      "name": "Wetware Mainframe",
+      "groupId": "1041",
+      "groupName": "Advanced Commodities - Tier 4",
+      "categoryId": "43",
+      "volume": 50,
+      "capacity": null,
+      "tier": "P4",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 1200000
+        },
+        {
+          "attributeID": 1641,
+          "value": 1200000
+        }
+      ]
+    },
+    {
+      "id": "3060",
+      "name": "Gas Extractor Control Unit",
+      "groupId": "1063",
+      "groupName": "Extractor Control Units",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 2600
+        },
+        {
+          "attributeID": 49,
+          "value": 400
+        },
+        {
+          "attributeID": 1632,
+          "value": 13
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        },
+        {
+          "attributeID": 1690,
+          "value": 110
+        },
+        {
+          "attributeID": 1691,
+          "value": 550
+        }
+      ]
+    },
+    {
+      "id": "3061",
+      "name": "Ice Extractor Control Unit",
+      "groupId": "1063",
+      "groupName": "Extractor Control Units",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 2600
+        },
+        {
+          "attributeID": 49,
+          "value": 400
+        },
+        {
+          "attributeID": 1632,
+          "value": 12
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        },
+        {
+          "attributeID": 1690,
+          "value": 110
+        },
+        {
+          "attributeID": 1691,
+          "value": 550
+        }
+      ]
+    },
+    {
+      "id": "3062",
+      "name": "Lava Extractor Control Unit",
+      "groupId": "1063",
+      "groupName": "Extractor Control Units",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 2600
+        },
+        {
+          "attributeID": 49,
+          "value": 400
+        },
+        {
+          "attributeID": 1632,
+          "value": 2015
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        },
+        {
+          "attributeID": 1690,
+          "value": 110
+        },
+        {
+          "attributeID": 1691,
+          "value": 550
+        }
+      ]
+    },
+    {
+      "id": "3063",
+      "name": "Oceanic Extractor Control Unit",
+      "groupId": "1063",
+      "groupName": "Extractor Control Units",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 2600
+        },
+        {
+          "attributeID": 49,
+          "value": 400
+        },
+        {
+          "attributeID": 1632,
+          "value": 2014
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        },
+        {
+          "attributeID": 1690,
+          "value": 110
+        },
+        {
+          "attributeID": 1691,
+          "value": 550
+        }
+      ]
+    },
+    {
+      "id": "3064",
+      "name": "Plasma Extractor Control Unit",
+      "groupId": "1063",
+      "groupName": "Extractor Control Units",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 2600
+        },
+        {
+          "attributeID": 49,
+          "value": 400
+        },
+        {
+          "attributeID": 1632,
+          "value": 2063
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        },
+        {
+          "attributeID": 1690,
+          "value": 110
+        },
+        {
+          "attributeID": 1691,
+          "value": 550
+        }
+      ]
+    },
+    {
+      "id": "3067",
+      "name": "Storm Extractor Control Unit",
+      "groupId": "1063",
+      "groupName": "Extractor Control Units",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 2600
+        },
+        {
+          "attributeID": 49,
+          "value": 400
+        },
+        {
+          "attributeID": 1632,
+          "value": 2017
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        },
+        {
+          "attributeID": 1690,
+          "value": 110
+        },
+        {
+          "attributeID": 1691,
+          "value": 550
+        }
+      ]
+    },
+    {
+      "id": "3068",
+      "name": "Temperate Extractor Control Unit",
+      "groupId": "1063",
+      "groupName": "Extractor Control Units",
+      "categoryId": "41",
+      "volume": null,
+      "capacity": null,
+      "tier": null,
+      "dogma": [
+        {
+          "attributeID": 15,
+          "value": 2600
+        },
+        {
+          "attributeID": 49,
+          "value": 400
+        },
+        {
+          "attributeID": 1632,
+          "value": 11
+        },
+        {
+          "attributeID": 1642,
+          "value": 1000
+        },
+        {
+          "attributeID": 1643,
+          "value": 300
+        },
+        {
+          "attributeID": 1644,
+          "value": 5
+        },
+        {
+          "attributeID": 1645,
+          "value": 1
+        },
+        {
+          "attributeID": 1690,
+          "value": 110
+        },
+        {
+          "attributeID": 1691,
+          "value": 550
+        }
+      ]
+    },
+    {
+      "id": "3645",
+      "name": "Water",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "3683",
+      "name": "Oxygen",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "3689",
+      "name": "Mechanical Parts",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "3691",
+      "name": "Synthetic Oil",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "3693",
+      "name": "Fertilizer",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "3695",
+      "name": "Polytextiles",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "3697",
+      "name": "Silicate Glass",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "3725",
+      "name": "Livestock",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "3775",
+      "name": "Viral Agent",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "3779",
+      "name": "Biomass",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "3828",
+      "name": "Construction Blocks",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "9828",
+      "name": "Silicon",
+      "groupId": "1042",
+      "groupName": "Basic Commodities - Tier 1",
+      "categoryId": "43",
+      "volume": 0.19,
+      "capacity": null,
+      "tier": "P1",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 400
+        },
+        {
+          "attributeID": 1641,
+          "value": 400
+        }
+      ]
+    },
+    {
+      "id": "9830",
+      "name": "Rocket Fuel",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "9832",
+      "name": "Coolant",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "9834",
+      "name": "Guidance Systems",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "9836",
+      "name": "Consumer Electronics",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "9838",
+      "name": "Superconductors",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "9840",
+      "name": "Transmitter",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "9842",
+      "name": "Miniature Electronics",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "9846",
+      "name": "Planetary Vehicles",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "9848",
+      "name": "Robotics",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "12836",
+      "name": "Transcranial Microcontrollers",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "15317",
+      "name": "Genetically Enhanced Livestock",
+      "groupId": "1034",
+      "groupName": "Refined Commodities - Tier 2",
+      "categoryId": "43",
+      "volume": 0.75,
+      "capacity": null,
+      "tier": "P2",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 7200
+        },
+        {
+          "attributeID": 1641,
+          "value": 7200
+        }
+      ]
+    },
+    {
+      "id": "17136",
+      "name": "Ukomi Superconductors",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "17392",
+      "name": "Data Chips",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "17898",
+      "name": "High-Tech Transmitters",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    },
+    {
+      "id": "28974",
+      "name": "Vaccines",
+      "groupId": "1040",
+      "groupName": "Specialized Commodities - Tier 3",
+      "categoryId": "43",
+      "volume": 3,
+      "capacity": null,
+      "tier": "P3",
+      "dogma": [
+        {
+          "attributeID": 1640,
+          "value": 60000
+        },
+        {
+          "attributeID": 1641,
+          "value": 60000
+        }
+      ]
+    }
+  ],
+  "recipes": [
+    {
+      "id": "65",
+      "name": "Superconductors",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2389",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3645",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9838",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "66",
+      "name": "Coolant",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2390",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3645",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9832",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "67",
+      "name": "Rocket Fuel",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2389",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2390",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9830",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "68",
+      "name": "Synthetic Oil",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2390",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3683",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3691",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "69",
+      "name": "Oxides",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2392",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3683",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2317",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "70",
+      "name": "Silicate Glass",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2392",
+          "quantity": "40"
+        },
+        {
+          "typeId": "9828",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3697",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "71",
+      "name": "Transmitter",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2389",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2401",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9840",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "72",
+      "name": "Water-Cooled CPU",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2398",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3645",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2328",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "73",
+      "name": "Mechanical Parts",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2398",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2399",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3689",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "74",
+      "name": "Construction Blocks",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2398",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2400",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3828",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "75",
+      "name": "Enriched Uranium",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2399",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2400",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "44",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "76",
+      "name": "Consumer Electronics",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2400",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2401",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9836",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "77",
+      "name": "Miniature Electronics",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2401",
+          "quantity": "40"
+        },
+        {
+          "typeId": "9828",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9842",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "78",
+      "name": "Nanites",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2393",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2398",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2463",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "79",
+      "name": "Biocells",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2396",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2399",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2329",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "80",
+      "name": "Microfiber Shielding",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2397",
+          "quantity": "40"
+        },
+        {
+          "typeId": "9828",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2327",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "81",
+      "name": "Viral Agent",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2393",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3779",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3775",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "82",
+      "name": "Fertilizer",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2393",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2395",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3693",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "83",
+      "name": "Genetically Enhanced Livestock",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2395",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3779",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "15317",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "84",
+      "name": "Livestock",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2395",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2396",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3725",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "85",
+      "name": "Polytextiles",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2396",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2397",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3695",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "86",
+      "name": "Test Cultures",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2393",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3645",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2319",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "87",
+      "name": "Supertensile Plastics",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "3683",
+          "quantity": "40"
+        },
+        {
+          "typeId": "3779",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2312",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "88",
+      "name": "Polyaramids",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2392",
+          "quantity": "40"
+        },
+        {
+          "typeId": "2397",
+          "quantity": "40"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2321",
+          "quantity": "5"
+        }
+      ]
+    },
+    {
+      "id": "89",
+      "name": "Ukomi Superconductor",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "3691",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9838",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "17136",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "90",
+      "name": "Condensates",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2317",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9832",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2344",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "91",
+      "name": "Camera Drones",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "3697",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9830",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2345",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "92",
+      "name": "Synthetic Synapses",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2312",
+          "quantity": "10"
+        },
+        {
+          "typeId": "2319",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2346",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "94",
+      "name": "High-Tech Transmitter",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2321",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9840",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "17898",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "95",
+      "name": "Gel-Matrix Biopaste",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2317",
+          "quantity": "10"
+        },
+        {
+          "typeId": "2329",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9838",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2348",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "96",
+      "name": "Supercomputers",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2328",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9832",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9836",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2349",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "97",
+      "name": "Robotics",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "3689",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9836",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9848",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "98",
+      "name": "Smartfab Units",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "3828",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9842",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2351",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "99",
+      "name": "Nuclear Reactors",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "44",
+          "quantity": "10"
+        },
+        {
+          "typeId": "2327",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2352",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "100",
+      "name": "Guidance Systems",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2328",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9840",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9834",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "102",
+      "name": "Neocoms",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2329",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3697",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2354",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "103",
+      "name": "Planetary Vehicles",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2312",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3689",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9842",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9846",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "104",
+      "name": "Biotech Research Reports",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2463",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3725",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3828",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2358",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "105",
+      "name": "Vaccines",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "3725",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3775",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "28974",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "106",
+      "name": "Industrial Explosives",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "3693",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3695",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2360",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "107",
+      "name": "Hermetic Membranes",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2321",
+          "quantity": "10"
+        },
+        {
+          "typeId": "15317",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2361",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "108",
+      "name": "Transcranial Microcontroller",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2329",
+          "quantity": "10"
+        },
+        {
+          "typeId": "2463",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "12836",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "109",
+      "name": "Data Chips",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2312",
+          "quantity": "10"
+        },
+        {
+          "typeId": "2327",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "17392",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "110",
+      "name": "Hazmat Detection Systems",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "3695",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3775",
+          "quantity": "10"
+        },
+        {
+          "typeId": "9840",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2366",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "111",
+      "name": "Cryoprotectant Solution",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2470",
+        "2472",
+        "2474",
+        "2480",
+        "2484",
+        "2485",
+        "2491",
+        "2494"
+      ],
+      "inputs": [
+        {
+          "typeId": "2319",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3691",
+          "quantity": "10"
+        },
+        {
+          "typeId": "3693",
+          "quantity": "10"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2367",
+          "quantity": "3"
+        }
+      ]
+    },
+    {
+      "id": "112",
+      "name": "Organic Mortar Applicators",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2475",
+        "2482"
+      ],
+      "inputs": [
+        {
+          "typeId": "2344",
+          "quantity": "6"
+        },
+        {
+          "typeId": "2393",
+          "quantity": "40"
+        },
+        {
+          "typeId": "9848",
+          "quantity": "6"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2870",
+          "quantity": "1"
+        }
+      ]
+    },
+    {
+      "id": "113",
+      "name": "Sterile Conduits",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2475",
+        "2482"
+      ],
+      "inputs": [
+        {
+          "typeId": "2351",
+          "quantity": "6"
+        },
+        {
+          "typeId": "3645",
+          "quantity": "40"
+        },
+        {
+          "typeId": "28974",
+          "quantity": "6"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2875",
+          "quantity": "1"
+        }
+      ]
+    },
+    {
+      "id": "114",
+      "name": "Nano-Factory",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2475",
+        "2482"
+      ],
+      "inputs": [
+        {
+          "typeId": "2360",
+          "quantity": "6"
+        },
+        {
+          "typeId": "2398",
+          "quantity": "40"
+        },
+        {
+          "typeId": "17136",
+          "quantity": "6"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2869",
+          "quantity": "1"
+        }
+      ]
+    },
+    {
+      "id": "115",
+      "name": "Self-Harmonizing Power Core",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2475",
+        "2482"
+      ],
+      "inputs": [
+        {
+          "typeId": "2345",
+          "quantity": "6"
+        },
+        {
+          "typeId": "2352",
+          "quantity": "6"
+        },
+        {
+          "typeId": "2361",
+          "quantity": "6"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2872",
+          "quantity": "1"
+        }
+      ]
+    },
+    {
+      "id": "116",
+      "name": "Recursive Computing Module",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2475",
+        "2482"
+      ],
+      "inputs": [
+        {
+          "typeId": "2346",
+          "quantity": "6"
+        },
+        {
+          "typeId": "9834",
+          "quantity": "6"
+        },
+        {
+          "typeId": "12836",
+          "quantity": "6"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2871",
+          "quantity": "1"
+        }
+      ]
+    },
+    {
+      "id": "117",
+      "name": "Broadcast Node",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2475",
+        "2482"
+      ],
+      "inputs": [
+        {
+          "typeId": "2354",
+          "quantity": "6"
+        },
+        {
+          "typeId": "17392",
+          "quantity": "6"
+        },
+        {
+          "typeId": "17898",
+          "quantity": "6"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2867",
+          "quantity": "1"
+        }
+      ]
+    },
+    {
+      "id": "118",
+      "name": "Integrity Response Drones",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2475",
+        "2482"
+      ],
+      "inputs": [
+        {
+          "typeId": "2348",
+          "quantity": "6"
+        },
+        {
+          "typeId": "2366",
+          "quantity": "6"
+        },
+        {
+          "typeId": "9846",
+          "quantity": "6"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2868",
+          "quantity": "1"
+        }
+      ]
+    },
+    {
+      "id": "119",
+      "name": "Wetware Mainframe",
+      "cycleSeconds": 3600,
+      "pinTypeIds": [
+        "2475",
+        "2482"
+      ],
+      "inputs": [
+        {
+          "typeId": "2349",
+          "quantity": "6"
+        },
+        {
+          "typeId": "2358",
+          "quantity": "6"
+        },
+        {
+          "typeId": "2367",
+          "quantity": "6"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2876",
+          "quantity": "1"
+        }
+      ]
+    },
+    {
+      "id": "121",
+      "name": "Water",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2268",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3645",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "122",
+      "name": "Plasmoids",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2308",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2389",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "123",
+      "name": "Electrolytes",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2309",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2390",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "124",
+      "name": "Oxygen",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2310",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3683",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "125",
+      "name": "Oxidizing Compound",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2311",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2392",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "126",
+      "name": "Reactive Metals",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2267",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2398",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "127",
+      "name": "Precious Metals",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2270",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2399",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "128",
+      "name": "Toxic Metals",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2272",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2400",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "129",
+      "name": "Chiral Structures",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2306",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2401",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "130",
+      "name": "Silicon",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2307",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "9828",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "131",
+      "name": "Bacteria",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2073",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2393",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "132",
+      "name": "Biomass",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2286",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "3779",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "133",
+      "name": "Proteins",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2287",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2395",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "134",
+      "name": "Biofuels",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2288",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2396",
+          "quantity": "20"
+        }
+      ]
+    },
+    {
+      "id": "135",
+      "name": "Industrial Fibers",
+      "cycleSeconds": 1800,
+      "pinTypeIds": [
+        "2469",
+        "2471",
+        "2473",
+        "2481",
+        "2483",
+        "2490",
+        "2492",
+        "2493"
+      ],
+      "inputs": [
+        {
+          "typeId": "2305",
+          "quantity": "3000"
+        }
+      ],
+      "outputs": [
+        {
+          "typeId": "2397",
+          "quantity": "20"
+        }
+      ]
+    }
+  ],
+  "systems": [
+    {
+      "id": "30001372",
+      "name": "Kino",
+      "planetIds": [
+        "40087444",
+        "40087446",
+        "40087448",
+        "40087450",
+        "40087468",
+        "40087476",
+        "40087495",
+        "40087521",
+        "40087532",
+        "40087537"
+      ]
+    }
+  ],
+  "planets": [
+    {
+      "id": "40087444",
+      "systemId": "30001372",
+      "typeId": "2016"
+    },
+    {
+      "id": "40087446",
+      "systemId": "30001372",
+      "typeId": "2016"
+    },
+    {
+      "id": "40087448",
+      "systemId": "30001372",
+      "typeId": "2017"
+    },
+    {
+      "id": "40087450",
+      "systemId": "30001372",
+      "typeId": "13"
+    },
+    {
+      "id": "40087468",
+      "systemId": "30001372",
+      "typeId": "2017"
+    },
+    {
+      "id": "40087476",
+      "systemId": "30001372",
+      "typeId": "13"
+    },
+    {
+      "id": "40087495",
+      "systemId": "30001372",
+      "typeId": "13"
+    },
+    {
+      "id": "40087521",
+      "systemId": "30001372",
+      "typeId": "13"
+    },
+    {
+      "id": "40087532",
+      "systemId": "30001372",
+      "typeId": "12"
+    },
+    {
+      "id": "40087537",
+      "systemId": "30001372",
+      "typeId": "2014"
+    }
+  ],
+  "categories": [
+    {
+      "id": "41",
+      "name": "Planetary Industry"
+    },
+    {
+      "id": "42",
+      "name": "Planetary Resources"
+    },
+    {
+      "id": "43",
+      "name": "Planetary Commodities"
+    }
+  ],
+  "resourceCompatibility": "UNKNOWN: official planetary yield/type compatibility is not asserted; configure evidenced local inputs"
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "reportId": "bbbbbbbb-0000-4000-8000-000000000004",
+  "period": {
+    "from": "2026-10-05T00:00:00Z",
+    "to": "2026-10-05T23:59:59Z"
+  },
+  "generatedAt": "2026-10-06T00:00:00Z",
+  "source": "agent",
+  "status": "actual",
+  "currency": "ISK",
+  "provenance": "live",
+  "notes": "Vorlage: Vor Verwendung ID, Zeitraum, Quelle und Messwerte ersetzen. Nicht automatisch als Seed geladen.",
+  "pillar": "supplementary",
+  "reportType": "daily",
+  "data": {
+    "kind": "SupplementaryIncomeReport",
+    "activities": [
+      "ratloot",
+      "hacking",
+      "salvage"
+    ],
+    "realizedRevenue": "not_reported",
+    "operatingCosts": "not_reported",
+    "internalTransfers": "not_reported",
+    "plexPurchases": "not_reported"
+  }
+}
