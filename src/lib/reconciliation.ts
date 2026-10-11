@@ -70,7 +70,8 @@ export function collectFinancialSources(db:DatabaseSync):FinancialSource[]{
    if(['TRADING_FEE','OPERATING_COST','INDUSTRY_COST'].includes(category)){role='cost';cost=amount;}
    if(category==='INTERNAL_TRANSFER')identity='transfer:'+d.id;
    if(d.ref_type==='market_transaction'){category=delta!==null&&signedCents(delta)<0n?'TRADING_PURCHASE':'TRADING_SALE';identity='journal:'+r.sourceCharacterId+':'+d.id;}
-   if(['contract_price','contract_price_payment_corp'].includes(String(d.ref_type))&&d.context_id_type==='contract_id'&&d.context_id){identity='contract:'+d.context_id;const c=contracts.find(x=>x.contractId===String(d.context_id));if(c?.candidate&&c.completed&&c.category&&['AUTO_CONFIRMED','MANUALLY_CONFIRMED'].includes(c.quality)&&String(c.raw.issuer_id)===r.sourceCharacterId&&delta!==null&&signedCents(delta)>0n)category=categories[c.category]??'UNKNOWN';}
+   // Item policy describes the contract, not the provenance of cash income. Explicit allocations and effective origin splits project categories later.
+   if(['contract_price','contract_price_payment_corp'].includes(String(d.ref_type))&&d.context_id_type==='contract_id'&&d.context_id)identity='contract:'+d.context_id;
    const contractEconomics=contractJournalEconomics(d,r.sourceCharacterId,owned,contracts.find(c=>c.contractId===String(d.context_id))?.raw);
    if(contractEconomics){category=contractEconomics.category;if(d.context_id_type==='contract_id')identity='contract:'+d.context_id;if(category==='SERVICE_COST'||category==='MISC_COST'){role='cost';cost=amount;}if(category==='SERVICE_INCOME'||category==='MISC_INCOME')net=amount;}
    const walletBinding=readWalletBinding(db,key);

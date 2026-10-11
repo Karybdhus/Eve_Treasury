@@ -27,3 +27,25 @@ data/order07/
 data/order08/
 
 data/order09/
+
+# Private workstation instructions, reports and acceptance evidence
+/AGENTS.md
+/docs/REPORT_SYNC_STATE.json
+/docs/DASHBOARD_*.md
+/docs/qa/
+/docs/ORDER_*
+!/docs/ORDER_13_ACCEPTANCE.md
+/docs/NIGHT_*
+/docs/FOLLOWUP_*
+/docs/FINAL_REPORT.md
+/docs/FINANCIAL_INTEGRITY_AUDIT.md
+/docs/IMPLEMENTATION_PROGRESS.md
+/docs/KNOWN_ISSUES.md
+/docs/VISUAL_QA.md
+/docs/WORKSTATION_HANDOVER.md
+
+/scripts/order*-baseline.ts
+/scripts/order*-diagnosis.ts
+/scripts/order*-compare.ts
+/scripts/order*-verify.ts
+/scripts/order*-audit.ts

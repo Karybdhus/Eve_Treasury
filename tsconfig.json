@@ -37,7 +37,6 @@
   ],
   "exclude": [
     "node_modules",
-    "data/order06/**",
-    "data/order09/**"
+    "data/**"
   ]
 }
