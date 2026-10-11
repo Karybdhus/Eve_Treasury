@@ -19,7 +19,7 @@ export function currentConsumedOrigin(db:DatabaseSync,segment:ConsumedLot,visite
  if(lot.origin==='MARKET_PURCHASE'&&purchaseKey&&!lot.lineage?.length){
   const proof=db.prepare('SELECT body,status,source,source_character_id FROM project_records WHERE deduplication_key=? AND is_current=1').get(purchaseKey);
   const data=proof?JSON.parse(String(proof.body)):null,unit=moneyFact(data?.unit_price).value;
-  const valid=proof?.status==='actual'&&proof.source==='esi'&&String(proof.source_character_id)===lot.owner&&data?.is_buy===true&&data?.is_personal===true&&String(data.type_id)===lot.typeId&&String(data.quantity)===lot.quantity&&Number.isFinite(Date.parse(data.date))&&Date.parse(data.date)===Date.parse(lot.acquiredAt)&&(lot.costCents===null||unit!==null&&signedCents(unit)*BigInt(lot.quantity)===BigInt(lot.costCents));
+  const valid=proof?.status==='actual'&&proof.source==='esi'&&String(proof.source_character_id)===lot.owner&&data?.is_buy===true&&data?.is_personal===true&&!db.prepare('SELECT 1 FROM characters WHERE character_id=?').get(String(data.client_id))&&String(data.type_id)===lot.typeId&&String(data.quantity)===lot.quantity&&Number.isFinite(Date.parse(data.date))&&Date.parse(data.date)===Date.parse(lot.acquiredAt)&&(lot.costCents===null||unit!==null&&signedCents(unit)*BigInt(lot.quantity)===BigInt(lot.costCents));
   if(!valid)return {...segment,category:null,quality:'conflict',costCents:null};
  }
  if(lot.origin==='CONTRACT_PURCHASE'&&!lot.lineage?.length){

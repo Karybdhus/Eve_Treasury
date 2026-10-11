@@ -45,7 +45,7 @@ Guarded schema-8 to schema-9 copy migration preserved all 42 pre-existing tables
 
 ## Final local verification
 
-The final aggregate regression passed 473/473 tests with zero skips. Lint, Typecheck and the isolated Production Build passed. Detailed run evidence is retained in the private handover. The documented 32-scenario map remains tied to the named executable tests.
+The final aggregate regression passed 475/475 tests with zero skips. Lint, Typecheck and the isolated Production Build passed. Detailed run evidence is retained in the private handover. The documented 32-scenario map remains tied to the named executable tests.
 
 Repository, staged changes and reachable history are checked with the existing scanner, including comparisons against locally available credential values. Independent redacted Gitleaks checks cover history and staged diff. No private database, workstation instruction, screenshot or security report is part of the public changeset. The dependency audit reports zero known vulnerabilities. Public documentation links are checked.
 
@@ -67,3 +67,5 @@ A complete synthetic 5000-position baseline took 85.05 ms to prepare and 336.13 
 ## Publication
 
 Target: the existing cleaned `main`, with a normal fast-forward push only after the local gates. The public starting head is recorded above; the enclosing commit identifies this implementation. Exact remote-head equality and GitHub check outcomes are recorded in the private delivery reports. No force push, history rewrite or old private object restoration is used.
+
+Final correction coverage: later manual and revoked Contract origins override FIFO projections; corrected purchases with an own-character counterparty invalidate external cost evidence. Baseline summaries apply each character's entry cutoff and Berlin calendar dates.
