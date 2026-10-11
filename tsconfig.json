@@ -37,6 +37,8 @@
   ],
   "exclude": [
     "node_modules",
-    "data/**"
+    "data/**",
+    "scripts/order*.ts",
+    "scripts/night*.ts"
   ]
 }

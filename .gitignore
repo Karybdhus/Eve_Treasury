@@ -34,7 +34,7 @@ data/order09/
 /docs/DASHBOARD_*.md
 /docs/qa/
 /docs/ORDER_*
-!/docs/ORDER_13_ACCEPTANCE.md
+!/docs/ORDER_14_ACCEPTANCE.md
 /docs/NIGHT_*
 /docs/FOLLOWUP_*
 /docs/FINAL_REPORT.md
@@ -49,3 +49,26 @@ data/order09/
 /scripts/order*-compare.ts
 /scripts/order*-verify.ts
 /scripts/order*-audit.ts
+
+# Private local security and operational files at any depth
+AGENTS.md
+AGENTS.*.md
+.security.local.json
+REPORT_SYNC_STATE.json
+DASHBOARD_*.md
+*.log
+*.bak
+*.backup
+*.dump
+*.pem
+*.key
+*.p12
+*.pfx
+backups/
+private/
+private-reports/
+oauth-diagnostics/
+esi-raw/
+qa-screenshots/
+/scripts/order*
+/scripts/night*

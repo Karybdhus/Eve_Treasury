@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "publicExamples": [".env.example"],
+  "syntheticSecretPattern": "^(?:invalid-synthetic-(?:access|refresh)|test-only-[a-z0-9-]+|(?:order[0-9]+|fixture|synthetic)-[a-z0-9-]*(?:only|secret|token|key)[a-z0-9-]*|not-a-valid-token|fixture-client)$",
+  "privatePaths": [
+    "(^|/)AGENTS(?:\\.[^/]*)?\\.md$",
+    "(^|/)REPORT_SYNC_STATE\\.json$",
+    "(^|/)DASHBOARD_[^/]+\\.md$",
+    "^data/",
+    "(^|/)\\.env(?:\\..*)?$",
+    "\\.(?:sqlite(?:3)?|db)(?:[.-].*)?$",
+    "\\.(?:bak|backup|dump|log|pem|key|p12|pfx)$",
+    "(^|/)(?:backups|private|private-reports|oauth-diagnostics|esi-raw|qa-screenshots)/",
+    "^docs/qa/",
+    "^scripts/(?:order[0-9]+|night[0-9]+)",
+    "(^|/)(?:security-findings|scan-findings|private-security)[^/]*\\.json$"
+  ]
+}
