@@ -8,7 +8,7 @@ const models=new Map<string,{revision:string;state:State;computedAt:string}>();
 const tables=['reports','imported_source_reports','buyback_bookings','buyback_wallet_links','app_settings','contract_observations','contract_decisions','evidence_allocations','event_cost_components','economic_events','event_sources','reconciliation_decisions','reconciliation_audit','financial_money','reported_profit_decimal'];
 export function financialRevision(db:DatabaseSync){
  const hash=createHash('sha256').update(dateKey(new Date()));
- for(const table of tables){hash.update(table);hash.update(JSON.stringify(db.prepare('SELECT * FROM '+table+' ORDER BY rowid').all()));}
+ for(const table of tables){hash.update(table);hash.update(JSON.stringify(db.prepare(table==='app_settings'?"SELECT * FROM app_settings WHERE name NOT LIKE 'esi_sync:%' ORDER BY rowid":'SELECT * FROM '+table+' ORDER BY rowid').all()));}
  hash.update(JSON.stringify(db.prepare('SELECT character_id,connection_status FROM characters ORDER BY character_id').all()));
  hash.update(JSON.stringify(db.prepare("SELECT * FROM project_records WHERE kind IN ('wallet_journal','wallet_transaction','motor_trade','industry_job','mining_entry','pi_colony','pi_pin','market_order','wallet_snapshot','wallet_balance','ess_observation') ORDER BY deduplication_key").all()));
  return hash.digest('hex');
@@ -24,3 +24,5 @@ export function financialReadModel(db:DatabaseSync){
  if(models.size>8)models.delete(models.keys().next().value!);
  return state;
 }
+
+export function invalidateFinancialReadModel(db:DatabaseSync){const file=(db.prepare('PRAGMA database_list').all() as {name:string;file:string}[]).find(r=>r.name==='main')?.file;if(file)models.delete(file);}
