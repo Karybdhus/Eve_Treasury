@@ -76,3 +76,6 @@ qa-screenshots/
 
 # Isolated production acceptance build
 .next-acceptance/
+
+# Public operational acceptance, without private finance or identifiers
+!/docs/ORDER_16_ACCEPTANCE.md

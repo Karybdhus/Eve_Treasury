@@ -69,7 +69,7 @@ test('ETag revalidation retains payload and pagination metadata',async()=>{
  const client=new EsiClient('','1001',cache,request,'2026-08-18');
  await client.get('/characters/1001/mining','char-industry');
  const row=await client.get('/characters/1001/mining','char-industry');
- assert.deepEqual(row.data,[]);assert.equal(row.pages,2);assert.equal(row.cached,true);
+ assert.deepEqual(row.data,[]);assert.equal(row.pages,2);assert.equal(row.cached,true);assert.equal(row.fetchedAt,row.checkedAt);const reused=await client.get('/characters/1001/mining','char-industry');assert.equal(reused.fetchedAt,row.checkedAt);assert.equal(calls,2);
 });
 test('Rate limiting prevents a second network request',async()=>{
  let calls=0;const cache=memoryCache(),request:typeof fetch=async()=>{calls++;return new Response('{}',{status:429,headers:{'retry-after':'120'}});};

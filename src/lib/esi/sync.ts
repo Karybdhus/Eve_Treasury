@@ -58,7 +58,7 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
     for(const kind of replaceKinds){const previous=write.prepare("SELECT deduplication_key,body FROM project_records WHERE source='esi' AND source_character_id=? AND kind=? AND is_current=1").all(characterId,kind) as {deduplication_key:string;body:string}[];for(const row of previous){if(seen.has(row.deduplication_key))continue;if(kind==='mining_entry'&&String(JSON.parse(row.body).sourceDate)<new Date(Date.now()-30*86400000).toISOString().slice(0,10))continue;removed+=Number(write.prepare('UPDATE project_records SET is_current=0 WHERE deduplication_key=?').run(row.deduplication_key).changes);}}
     for(const b of batches){
      const rawId=storeRaw(write,{source:'esi',characterId,endpoint:b.path,fetchedAt:b.response.fetchedAt,sourceTimestamp:b.response.sourceTimestamp,payloadText:b.response.rawText});
-     capturedRawIds.push(rawId);observedVersions.push({rawId,observedAt:b.response.fetchedAt,endpoint:b.path});for(const row of b.rows){const prior=write.prepare('SELECT body,is_current FROM project_records WHERE deduplication_key=?').get(row.deduplicationKey) as {body:string;is_current:number}|undefined;
+     capturedRawIds.push(rawId);observedVersions.push({rawId,observedAt:b.response.outcome==='unchanged'?b.response.checkedAt??b.response.fetchedAt:b.response.fetchedAt,endpoint:b.path});for(const row of b.rows){const prior=write.prepare('SELECT body,is_current FROM project_records WHERE deduplication_key=?').get(row.deduplicationKey) as {body:string;is_current:number}|undefined;
       const differs=!prior||prior.body!==JSON.stringify(row.data)||!prior.is_current;if(!prior)inserted++;else if(differs)changed++;
       const source={...row,rawId};if(row.kind==='contract_archive')archiveContract(write,source);else if(differs)storeRecord(write,source);
      }
@@ -67,7 +67,7 @@ export async function syncCharacter(characterId:string,options:{client?:EsiClien
      const ids=new Set(listCharacters().map(c=>c.character_id));
      for(const row of records(write,'wallet_journal')){const c=classifyJournal(row.data,ids,row.sourceCharacterId);write.prepare('INSERT INTO wallet_classifications VALUES (?,?,?,?) ON CONFLICT(deduplication_key) DO UPDATE SET category=excluded.category,quality=excluded.quality,rule_version=excluded.rule_version').run(row.deduplicationKey,c.category,c.quality,'1.0');}
     }
-    captureBaselineSource(write,characterId,name,{rawIds:capturedRawIds,versions:observedVersions,observedAt:batches.map(b=>b.response.fetchedAt).sort().at(-1)??attemptedAt,checkedAt:attemptedAt,cacheUntil:batches.map(b=>b.response.cacheUntil).filter((v):v is string=>!!v).sort()[0]??null});
+    captureBaselineSource(write,characterId,name,{rawIds:capturedRawIds,versions:observedVersions,observedAt:observedVersions.map(v=>v.observedAt).sort().at(-1)??attemptedAt,checkedAt:attemptedAt,cacheUntil:batches.map(b=>b.response.cacheUntil).filter((v):v is string=>!!v).sort()[0]??null});
     write.exec('COMMIT');
    }catch(e){write.exec('ROLLBACK');throw e;}finally{write.close();}
    const network=batches.filter(b=>b.response.outcome?b.response.outcome!=='cache_valid':!b.response.cached);

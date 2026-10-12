@@ -48,7 +48,7 @@ export class EsiClient{
    this.cache.block(rateKey,Number.isFinite(retryAt)?retryAt:Date.now()+60000);throw new EsiError(res.status,retryAt);
   }
   if(res.status===304&&stored){
-   const row={...stored,expires_at:expiresAt};if(/no-store/.test(policy))this.cache.remove?.(key);else this.cache.write(key,row);
+   const row={...stored,expires_at:expiresAt,fetched_at:now};if(/no-store/.test(policy))this.cache.remove?.(key);else this.cache.write(key,row);
    const response=responseFrom(row,true);response.pages=Number(this.cache.read(key+':pages')?.body??1);response.outcome='unchanged';response.checkedAt=now;return response;
   }
   if(!res.ok){if(res.status>=500)this.cache.block(rateKey,Date.now()+60000);throw new EsiError(res.status);}
