@@ -21,3 +21,6 @@ Profit, free liquidity, escrow, inventory and allocated PLEX funding are separat
 ## Verification and security
 
 Run npm run test, npm run typecheck, npm run lint and npm run build. See [security policy](SECURITY.md) before publishing code. Operational reports, account data, credentials, local paths and security findings belong in ignored local storage. Public code is shared independently of private databases.
+
+
+Contract classification, paid/pending presentation and assumptions: [V17 accounting rules](docs/CONTRACT_CLASSIFICATION.md).

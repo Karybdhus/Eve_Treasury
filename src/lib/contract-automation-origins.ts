@@ -9,12 +9,14 @@ export function planAutomaticOrigins(db:DatabaseSync,id:string){
  const c=contractManagement(db,id),owner=c.role==='issuer'?c.issuerId:c.acceptorId;
  if(!c.completed||c.type!=='item_exchange'||c.direction!=='outgoing'||c.purpose!=='material_sale'||c.quality==='conflict'||contractOriginLinks(db,id).some(l=>l.status==='revoked')||manualContractOrigins(db,id).some(l=>!l.active))return [];
  const items=contractItemOrigins(db,id).filter(i=>i.direction==='outgoing'&&!i.conflict&&BigInt(i.unknownQuantity??'0')>0n);
- const positions=(db.prepare('SELECT item_id FROM inventory_positions WHERE owner=?').all(owner) as {item_id:string}[]).map(p=>inventoryPosition(db,p.item_id)!);
+ if(!items.length)return [];const typeIds=[...new Set(items.map(i=>i.type_id))];
+ const positions=(db.prepare('SELECT item_id FROM inventory_positions WHERE owner=? AND type_id IN ('+typeIds.map(()=>'?').join(',')+") AND julianday(as_of)<=julianday(?) AND EXISTS(SELECT 1 FROM json_each(body,'$.slices') s WHERE json_extract(s.value,'$.active')=1 AND json_extract(s.value,'$.status')!='suggested' AND coalesce(json_extract(s.value,'$.unknownOrigin'),0)=0)").all(owner,...typeIds,c.dateIssued) as {item_id:string}[]).map(p=>inventoryPosition(db,p.item_id)!);
+ const competingTypes=new Set<string>();
+ if(positions.length){for(const row of db.prepare("SELECT DISTINCT source_entity_id FROM project_records WHERE kind='contract_archive' AND source_entity_id!=?").all(id)){const other=contractManagement(db,String(row.source_entity_id));if(other.completed&&other.direction==='outgoing'&&(other.role==='issuer'?other.issuerId:other.acceptorId)===owner&&(other.items??[]).some(i=>typeIds.includes(i.type_id))){for(const item of contractItemOrigins(db,other.contractId))if(BigInt(item.unknownQuantity??'0')>0n)competingTypes.add(item.type_id);}}}
  return items.map(i=>{
   const remaining=BigInt(i.unknownQuantity!),matches=positions.filter(p=>p.typeId===i.type_id&&!p.conflict&&!p.identityConflict&&Number.isFinite(Date.parse(p.asOf))&&Date.parse(p.asOf)<=Date.parse(c.dateIssued)).map(p=>({p,slices:p.slices.filter(s=>s.active&&s.status!=='suggested'&&!s.unknownOrigin&&new Set(sliceCategories(s)).size===1)})).filter(v=>v.slices.reduce((n,s)=>n+BigInt(s.quantity),0n)===remaining||v.slices.length===1&&BigInt(v.slices[0].quantity)>=remaining);
   const otherItems=items.some(other=>other.record_id!==i.record_id&&other.type_id===i.type_id);
-  const contracts=db.prepare("SELECT DISTINCT source_entity_id FROM project_records WHERE kind='contract_archive' AND source_entity_id!=?").all(id) as {source_entity_id:string}[];
-  const competing=otherItems||contracts.some(r=>{const other=contractManagement(db,r.source_entity_id);return other.completed&&other.direction==='outgoing'&&(other.role==='issuer'?other.issuerId:other.acceptorId)===owner&&contractItemOrigins(db,r.source_entity_id).some(item=>item.type_id===i.type_id&&BigInt(item.unknownQuantity??'0')>0n);});
+  const competing=matches.length!==1||otherItems||competingTypes.has(i.type_id);
   return {recordId:i.record_id,status:matches.length===1&&!competing?'ready' as const:'proposal' as const,candidates:matches.map(({p,slices})=>({itemId:p.itemId,revision:p.revision,slices:slices.map(s=>({id:s.id,quantity:vQuantity(s.quantity,remaining,slices.length)}))}))};
  });
 }

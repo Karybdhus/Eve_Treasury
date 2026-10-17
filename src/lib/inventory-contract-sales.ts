@@ -19,7 +19,7 @@ export function continuousContractSegments(db:DatabaseSync,id:string){
  for(const item of items){const row=db.prepare('SELECT body FROM inventory_origin_movements WHERE source_key=?').get('contract-sale:'+id+':'+item.record_id);if(!row)return null;
   const movement=JSON.parse(String(row.body)) as {input:{typeId:string;quantity:string;owner:string};segments:ConsumedLot[];unknownQuantity:string};
   if(movement.input.typeId!==item.type_id||movement.input.quantity!==item.quantity||movement.input.owner!==(contract.role==='issuer'?contract.issuerId:contract.acceptorId))throw Error('Continuous contract evidence changed');
-  for(const [index,stored] of movement.segments.entries()){const segment=currentConsumedOrigin(db,stored);result.push({id:'lot:'+item.record_id+':'+index,recordId:item.record_id,category:segment.category,quantity:segment.quantity,costCents:segment.costCents,origin:segment.origin==='OPENING_STOCK'?'OPENING_STOCK':segment.origin+(segment.quality==='rule_based'?' (regelbasiert)':'')});}
+  for(const [index,stored] of movement.segments.entries()){const segment=currentConsumedOrigin(db,stored);result.push({id:'lot:'+item.record_id+':'+index,recordId:item.record_id,category:segment.category,quantity:segment.quantity,costCents:segment.costCents,origin:segment.quality==='conflict'?'CONFLICT':segment.origin==='OPENING_STOCK'?'OPENING_STOCK':segment.origin+(segment.quality==='rule_based'?' (regelbasiert)':'')});}
   if(movement.unknownQuantity!=='0')result.push({id:'unknown:'+item.record_id,recordId:item.record_id,category:null,quantity:movement.unknownQuantity,costCents:null,origin:'Unknown'});
  }
  return result;

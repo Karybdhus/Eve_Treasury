@@ -1,3 +1,4 @@
+import {memoizedDatabaseRead} from './database-read-cache';
 import {randomUUID} from 'node:crypto';
 import type {DatabaseSync} from 'node:sqlite';
 import {z} from 'zod';
@@ -9,7 +10,7 @@ export type ContractDirection=typeof contractDirections[number];
 const Decision=z.object({contractId:z.string().regex(/^\d+$/),revision:z.number().int().nonnegative(),action:z.enum(['confirm','revoke']),purpose:z.enum(contractPurposes).optional(),direction:z.enum(contractDirections).optional(),reviewed:z.boolean().optional(),reason:z.string().trim().min(1).max(2000)}).strict();
 type Management={purpose:ContractPurpose;direction:ContractDirection;reviewed:boolean;active:boolean;type:string;issuer:string;acceptor:string;corporation:boolean};
 function archived(db:DatabaseSync,id:string){const r=db.prepare("SELECT body,fetched_at FROM project_records WHERE kind='contract_archive' AND source_entity_id=? ORDER BY fetched_at DESC LIMIT 1").get(id) as {body:string;fetched_at:string}|undefined;if(!r)throw new Error('Contract not archived');return r;}
-export function contractManagement(db:DatabaseSync,id:string){
+function computeContractManagement(db:DatabaseSync,id:string){
  const row=archived(db,id),raw=JSON.parse(row.body),c=Contract.parse(raw);
  const own=new Set((db.prepare('SELECT character_id FROM characters').all() as {character_id:string}[]).map(r=>r.character_id));
  const issuerOwned=!c.for_corporation&&own.has(c.issuer_id),acceptorOwned=!c.for_corporation&&c.acceptor_id!=='0'&&own.has(c.acceptor_id);
@@ -36,6 +37,7 @@ export function contractManagement(db:DatabaseSync,id:string){
  }
  return {contractId:id,type:c.type,status:c.status,role,issuerOwned,acceptorOwned,issuerId:c.issuer_id,acceptorId:c.acceptor_id,assigneeId:c.assignee_id,purpose,direction,legacyPurpose,revision:decision?.revision??0,reason:decision?.reason??null,reviewed:!!m?.active&&m.reviewed&&conflicts.length===0,decisionActive:!!m?.active,quality:conflicts.length?'conflict':m?.active?'manually_confirmed':direction==='unknown'?'unknown':'proposed',conflicts,items:itemFlows,fetchedAt:row.fetched_at,completed:['finished','finished_issuer','finished_contractor'].includes(c.status),dateIssued:c.date_issued,dateCompleted:c.date_completed??null};
 }
+export function contractManagement(db:DatabaseSync,id:string){return memoizedDatabaseRead(db,'contract-management:'+id,()=>computeContractManagement(db,id));}
 export function decideContractManagement(db:DatabaseSync,input:unknown){
  const v=Decision.parse(input);db.exec('BEGIN IMMEDIATE');try{
  const before=contractManagement(db,v.contractId);if(before.revision!==v.revision)throw new Error('Revision conflict; reload contract');

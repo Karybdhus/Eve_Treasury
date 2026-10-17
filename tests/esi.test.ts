@@ -67,9 +67,9 @@ test('ETag revalidation retains payload and pagination metadata',async()=>{
   return new Response(null,{status:304,headers:{'cache-control':'max-age=600'}});
  };
  const client=new EsiClient('','1001',cache,request,'2026-08-18');
- await client.get('/characters/1001/mining','char-industry');
+ const original=await client.get('/characters/1001/mining','char-industry');
  const row=await client.get('/characters/1001/mining','char-industry');
- assert.deepEqual(row.data,[]);assert.equal(row.pages,2);assert.equal(row.cached,true);assert.equal(row.fetchedAt,row.checkedAt);const reused=await client.get('/characters/1001/mining','char-industry');assert.equal(reused.fetchedAt,row.checkedAt);assert.equal(calls,2);
+ assert.deepEqual(row.data,[]);assert.equal(row.pages,2);assert.equal(row.cached,true);assert.equal(row.fetchedAt,original.fetchedAt);assert.ok(Date.parse(row.checkedAt!)>=Date.parse(original.fetchedAt));const reused=await client.get('/characters/1001/mining','char-industry');assert.equal(reused.fetchedAt,original.fetchedAt);assert.equal(calls,2);
 });
 test('Rate limiting prevents a second network request',async()=>{
  let calls=0;const cache=memoryCache(),request:typeof fetch=async()=>{calls++;return new Response('{}',{status:429,headers:{'retry-after':'120'}});};

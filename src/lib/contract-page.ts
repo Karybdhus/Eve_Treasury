@@ -1,10 +1,12 @@
+import {economicCategories} from './economic-categories';
+import {contractVolumes} from './contract-volumes';
 import {reviewedStartActivity} from './baseline-activity-correction';
 import {effectiveContractSplit as confirmedSplit} from './contract-split-state';
 import {currentWalletBinding,type WalletBinding} from './contract-wallet-state';import {effectiveContractSplit} from './contract-split-state';
 import type {DatabaseSync,SQLInputValue} from 'node:sqlite';import {z} from 'zod';import {staticNames} from './names';import {moneyFact,exactSum} from './exact-money';import {contractPurposes} from './contract-management';
 import {contractPurposeLabels,contractDirectionLabels,reviewLabels} from './contract-labels';
 export {contractPurposeLabels,contractDirectionLabels,reviewLabels};
-const Filter=z.object({q:z.string().max(200).default(''),page:z.coerce.number().int().nonnegative().default(0),characterId:z.string().regex(/^\d+$/).optional(),type:z.string().max(100).optional(),purpose:z.enum(contractPurposes).optional(),status:z.string().max(100).optional(),from:z.iso.date().optional(),to:z.iso.date().optional(),evidence:z.enum(['open','purpose','direction','origin','payment','split','conflict','done']).optional()}).strict().refine(v=>!v.from||!v.to||v.from<=v.to,'Date range invalid');
+const Filter=z.object({q:z.string().max(200).default(''),page:z.coerce.number().int().nonnegative().default(0),characterId:z.string().regex(/^\d+$/).optional(),type:z.string().max(100).optional(),purpose:z.enum(contractPurposes).optional(),status:z.string().max(100).optional(),from:z.iso.date().optional(),to:z.iso.date().optional(),activity:z.enum(economicCategories).optional(),baselineId:z.string().uuid().optional(),source:z.enum(['buyback','esi','agent','manual','motor_market','dashboard']).optional(),evidence:z.enum(['open','purpose','direction','origin','payment','split','conflict','done']).optional()}).strict().refine(v=>!v.from||!v.to||v.from<=v.to,'Date range invalid');
 export type ContractFilters=z.input<typeof Filter>;
 export type ContractListRow={contractId:string;type:string;status:string;date:string;ownId:string|null;ownName:string|null;counterpartyId:string|null;counterpartyName:string|null;purpose:string;direction:string;review:string;automationStatus?:'automatic'|'manual'|'review';startActivity?:ReturnType<typeof reviewedStartActivity>;revision:number;priceISK:string|null;rewardISK:string|null;collateralISK:string|null};
 const base=`WITH raw AS (
@@ -48,10 +50,11 @@ export function contractPage(db:DatabaseSync,raw:Record<string,unknown>={}){
  db.function('contract_review_conflict',{deterministic:true},(id)=>conflicts.has(String(id))?1:0);
  db.function('contract_start_activity',{deterministic:true},id=>reviewedStartActivity(db,String(id))?1:0);
  const filter=Filter.parse(Object.fromEntries(Object.entries(raw).filter(([,v])=>v!==undefined&&v!==''))),where=['1=1'],args:SQLInputValue[]=[];
+ if(filter.activity){const matches=new Set(contractVolumes(db,filter).rows.filter(r=>r.categories.includes(filter.activity!)).map(r=>r.contractId));db.function('contract_activity_matches',{deterministic:true},id=>matches.has(String(id))?1:0);where.push('contract_activity_matches(contractId)=1');}
  if(filter.q){where.push("(contractId LIKE ? ESCAPE '\\' OR ownName LIKE ? ESCAPE '\\' OR json_extract(body,'$.title') LIKE ? ESCAPE '\\')");const term='%'+filter.q.replace(/[\\%_]/g,c=>'\\'+c)+'%';args.push(term,term,term);}
  if(filter.characterId){where.push('(ownsIssuer=1 AND issuer=? OR ownsAcceptor=1 AND acceptor=?)');args.push(filter.characterId,filter.characterId);}
  for(const [key,column] of [['type','type'],['purpose','purpose'],['status','status'],['evidence','review']] as const){if(filter[key]){if(key==='evidence'&&filter[key]==='open')where.push("review!='done'");else if(key==='type'&&filter[key]==='other')where.push("type NOT IN ('item_exchange','courier')");else{where.push(column+'=?');args.push(filter[key]!);}}}
- if(filter.from){where.push('substr(date,1,10)>=?');args.push(filter.from);}if(filter.to){where.push('substr(date,1,10)<=?');args.push(filter.to);}
+ if(filter.from&&!filter.activity){where.push('substr(date,1,10)>=?');args.push(filter.from);}if(filter.to&&!filter.activity){where.push('substr(date,1,10)<=?');args.push(filter.to);}
  const condition=' WHERE '+where.join(' AND '),total=Number(db.prepare(base+' SELECT COUNT(*) total FROM reviewed'+condition).get(...args)!.total),pages=Math.max(1,Math.ceil(total/25)),page=Math.min(filter.page,pages-1);
  const rows=db.prepare(base+" SELECT contractId,type,status,date,ownId,ownName,counterpartyId,purpose,direction,review,revision,json_extract(body,'$.price') price,json_extract(body,'$.reward') reward,json_extract(body,'$.collateral') collateral FROM reviewed"+condition+' ORDER BY date DESC,contractId DESC LIMIT 25 OFFSET ?').all(...args,page*25) as (Omit<ContractListRow,'priceISK'|'rewardISK'|'collateralISK'|'counterpartyName'>&{price:unknown;reward:unknown;collateral:unknown})[];
  const catalog=staticNames(),people=new Map((db.prepare('SELECT character_id,name FROM characters').all() as {character_id:string;name:string}[]).map(r=>[r.character_id,r.name]));

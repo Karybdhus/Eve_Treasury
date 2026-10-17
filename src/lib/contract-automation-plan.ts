@@ -4,10 +4,11 @@ import {contractManagement} from './contract-management';
 import {contractItemOrigins} from './contract-origins';
 import {readWalletBinding,currentWalletBinding,walletFingerprint} from './contract-wallet-state';
 import {readContractSplit,effectiveContractSplit,splitSegments} from './contract-split-state';
-import {contractValuation,proposeContractSplit,proportionalCents} from './contract-valuation';
+import {contractValuation,proportionalCents} from './contract-valuation';
+import {decimal} from './money';
 import {moneyFact,signedCents} from './exact-money';
-export const contractAutomationVersion='13.1';
-export type ContractAutomationPlan={contractId:string;version:string;status:'ready'|'manual'|'review'|'ineligible';issues:string[];contractRevision:number;estimatedDistribution?:boolean;costEvidence?:string;paymentKey?:string;paymentRevision?:number;paymentFingerprint?:string;lines?:{id:string;amountISK:string}[];unallocatedISK?:string;evidenceHash:string};
+export const contractAutomationVersion='17.1';
+export type ContractAutomationPlan={contractId:string;version:string;status:'ready'|'manual'|'review'|'ineligible';issues:string[];contractRevision:number;estimatedDistribution?:boolean;allocationRule?:string;costEvidence?:string;paymentKey?:string;paymentRevision?:number;paymentFingerprint?:string;lines?:{id:string;amountISK:string}[];unallocatedISK?:string;evidenceHash:string};
 // Read-only planning. Applying a plan requires separately tested revision guards.
 export function planContractAutomation(db:DatabaseSync,id:string):ContractAutomationPlan{
  const c=contractManagement(db,id),plan:ContractAutomationPlan={contractId:id,version:contractAutomationVersion,status:'review',issues:[],contractRevision:c.revision,evidenceHash:''};
@@ -39,6 +40,7 @@ export function planContractAutomation(db:DatabaseSync,id:string):ContractAutoma
  const items=contractItemOrigins(db,id).filter(i=>i.direction==='outgoing');
  if(items.some(i=>i.conflict)){plan.issues.push('Herkunftskonflikt');return finish();}
  const segments=splitSegments(db,id);if(!segments.length){plan.issues.push('Warenpositionen fehlen');return finish();}
+ if(segments.every(s=>s.category===null&&s.origin!=='OPENING_STOCK')){plan.issues.push('Warenherkunft ohne anwendbare Standardregel');return finish();}
  const categories=new Set(segments.map(s=>s.category)),payout=moneyFact(d.amount).value!;
  if(categories.size===1&&(!categories.has(null)||segments.every(s=>s.origin==='OPENING_STOCK'))){
   // Same-category aggregate income is exact; these shares are not unit prices.
@@ -46,10 +48,15 @@ export function planContractAutomation(db:DatabaseSync,id:string):ContractAutoma
  }else if(segments.some(s=>s.id.startsWith('lot:'))&&new Set(items.map(i=>i.type_id)).size===1){
   plan.lines=proportionalCents(payout,segments.map(s=>({id:s.id,weight:BigInt(s.quantity)})));plan.unallocatedISK='0.00';plan.estimatedDistribution=true;
  }else{
-  const valuation=contractValuation(db,id);const continuous=segments.some(s=>s.id.startsWith('lot:'));
-  if(!valuation||items.some(i=>{const v=valuation.lines.find(l=>l.recordId===i.record_id);return !v||(!continuous&&(v.source??valuation.source)!=='manual')||v.valueISK===null||v.typeId!==i.type_id||v.quantity!==i.quantity;})){if(categories.has(null))plan.issues.push('Warenherkunft fehlt');plan.issues.push('Bestaetigte Einzelpositionsbewertung fehlt');return finish();}
-  if(continuous&&valuation.lines.some(l=>(l.source??valuation.source)!=='manual'))plan.estimatedDistribution=true;
-  try{const lines=proposeContractSplit(db,id,payout).lines;const openingIds=new Set(segments.filter(s=>s.origin==='OPENING_STOCK').map(s=>s.id));plan.lines=lines.filter(l=>l.category!==null||openingIds.has(l.id)).map(l=>({id:l.id,amountISK:l.amountISK}));const unknown=lines.filter(l=>l.category===null&&!openingIds.has(l.id)).reduce((n,l)=>n+signedCents(l.amountISK),0n);plan.unallocatedISK=(unknown/100n)+'.'+(unknown%100n).toString().padStart(2,'0');if(unknown>0n)plan.issues.push('Ungeklaerter Erloesanteil');}catch{plan.issues.push('Bewertung nicht aufteilbar');return finish();}
+  const valuation=contractValuation(db,id),matching=valuation&&items.every(i=>{const v=valuation.lines.find(l=>l.recordId===i.record_id);return v&&v.valueISK!==null&&v.typeId===i.type_id&&v.quantity===i.quantity;});
+  if(valuation&&items.some(i=>{const v=valuation.lines.find(l=>l.recordId===i.record_id);return v&&(v.typeId!==i.type_id||v.quantity!==i.quantity);})){plan.issues.push('Positionsbewertung widerspricht aktuellen Waren; Ausnahme pruefen');return finish();}
+  const weights=segments.map(segment=>{const item=items.find(i=>i.record_id===segment.recordId)!;const line=matching?valuation!.lines.find(l=>l.recordId===segment.recordId):null;return {id:segment.id,weight:line?signedCents(line.valueISK!)*BigInt(segment.quantity)*1000000n/BigInt(item.quantity):BigInt(segment.quantity)};});
+  if(weights.every(w=>w.weight===0n)){plan.issues.push('Bewertung ohne positives Verteilungsgewicht');return finish();}
+  const allocated=proportionalCents(payout,weights),known=new Set(segments.filter(s=>s.category!==null||s.origin==='OPENING_STOCK').map(s=>s.id));
+  plan.lines=allocated.filter(l=>known.has(l.id));plan.unallocatedISK=decimal(allocated.filter(l=>!known.has(l.id)).reduce((n,l)=>n+signedCents(l.amountISK),0n));
+  plan.estimatedDistribution=true;plan.allocationRule=matching?'Positionswerte; stabile groesste Reste, centgenau':'Mengenanteile ohne Einzelpreise; geschaetzte Verteilung, stabile groesste Reste';
+  if(signedCents(plan.unallocatedISK)>0n)plan.issues.push('Ungeklaerter Erloesanteil');
  }
+
  plan.status='ready';return finish();
 }
