@@ -25,7 +25,7 @@
     "exceljs": "^4.4.0",
     "jose": "^6.2.12",
     "lossless-json": "^4.3.1",
-    "next": "^16.0.0",
+    "next": "^16.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "recharts": "^3.0.0",
